@@ -5,33 +5,8 @@ use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
 
-use regex::Regex;
-
-fn main() {
-    let args = Cli::parse();
-    //println!("{:?}", &args);
-
-    let outdir = "_site";
-    if ! Path::new(outdir).exists() {
-        fs::create_dir(outdir).unwrap();
-    }
- 
-    let path = Path::new(&args.pages);
-    for entry in path.read_dir().expect("read_dir call failed") {
-        if let Ok(entry) = entry {
-            // println!("{:?}", entry.path());
-            // println!("{:?}", entry.file_name());
-            let mut outfile = PathBuf::from(entry.file_name().to_owned());
-            outfile.set_extension("html");
-            let page = read_md_file(&entry.path().to_str().unwrap());
-            dbg!(&page);
-            render(page, &format!("_site/{}", outfile.display()));
-        }
-    }
-
-}
-
 use clap::Parser;
+use regex::Regex;
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -45,6 +20,29 @@ struct Page {
     title: String,
     timestamp: String,
     content: String,
+}
+
+fn main() {
+    let args = Cli::parse();
+    //println!("{:?}", &args);
+
+    let outdir = "_site";
+    if !Path::new(outdir).exists() {
+        fs::create_dir(outdir).unwrap();
+    }
+
+    let path = Path::new(&args.pages);
+    for entry in path.read_dir().expect("read_dir call failed") {
+        if let Ok(entry) = entry {
+            // println!("{:?}", entry.path());
+            // println!("{:?}", entry.file_name());
+            let mut outfile = PathBuf::from(entry.file_name().to_owned());
+            outfile.set_extension("html");
+            let page = read_md_file(&entry.path().to_str().unwrap());
+            dbg!(&page);
+            render(page, &format!("_site/{}", outfile.display()));
+        }
+    }
 }
 
 fn render(page: Page, path: &str) {
@@ -62,9 +60,8 @@ fn render(page: Page, path: &str) {
     let output = template.render(&globals).unwrap();
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();   
+    writeln!(&mut file, "{}", output).unwrap();
 }
-
 
 impl Page {
     pub fn new() -> Page {
