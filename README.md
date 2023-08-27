@@ -19,3 +19,9 @@
 =comments_disqus_enable 0
 ```
 
+## Testing
+
+```
+cargo test
+```
+
