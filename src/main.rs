@@ -83,23 +83,35 @@ fn read_md_file(path: &str) -> Page {
     match File::open(path) {
         Ok(file) => {
             let reader = BufReader::new(file);
+            let mut in_front_matter = false;
             for line in reader.lines() {
                 let line = line.unwrap();
-                //dbg!(&line);
-                let re = Regex::new(r"^=([a-z]+) (.*)").unwrap();
-                match re.captures(&line) {
-                    Some(value) => {
-                        //dbg!(&value);
-                        if &value[1] == "title" {
-                            page.title = value[2].to_string();
-                            continue;
-                        }
-                        if &value[1] == "timestamp" {
-                            page.timestamp = value[2].to_string();
-                            continue;
-                        }
+                log::info!("line '{}'", line);
+                if in_front_matter {
+                    if line == "---" {
+                        in_front_matter = false;
+                        continue;
                     }
-                    None => {}
+                    //dbg!(&line);
+                    let re = Regex::new(r"^([a-z]+): (.*)").unwrap();
+                    match re.captures(&line) {
+                        Some(value) => {
+                            //dbg!(&value);
+                            if &value[1] == "title" {
+                                page.title = value[2].to_string();
+                                continue;
+                            }
+                            if &value[1] == "timestamp" {
+                                page.timestamp = value[2].to_string();
+                                continue;
+                            }
+                        }
+                        None => {}
+                    }
+                }
+                if line == "---" {
+                    in_front_matter = true;
+                    continue;
                 }
                 page.content += &line;
             }
