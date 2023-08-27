@@ -28,6 +28,8 @@ struct Page {
 fn main() {
     let args = Cli::parse();
     //println!("{:?}", &args);
+    simple_logger::init_with_level(log::Level::Info).unwrap();
+    log::info!("Generate pages");
 
     if !Path::new(&args.outdir).exists() {
         fs::create_dir(&args.outdir).unwrap();
@@ -36,18 +38,19 @@ fn main() {
     let path = Path::new(&args.pages);
     for entry in path.read_dir().expect("read_dir call failed") {
         if let Ok(entry) = entry {
-            // println!("{:?}", entry.path());
+            log::info!("path: {:?}", entry.path());
             // println!("{:?}", entry.file_name());
             let mut outfile = PathBuf::from(entry.file_name().to_owned());
             outfile.set_extension("html");
             let page = read_md_file(&entry.path().to_str().unwrap());
-            dbg!(&page);
+            log::info!("{:?}", &page);
             render(page, &format!("_site/{}", outfile.display()));
         }
     }
 }
 
 fn render(page: Page, path: &str) {
+    log::info!("render path {}", path);
     let template_filename = String::from("templates/page.html");
     let template = liquid::ParserBuilder::with_stdlib()
         .build()
