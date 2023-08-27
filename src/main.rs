@@ -2,14 +2,42 @@ use std::fs;
 use std::fs::File;
 use std::io::Write;
 use std::io::{BufRead, BufReader};
+use std::path::Path;
+use std::path::PathBuf;
 
 use regex::Regex;
 
 fn main() {
-    fs::create_dir("_site").unwrap();
-    let page = read_md_file("examples/pages/index.md");
-    dbg!(&page);
-    render(page, "_site/index.html")
+    let args = Cli::parse();
+    //println!("{:?}", &args);
+
+    let outdir = "_site";
+    if ! Path::new(outdir).exists() {
+        fs::create_dir(outdir).unwrap();
+    }
+ 
+    let path = Path::new(&args.pages);
+    for entry in path.read_dir().expect("read_dir call failed") {
+        if let Ok(entry) = entry {
+            // println!("{:?}", entry.path());
+            // println!("{:?}", entry.file_name());
+            let mut outfile = PathBuf::from(entry.file_name().to_owned());
+            outfile.set_extension("html");
+            let page = read_md_file(&entry.path().to_str().unwrap());
+            dbg!(&page);
+            render(page, &format!("_site/{}", outfile.display()));
+        }
+    }
+
+}
+
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+#[command(version)]
+struct Cli {
+    #[arg(long)]
+    pages: String,
 }
 
 #[derive(Debug)]
