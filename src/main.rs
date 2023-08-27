@@ -123,6 +123,7 @@ fn read_md_file(path: &str) -> Page {
                 }
 
                 content += &line;
+                content += "\n";
             }
         }
         Err(error) => {
@@ -147,7 +148,7 @@ fn test_read() {
     let expected = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
-        content: "<p>Some Text.</p>".to_string(),
+        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text</p>\n".to_string(),
         todo: vec![],
     };
     assert_eq!(data.title, expected.title);
@@ -160,7 +161,7 @@ fn test_read() {
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
-        content: "<p>Some Content.</p>".to_string(),
+        content: "<p>Some Content.</p>\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
