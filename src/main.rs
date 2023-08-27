@@ -6,7 +6,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use clap::Parser;
-use regex::Regex;
+use serde::Deserialize;
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -18,11 +18,17 @@ struct Cli {
     outdir: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 struct Page {
     title: String,
     timestamp: String,
+
+    #[serde(default = "get_empty_string")]
     content: String,
+}
+
+fn get_empty_string() -> String {
+    "".to_string()
 }
 
 fn main() {
@@ -79,41 +85,36 @@ impl Page {
 }
 
 fn read_md_file(path: &str) -> Page {
-    let mut page = Page::new();
+    let mut page: Page = Page::new();
+
+    let mut content = "".to_string();
+
     match File::open(path) {
         Ok(file) => {
             let reader = BufReader::new(file);
             let mut in_front_matter = false;
+            let mut front_matter = "".to_string();
             for line in reader.lines() {
                 let line = line.unwrap();
                 log::info!("line '{}'", line);
                 if in_front_matter {
                     if line == "---" {
                         in_front_matter = false;
+                        log::info!("'{}'", &front_matter);
+                        page = serde_yaml::from_str(&front_matter).expect("YAML parsing error");
                         continue;
                     }
                     //dbg!(&line);
-                    let re = Regex::new(r"^([a-z]+): (.*)").unwrap();
-                    match re.captures(&line) {
-                        Some(value) => {
-                            //dbg!(&value);
-                            if &value[1] == "title" {
-                                page.title = value[2].to_string();
-                                continue;
-                            }
-                            if &value[1] == "timestamp" {
-                                page.timestamp = value[2].to_string();
-                                continue;
-                            }
-                        }
-                        None => {}
-                    }
+                    front_matter += &line;
+                    front_matter += "\n";
+                    continue;
                 }
                 if line == "---" {
                     in_front_matter = true;
                     continue;
                 }
-                page.content += &line;
+
+                content += &line;
             }
         }
         Err(error) => {
@@ -121,6 +122,7 @@ fn read_md_file(path: &str) -> Page {
         }
     }
 
+    page.content = content;
     page
 }
 
