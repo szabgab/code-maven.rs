@@ -130,6 +130,12 @@ fn read_md_file(path: &str) -> Page {
         }
     }
 
+    let content = markdown::to_html(&content);
+    //println!("{}", content);
+    let content = content.replace("<h1>", "<h1 class=\"title\">");
+    let content = content.replace("<h2>", "<h2 class=\"title is-4\">");
+    let content = content.replace("<h3>", "<h3 class=\"title is-5\">");
+
     page.content = content;
     page
 }
@@ -141,7 +147,7 @@ fn test_read() {
     let expected = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
-        content: "Some Text.".to_string(),
+        content: "<p>Some Text.</p>".to_string(),
         todo: vec![],
     };
     assert_eq!(data.title, expected.title);
@@ -154,7 +160,7 @@ fn test_read() {
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
-        content: "Some Content.".to_string(),
+        content: "<p>Some Content.</p>".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
