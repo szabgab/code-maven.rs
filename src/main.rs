@@ -44,7 +44,7 @@ fn main() {
             outfile.set_extension("html");
             let page = read_md_file(&entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
-            render(page, &format!("_site/{}", outfile.display()));
+            render(page, &format!("{}/{}", &args.outdir, outfile.display()));
         }
     }
 }
