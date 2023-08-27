@@ -13,6 +13,9 @@ use regex::Regex;
 struct Cli {
     #[arg(long)]
     pages: String,
+
+    #[arg(long)]
+    outdir: String,
 }
 
 #[derive(Debug)]
@@ -26,9 +29,8 @@ fn main() {
     let args = Cli::parse();
     //println!("{:?}", &args);
 
-    let outdir = "_site";
-    if !Path::new(outdir).exists() {
-        fs::create_dir(outdir).unwrap();
+    if !Path::new(&args.outdir).exists() {
+        fs::create_dir(&args.outdir).unwrap();
     }
 
     let path = Path::new(&args.pages);
