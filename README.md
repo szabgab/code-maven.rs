@@ -6,7 +6,7 @@
 * Go over all the extra pages (e.g. /archive) and create the pages for those.
 
 
-* Read .md files with a header that look like this
+* Read .md files with a header that looks like this (we'll define the exact fields later)
 
 ```
 =title Title text
@@ -18,6 +18,7 @@
 =archive 1
 =comments_disqus_enable 0
 ```
+
 
 ## Testing
 
