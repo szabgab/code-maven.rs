@@ -11,12 +11,14 @@ fn main() {
 #[derive(Debug)]
 struct Page {
     title: String,
+    timestamp: String,
 }
 
 impl Page {
     pub fn new() -> Page {
         Page {
             title: "".to_string(),
+            timestamp: "".to_string(),
         }
     }
 }
@@ -35,6 +37,9 @@ fn read_md_file(path: &str) -> Page {
                         //dbg!(&value);
                         if &value[1] == "title" {
                             page.title = value[2].to_string();
+                        }
+                        if &value[1] == "timestamp" {
+                            page.timestamp = value[2].to_string();
                         }
                     }
                     None => {}
@@ -55,6 +60,8 @@ fn test_read() {
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
+        timestamp: "2015-10-11T12:30:01".to_string(),
     };
     assert_eq!(data.title, expected.title);
+    assert_eq!(data.timestamp, expected.timestamp);
 }
