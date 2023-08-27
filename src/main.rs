@@ -23,8 +23,15 @@ struct Page {
     title: String,
     timestamp: String,
 
+    #[serde(default = "get_empty_vector")]
+    todo: Vec<String>,
+
     #[serde(default = "get_empty_string")]
     content: String,
+}
+
+fn get_empty_vector() -> Vec<String> {
+    vec![]
 }
 
 fn get_empty_string() -> String {
@@ -80,6 +87,7 @@ impl Page {
             title: "".to_string(),
             timestamp: "".to_string(),
             content: "".to_string(),
+            todo: vec![],
         }
     }
 }
@@ -134,8 +142,26 @@ fn test_read() {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         content: "Some Text.".to_string(),
+        todo: vec![],
     };
     assert_eq!(data.title, expected.title);
     assert_eq!(data.timestamp, expected.timestamp);
     assert_eq!(data.content, expected.content);
+    assert_eq!(data.todo, expected.todo);
+
+    let data = read_md_file("examples/pages/with_todo.md");
+    dbg!(&data);
+    let expected = Page {
+        title: "Page with todos".to_string(),
+        timestamp: "2023-10-11T12:30:01".to_string(),
+        content: "Some Content.".to_string(),
+        todo: vec![
+            "Add another article extending on the topic".to_string(),
+            "Add an article describing a prerequisite".to_string(),
+        ],
+    };
+    assert_eq!(data.title, expected.title);
+    assert_eq!(data.timestamp, expected.timestamp);
+    assert_eq!(data.content, expected.content);
+    assert_eq!(data.todo, expected.todo);
 }
