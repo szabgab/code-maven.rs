@@ -26,3 +26,10 @@
 cargo test
 ```
 
+## Local development
+
+Install [rustatic](https://rustatic.code-maven.com/)
+
+```
+rustatic --path _site/ --indexfile index.html --nice --port 3000
+```

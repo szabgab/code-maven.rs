@@ -1,11 +1,15 @@
+use std::fs;
 use std::fs::File;
+use std::io::Write;
 use std::io::{BufRead, BufReader};
 
 use regex::Regex;
 
 fn main() {
-    let data = read_md_file("examples/pages/index.md");
-    dbg!(&data);
+    fs::create_dir("_site").unwrap();
+    let page = read_md_file("examples/pages/index.md");
+    dbg!(&page);
+    render(page, "_site/index.html")
 }
 
 #[derive(Debug)]
@@ -14,6 +18,25 @@ struct Page {
     timestamp: String,
     content: String,
 }
+
+fn render(page: Page, path: &str) {
+    let template_filename = String::from("templates/page.html");
+    let template = liquid::ParserBuilder::with_stdlib()
+        .build()
+        .unwrap()
+        .parse_file(&template_filename)
+        .unwrap();
+
+    let globals = liquid::object!({
+        "title": page.title,
+        "content": page.content,
+    });
+    let output = template.render(&globals).unwrap();
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();   
+}
+
 
 impl Page {
     pub fn new() -> Page {
