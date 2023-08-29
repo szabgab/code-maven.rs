@@ -28,7 +28,13 @@ cargo test
 
 ## Local development
 
-Install [rustatic](https://rustatic.code-maven.com/)
+Generate the example pages:
+
+```
+cargo run -- --pages examples/pages/ --outdir _site/
+```
+
+Install [rustatic](https://rustatic.code-maven.com/) and run the following to view the generated site
 
 ```
 rustatic --path _site/ --indexfile index.html --nice --port 3000
