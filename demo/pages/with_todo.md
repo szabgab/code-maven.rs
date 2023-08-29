@@ -7,3 +7,7 @@ todo:
 ---
 
 Some Content.
+
+![](picture.png)
+
+![a title](image.jpg)

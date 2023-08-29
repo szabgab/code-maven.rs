@@ -166,7 +166,7 @@ fn test_read() {
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
-        content: "<p>Some Content.</p>\n".to_string(),
+        content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
