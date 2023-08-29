@@ -131,6 +131,7 @@ fn read_md_file(path: &str) -> Page {
         }
     }
 
+    let content = pre_process(&content);
     let content = markdown::to_html(&content);
     //println!("{}", content);
     let content = content.replace("<h1>", "<h1 class=\"title\">");
@@ -139,6 +140,10 @@ fn read_md_file(path: &str) -> Page {
 
     page.content = content;
     page
+}
+
+fn pre_process(text: &str) -> String {
+    text.to_string()
 }
 
 #[test]
