@@ -143,7 +143,7 @@ fn read_md_file(path: &str) -> Page {
 
 #[test]
 fn test_read() {
-    let data = read_md_file("examples/pages/index.md");
+    let data = read_md_file("demo/pages/index.md");
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
@@ -156,7 +156,7 @@ fn test_read() {
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
 
-    let data = read_md_file("examples/pages/with_todo.md");
+    let data = read_md_file("demo/pages/with_todo.md");
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),

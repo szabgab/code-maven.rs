@@ -28,10 +28,10 @@ cargo test
 
 ## Local development
 
-Generate the example pages:
+Generate the demo pages:
 
 ```
-cargo run -- --pages examples/pages/ --outdir _site/
+cargo run -- --pages demo/pages/ --outdir _site/
 ```
 
 Install [rustatic](https://rustatic.code-maven.com/) and run the following to view the generated site
