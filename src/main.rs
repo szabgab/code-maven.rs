@@ -10,7 +10,7 @@ use std::path::PathBuf;
 use clap::Parser;
 use regex::Captures;
 use regex::Regex;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -27,7 +27,7 @@ struct Cli {
     outdir: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 struct Page {
     title: String,
     timestamp: String,
@@ -61,10 +61,37 @@ fn main() {
     }
 
     let pages = read_pages(&args.pages, &args.root);
-    render_pages(pages, &args.outdir);
+    render_pages(&pages, &args.outdir);
+    render_archive(pages, &format!("{}/archive.html", &args.outdir))
 }
 
-fn render_pages(pages: Vec<Page>, outdir: &str) {
+fn render_archive(pages: Vec<Page>, path: &str) {
+    log::info!("render archive");
+
+    let partials = match load_templates() {
+        Ok(partials) => partials,
+        Err(error) => panic!("Error loading templates {}", error),
+    };
+
+    let template_filename = String::from("templates/archive.html");
+    let template = liquid::ParserBuilder::with_stdlib()
+        .partials(partials)
+        .build()
+        .unwrap()
+        .parse_file(&template_filename)
+        .unwrap();
+
+    let globals = liquid::object!({
+        "title": "Archive".to_string(),
+        "pages": &pages,
+    });
+    let output = template.render(&globals).unwrap();
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
+}
+
+fn render_pages(pages: &Vec<Page>, outdir: &str) {
     for page in pages {
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
@@ -113,7 +140,7 @@ pub fn read_file(filename: &str) -> String {
     content
 }
 
-fn render(page: Page, path: &str) {
+fn render(page: &Page, path: &str) {
     log::info!("render path {}", path);
 
     let partials = match load_templates() {
