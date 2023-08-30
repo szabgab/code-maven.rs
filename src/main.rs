@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
+type Tags = HashMap<String, i32>;
+
 #[derive(Parser, Debug)]
 #[command(version)]
 struct Cli {
@@ -28,7 +30,7 @@ struct Cli {
     outdir: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Clone)]
 struct Page {
     title: String,
     timestamp: String,
@@ -62,13 +64,26 @@ fn main() {
 
     if !Path::new(&args.outdir).exists() {
         fs::create_dir(&args.outdir).unwrap();
+        fs::create_dir(Path::new(&args.outdir).join("tags")).unwrap();
     }
 
     let pages = read_pages(&args.pages, &args.root);
+    let tags: Tags = collect_tags(&pages);
     render_pages(&pages, &args.outdir);
+    render_tag_pages(&pages, &tags, &args.outdir);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir));
     render_archive(pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir));
+}
+
+fn collect_tags(pages: &Vec<Page>) -> Tags {
+    let mut tags: Tags = HashMap::new();
+    for page in pages {
+        for tag in &page.tags {
+            tags.insert(tag.to_lowercase(), 1);
+        }
+    }
+    tags
 }
 
 fn render_robots_txt(path: &str) {
@@ -126,6 +141,45 @@ fn render_archive(pages: Vec<Page>, path: &str) {
 
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
+}
+
+fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
+    log::info!("render_tag_pages");
+    for tag in tags.keys() {
+        let mut pages_with_tag: Vec<Page> = vec![];
+        for page in pages {
+            for xtag in &page.tags {
+                if &xtag.to_lowercase() == tag {
+                    pages_with_tag.push(page.clone());
+                }
+            }
+        }
+        let mut path = Path::new(outdir).join("tags").join(&tag);
+        path.set_extension("html");
+        log::info!("render_tag {}", tag);
+
+        let partials = match load_templates() {
+            Ok(partials) => partials,
+            Err(error) => panic!("Error loading templates {}", error),
+        };
+
+        let template_filename = String::from("templates/tag.html");
+        let template = liquid::ParserBuilder::with_stdlib()
+            .partials(partials)
+            .build()
+            .unwrap()
+            .parse_file(&template_filename)
+            .unwrap();
+
+        let globals = liquid::object!({
+            "title": format!("Articles tagged with '{}'", tag),
+            "pages": pages_with_tag,
+        });
+        let output = template.render(&globals).unwrap();
+
+        let mut file = File::create(path).unwrap();
+        writeln!(&mut file, "{}", output).unwrap();
+    }
 }
 
 fn render_pages(pages: &Vec<Page>, outdir: &str) {
@@ -348,6 +402,7 @@ fn test_read() {
         ],
         tags: vec![
             "println!".to_string(),
+            "fn".to_string(),
         ],
     };
     assert_eq!(data.title, expected.title);
