@@ -73,6 +73,10 @@ fn render_archive(pages: Vec<Page>, path: &str) {
         Err(error) => panic!("Error loading templates {}", error),
     };
 
+    let filtered_pages: Vec<Page> = pages
+        .into_iter()
+        .filter(|page| page.filename != "index")
+        .collect();
     let template_filename = String::from("templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()
         .partials(partials)
@@ -83,7 +87,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
 
     let globals = liquid::object!({
         "title": "Archive".to_string(),
-        "pages": &pages,
+        "pages": &filtered_pages,
     });
     let output = template.render(&globals).unwrap();
 
