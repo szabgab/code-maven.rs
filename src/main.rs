@@ -269,8 +269,7 @@ fn read_md_file(root: &str, path: &str) -> Page {
 
 fn pre_process(root: &str, text: &str) -> String {
     let re = Regex::new(r"!\[\]\(([^)]+)\)").unwrap();
-    let ext_to_language: HashMap<String, String> =
-        HashMap::from([("rs".to_string(), "rust".to_string())]);
+    let ext_to_language: HashMap<String, String> = read_languages();
 
     let result = re.replace_all(text, |caps: &Captures| {
         let path = Path::new(&caps[1]);
@@ -337,4 +336,24 @@ fn test_read() {
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
     assert_eq!(data.filename, expected.filename);
+}
+
+fn read_languages() -> HashMap<String, String> {
+    let filename = "languages.csv";
+    let mut data = HashMap::new();
+    match File::open(filename) {
+        Ok(file) => {
+            let reader = BufReader::new(file);
+            for line in reader.lines() {
+                let line = String::from(line.unwrap());
+                let parts = line.split(",");
+                let parts: Vec<&str> = parts.collect();
+                data.insert(parts[0].to_string(), parts[1].to_string());
+            }
+        }
+        Err(error) => {
+            println!("Error opening file {}: {}", filename, error);
+        }
+    }
+    data
 }
