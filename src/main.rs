@@ -5,11 +5,14 @@ use std::io::Write;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
+use std::error::Error;
 
 use clap::Parser;
 use regex::Captures;
 use regex::Regex;
 use serde::Deserialize;
+
+pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -68,10 +71,44 @@ fn main() {
     }
 }
 
+
+pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
+    // log::info!("load_templates");
+
+    let mut partials = Partials::empty();
+    let filename = "templates/incl/header.html";
+    partials.add(filename, read_file(filename));
+    let filename = "templates/incl/footer.html";
+    partials.add(filename, read_file(filename));
+    Ok(partials)
+}
+
+pub fn read_file(filename: &str) -> String {
+    let mut content = String::new();
+    match File::open(filename) {
+        Ok(mut file) => {
+            file.read_to_string(&mut content).unwrap();
+        }
+        Err(error) => {
+            println!("Error opening file {}: {}", filename, error);
+        }
+    }
+    content
+}
+
+
 fn render(page: Page, path: &str) {
     log::info!("render path {}", path);
+
+    let partials = match load_templates() {
+        Ok(partials) => partials,
+        Err(error) => panic!("Error loading templates {}", error),
+    };
+
+
     let template_filename = String::from("templates/page.html");
     let template = liquid::ParserBuilder::with_stdlib()
+        .partials(partials)
         .build()
         .unwrap()
         .parse_file(&template_filename)
