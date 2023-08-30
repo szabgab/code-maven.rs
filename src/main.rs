@@ -32,6 +32,9 @@ struct Page {
     title: String,
     timestamp: String,
 
+    #[serde(default = "get_empty_string")]
+    filename: String,
+
     #[serde(default = "get_empty_vector")]
     todo: Vec<String>,
 
@@ -65,7 +68,7 @@ fn main() {
             let page = read_md_file(&args.root, &entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
 
-            let mut outfile = PathBuf::from(entry.file_name().to_owned());
+            let mut outfile = PathBuf::from(&page.filename);
             outfile.set_extension("html");
             render(page, &format!("{}/{}", &args.outdir, outfile.display()));
         }
@@ -129,6 +132,7 @@ impl Page {
         Page {
             title: "".to_string(),
             timestamp: "".to_string(),
+            filename: "".to_string(),
             content: "".to_string(),
             todo: vec![],
         }
@@ -182,6 +186,12 @@ fn read_md_file(root: &str, path: &str) -> Page {
     let content = content.replace("<h3>", "<h3 class=\"title is-5\">");
 
     page.content = content;
+    page.filename = PathBuf::from(path)
+        .file_name()
+        .unwrap()
+        .to_str()
+        .unwrap()
+        .to_string();
     page
 }
 
@@ -225,6 +235,7 @@ fn test_read() {
     let expected = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
+        filename: "index.md".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         todo: vec![],
     };
@@ -232,12 +243,14 @@ fn test_read() {
     assert_eq!(data.timestamp, expected.timestamp);
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
+    assert_eq!(data.filename, expected.filename);
 
     let data = read_md_file("demo", "demo/pages/with_todo.md");
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
+        filename: "with_todo.md".to_string(),
         content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
@@ -248,4 +261,5 @@ fn test_read() {
     assert_eq!(data.timestamp, expected.timestamp);
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
+    assert_eq!(data.filename, expected.filename);
 }
