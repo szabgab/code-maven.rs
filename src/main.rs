@@ -60,7 +60,7 @@ fn main() {
         fs::create_dir(&args.outdir).unwrap();
     }
 
-    let pages = read_pages(&args);
+    let pages = read_pages(&args.pages, &args.root);
     render_pages(pages, &args.outdir);
 }
 
@@ -72,14 +72,14 @@ fn render_pages(pages: Vec<Page>, outdir: &str) {
     }
 }
 
-fn read_pages(args: &Cli) -> Vec<Page> {
+fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
-    let path = Path::new(&args.pages);
+    let path = Path::new(pages_path);
     for entry in path.read_dir().expect("read_dir call failed") {
         if let Ok(entry) = entry {
             log::info!("path: {:?}", entry.path());
             // println!("{:?}", entry.file_name());
-            let page = read_md_file(&args.root, &entry.path().to_str().unwrap());
+            let page = read_md_file(root, &entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
             pages.push(page);
         }
