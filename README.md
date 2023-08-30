@@ -31,7 +31,7 @@ cargo test
 Generate the demo pages:
 
 ```
-cargo run -- --pages demo/pages/ --outdir _site/
+cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
 ```
 
 Install [rustatic](https://rustatic.code-maven.com/) and run the following to view the generated site

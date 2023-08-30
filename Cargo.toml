@@ -13,3 +13,4 @@ log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
 markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
+regex = "1.9.3"

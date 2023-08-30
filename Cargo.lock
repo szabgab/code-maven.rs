@@ -150,6 +150,7 @@ dependencies = [
  "liquid",
  "log",
  "markdown",
+ "regex",
  "serde",
  "serde_yaml",
  "simple_logger",

@@ -1,11 +1,14 @@
 use std::fs;
 use std::fs::File;
+use std::io::Read;
 use std::io::Write;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
 
 use clap::Parser;
+use regex::Captures;
+use regex::Regex;
 use serde::Deserialize;
 
 #[derive(Parser, Debug)]
@@ -13,6 +16,9 @@ use serde::Deserialize;
 struct Cli {
     #[arg(long)]
     pages: String,
+
+    #[arg(long)]
+    root: String,
 
     #[arg(long)]
     outdir: String,
@@ -55,7 +61,7 @@ fn main() {
             // println!("{:?}", entry.file_name());
             let mut outfile = PathBuf::from(entry.file_name().to_owned());
             outfile.set_extension("html");
-            let page = read_md_file(&entry.path().to_str().unwrap());
+            let page = read_md_file(&args.root, &entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
             render(page, &format!("{}/{}", &args.outdir, outfile.display()));
         }
@@ -92,7 +98,7 @@ impl Page {
     }
 }
 
-fn read_md_file(path: &str) -> Page {
+fn read_md_file(root: &str, path: &str) -> Page {
     let mut page: Page = Page::new();
 
     let mut content = "".to_string();
@@ -131,7 +137,7 @@ fn read_md_file(path: &str) -> Page {
         }
     }
 
-    let content = pre_process(&content);
+    let content = pre_process(root, &content);
     let content = markdown::to_html(&content);
     //println!("{}", content);
     let content = content.replace("<h1>", "<h1 class=\"title\">");
@@ -142,18 +148,47 @@ fn read_md_file(path: &str) -> Page {
     page
 }
 
-fn pre_process(text: &str) -> String {
-    text.to_string()
+fn pre_process(root: &str, text: &str) -> String {
+    let re = Regex::new(r"!\[\]\(([^)]+)\)").unwrap();
+    let result = re.replace_all(text, |caps: &Captures| {
+        let path = Path::new(&caps[1]);
+        let include_path = Path::new(root).join(path);
+        if path.extension().unwrap() == "rs" {
+            let language = "rust";
+            if include_path.exists() {
+                match File::open(include_path) {
+                    Ok(mut file) => {
+                        let mut content = "```".to_string();
+                        content += language;
+                        content += "\n";
+                        file.read_to_string(&mut content).unwrap();
+                        content += "```\n";
+                        content
+                    }
+                    Err(_error) => {
+                        //println!("Error opening file {}: {}", include_path.display(), error);
+                        "FAILED".to_string()
+                    }
+                }
+            } else {
+                "MISSING".to_string()
+            }
+        } else {
+            caps[0].to_string() // .copy() // don't replace anything
+        }
+    });
+
+    result.to_string()
 }
 
 #[test]
 fn test_read() {
-    let data = read_md_file("demo/pages/index.md");
+    let data = read_md_file("demo", "demo/pages/index.md");
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
-        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text</p>\n".to_string(),
+        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         todo: vec![],
     };
     assert_eq!(data.title, expected.title);
@@ -161,12 +196,12 @@ fn test_read() {
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
 
-    let data = read_md_file("demo/pages/with_todo.md");
+    let data = read_md_file("demo", "demo/pages/with_todo.md");
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
-        content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n".to_string(),
+        content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
