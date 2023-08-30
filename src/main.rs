@@ -39,6 +39,9 @@ struct Page {
     #[serde(default = "get_empty_vector")]
     todo: Vec<String>,
 
+    #[serde(default = "get_empty_vector")]
+    tags: Vec<String>,
+
     #[serde(default = "get_empty_string")]
     content: String,
 }
@@ -203,6 +206,7 @@ fn render(page: &Page, path: &str) {
     let globals = liquid::object!({
         "title": page.title,
         "content": page.content,
+        "page": page,
     });
     let output = template.render(&globals).unwrap();
 
@@ -218,6 +222,7 @@ impl Page {
             filename: "".to_string(),
             content: "".to_string(),
             todo: vec![],
+            tags: vec![],
         }
     }
 }
@@ -321,11 +326,13 @@ fn test_read() {
         filename: "index".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         todo: vec![],
+        tags: vec![],
     };
     assert_eq!(data.title, expected.title);
     assert_eq!(data.timestamp, expected.timestamp);
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
+    assert_eq!(data.tags, expected.tags);
     assert_eq!(data.filename, expected.filename);
 
     let data = read_md_file("demo", "demo/pages/with_todo.md");
@@ -339,11 +346,15 @@ fn test_read() {
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
         ],
+        tags: vec![
+            "println!".to_string(),
+        ],
     };
     assert_eq!(data.title, expected.title);
     assert_eq!(data.timestamp, expected.timestamp);
     assert_eq!(data.content, expected.content);
     assert_eq!(data.todo, expected.todo);
+    assert_eq!(data.tags, expected.tags);
     assert_eq!(data.filename, expected.filename);
 }
 

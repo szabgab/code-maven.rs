@@ -4,6 +4,9 @@
       <h1 class="title">
         {{title}}
       </h1>
+      {% for tag in page.tags %}
+      <a class="button is-primary" href="/tags/{{tag | downcase }}">{{tag}}</a>
+      {% endfor %}
       <div class="content">
         {{content}}
       </div>
