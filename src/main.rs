@@ -60,6 +60,16 @@ fn main() {
         fs::create_dir(&args.outdir).unwrap();
     }
 
+    let pages = read_pages(&args);
+
+    for page in pages {
+        let mut outfile = PathBuf::from(&page.filename);
+        outfile.set_extension("html");
+        render(page, &format!("{}/{}", &args.outdir, outfile.display()));
+    }
+}
+
+fn read_pages(args: &Cli) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
     let path = Path::new(&args.pages);
     for entry in path.read_dir().expect("read_dir call failed") {
@@ -71,12 +81,7 @@ fn main() {
             pages.push(page);
         }
     }
-
-    for page in pages {
-        let mut outfile = PathBuf::from(&page.filename);
-        outfile.set_extension("html");
-        render(page, &format!("{}/{}", &args.outdir, outfile.display()));
-    }
+    pages
 }
 
 pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
