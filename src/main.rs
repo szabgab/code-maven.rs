@@ -61,7 +61,10 @@ fn main() {
     }
 
     let pages = read_pages(&args);
+    render_pages(pages, args);
+}
 
+fn render_pages(pages: Vec<Page>, args: Cli) {
     for page in pages {
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
