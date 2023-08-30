@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::fs;
 use std::fs::File;
 use std::io::Read;
@@ -5,7 +6,6 @@ use std::io::Write;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
-use std::error::Error;
 
 use clap::Parser;
 use regex::Captures;
@@ -72,7 +72,6 @@ fn main() {
     }
 }
 
-
 pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     // log::info!("load_templates");
 
@@ -99,7 +98,6 @@ pub fn read_file(filename: &str) -> String {
     content
 }
 
-
 fn render(page: Page, path: &str) {
     log::info!("render path {}", path);
 
@@ -107,7 +105,6 @@ fn render(page: Page, path: &str) {
         Ok(partials) => partials,
         Err(error) => panic!("Error loading templates {}", error),
     };
-
 
     let template_filename = String::from("templates/page.html");
     let template = liquid::ParserBuilder::with_stdlib()
