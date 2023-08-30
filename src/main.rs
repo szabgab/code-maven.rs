@@ -80,6 +80,8 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     partials.add(filename, read_file(filename));
     let filename = "templates/incl/footer.html";
     partials.add(filename, read_file(filename));
+    let filename = "templates/incl/navigation.html";
+    partials.add(filename, read_file(filename));
     Ok(partials)
 }
 
