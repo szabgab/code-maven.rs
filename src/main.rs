@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 use std::fs::File;
@@ -268,11 +269,14 @@ fn read_md_file(root: &str, path: &str) -> Page {
 
 fn pre_process(root: &str, text: &str) -> String {
     let re = Regex::new(r"!\[\]\(([^)]+)\)").unwrap();
+    let ext_to_language: HashMap<String, String> =
+        HashMap::from([("rs".to_string(), "rust".to_string())]);
+
     let result = re.replace_all(text, |caps: &Captures| {
         let path = Path::new(&caps[1]);
         let include_path = Path::new(root).join(path);
-        if path.extension().unwrap() == "rs" {
-            let language = "rust";
+        if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
+            let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             if include_path.exists() {
                 match File::open(include_path) {
                     Ok(mut file) => {
