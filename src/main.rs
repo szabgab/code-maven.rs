@@ -62,7 +62,27 @@ fn main() {
 
     let pages = read_pages(&args.pages, &args.root);
     render_pages(&pages, &args.outdir);
-    render_archive(pages, &format!("{}/archive.html", &args.outdir))
+    render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir));
+    render_archive(pages, &format!("{}/archive.html", &args.outdir));
+}
+
+fn render_sitemap(pages: &Vec<Page>, path: &str) {
+    log::info!("render sitemap");
+    let template_filename = String::from("templates/sitemap.xml");
+    let template = liquid::ParserBuilder::with_stdlib()
+        .build()
+        .unwrap()
+        .parse_file(&template_filename)
+        .unwrap();
+
+    let globals = liquid::object!({
+        "title": "Archive".to_string(),
+        "pages": &pages,
+    });
+    let output = template.render(&globals).unwrap();
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
 }
 
 fn render_archive(pages: Vec<Page>, path: &str) {
@@ -97,6 +117,9 @@ fn render_archive(pages: Vec<Page>, path: &str) {
 
 fn render_pages(pages: &Vec<Page>, outdir: &str) {
     for page in pages {
+        if page.filename == "archive" {
+            continue;
+        }
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
         render(page, &format!("{}/{}", outdir, outfile.display()));
@@ -115,6 +138,13 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
             pages.push(page);
         }
     }
+
+    let mut archive = Page::new();
+    archive.filename = "archive".to_string();
+    archive.timestamp = "2023-08-30T12:30:01".to_string(); // TODO put now
+                                                           // TODO in all the timestamp remove the part after the T for the sitemap
+                                                           //pages.push(archive);
+
     pages
 }
 
