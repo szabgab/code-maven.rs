@@ -62,10 +62,11 @@ fn main() {
         if let Ok(entry) = entry {
             log::info!("path: {:?}", entry.path());
             // println!("{:?}", entry.file_name());
-            let mut outfile = PathBuf::from(entry.file_name().to_owned());
-            outfile.set_extension("html");
             let page = read_md_file(&args.root, &entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
+
+            let mut outfile = PathBuf::from(entry.file_name().to_owned());
+            outfile.set_extension("html");
             render(page, &format!("{}/{}", &args.outdir, outfile.display()));
         }
     }
