@@ -9,14 +9,24 @@
 * Read .md files with a header that looks like this (we'll define the exact fields later)
 
 ```
-=title Title text
-=timestamp 2015-10-11T12:30:01
-=indexes open, File, read, readline, gets, while, each
-=status show
-=books ruby
-=author szabgab
-=archive 1
-=comments_disqus_enable 0
+---
+title: Title text
+timestamp: 2015-10-11T12:30:01
+todo:
+  - Add another article extending on the topic
+  - Add an article describing a prerequisite
+---
+```
+
+Not yet implemented fields
+
+```
+indexes: open, File, read, readline, gets, while, each
+status: show
+books: ruby
+author: szabgab
+archive: 1
+comments_disqus_enable: 0
 ```
 
 
