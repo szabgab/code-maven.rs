@@ -65,6 +65,15 @@ fn main() {
     render_pages(&pages, &args.outdir);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir));
     render_archive(pages, &format!("{}/archive.html", &args.outdir));
+    render_robots_txt(&format!("{}/robots.txt", &args.outdir));
+}
+
+fn render_robots_txt(path: &str) {
+    let url = "https://rust.code-maven.com";
+    let text = format!("Sitemap: {}/sitemap.xml\n\nUser-agent: *\n", url);
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", text).unwrap();
 }
 
 fn render_sitemap(pages: &Vec<Page>, path: &str) {
