@@ -60,6 +60,7 @@ fn main() {
         fs::create_dir(&args.outdir).unwrap();
     }
 
+    let mut pages: Vec<Page> = vec![];
     let path = Path::new(&args.pages);
     for entry in path.read_dir().expect("read_dir call failed") {
         if let Ok(entry) = entry {
@@ -67,11 +68,14 @@ fn main() {
             // println!("{:?}", entry.file_name());
             let page = read_md_file(&args.root, &entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
-
-            let mut outfile = PathBuf::from(&page.filename);
-            outfile.set_extension("html");
-            render(page, &format!("{}/{}", &args.outdir, outfile.display()));
+            pages.push(page);
         }
+    }
+
+    for page in pages {
+        let mut outfile = PathBuf::from(&page.filename);
+        outfile.set_extension("html");
+        render(page, &format!("{}/{}", &args.outdir, outfile.display()));
     }
 }
 
