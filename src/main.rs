@@ -362,7 +362,8 @@ fn pre_process(root: &str, text: &str) -> String {
             if include_path.exists() {
                 match File::open(include_path) {
                     Ok(mut file) => {
-                        let mut content = "```".to_string();
+                        let mut content = "".to_string();
+                        content += "```";
                         content += language;
                         content += "\n";
                         file.read_to_string(&mut content).unwrap();
