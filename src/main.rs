@@ -408,7 +408,7 @@ fn read_languages() -> HashMap<String, String> {
 }
 
 #[test]
-fn test_read() {
+fn test_read_index() {
     let data = read_md_file("demo", "demo/pages/index.md");
     dbg!(&data);
     let expected = Page {
@@ -421,7 +421,10 @@ fn test_read() {
         tags: vec![],
     };
     assert_eq!(data, expected);
+}
 
+#[test]
+fn test_read_todo() {
     let data = read_md_file("demo", "demo/pages/with_todo.md");
     dbg!(&data);
     let expected = Page {
