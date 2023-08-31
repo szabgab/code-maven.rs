@@ -39,6 +39,9 @@ struct Page {
     #[serde(default = "get_empty_string")]
     filename: String,
 
+    #[serde(default = "get_empty_string")]
+    description: String,
+
     #[serde(default = "get_empty_vector")]
     todo: Vec<String>,
 
@@ -136,6 +139,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
 
     let globals = liquid::object!({
         "title": "Archive".to_string(),
+        "description": "List of all the articles about the Rust programming language".to_string(),
         "pages": &filtered_pages,
     });
     let output = template.render(&globals).unwrap();
@@ -174,6 +178,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
 
         let globals = liquid::object!({
             "title": format!("Articles tagged with '{}'", tag),
+            "description": format!("Articles about Rust tagged with '{}'", tag),
             "pages": pages_with_tag,
         });
         let output = template.render(&globals).unwrap();
@@ -261,6 +266,7 @@ fn render(page: &Page, path: &str) {
 
     let globals = liquid::object!({
         "title": page.title,
+        "description": page.description,
         "content": page.content,
         "page": page,
     });
@@ -275,6 +281,7 @@ impl Page {
         Page {
             title: "".to_string(),
             timestamp: "".to_string(),
+            description: "".to_string(),
             filename: "".to_string(),
             content: "".to_string(),
             todo: vec![],
@@ -379,6 +386,7 @@ fn test_read() {
     let expected = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
+        description: "The text for the search engines".to_string(),
         filename: "index".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         todo: vec![],
@@ -391,6 +399,7 @@ fn test_read() {
     let expected = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
+        description: "".to_string(),
         filename: "with_todo".to_string(),
         content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n".to_string(),
         todo: vec![
