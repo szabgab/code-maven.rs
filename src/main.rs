@@ -213,6 +213,7 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
     archive.timestamp = now.format("%Y-%m-%dT%H::%M::%S").to_string();
     pages.push(archive);
 
+    pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
     pages
 }
 
