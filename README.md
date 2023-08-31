@@ -44,6 +44,14 @@ Generate the demo pages:
 cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
 ```
 
+Assuming you have cloned https://github.com/szabgab/rust.code-maven.com/ next to this repository then you can also try:
+
+```
+cargo run -- --root ../rust.code-maven.com/ --pages ../rust.code-maven.com/pages/ --outdir _site/
+```
+
+
+
 Install [rustatic](https://rustatic.code-maven.com/) and run the following to view the generated site
 
 ```
