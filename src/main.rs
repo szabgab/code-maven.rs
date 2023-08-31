@@ -31,7 +31,7 @@ struct Cli {
     outdir: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 struct Page {
     title: String,
     timestamp: String,
@@ -384,12 +384,7 @@ fn test_read() {
         todo: vec![],
         tags: vec![],
     };
-    assert_eq!(data.title, expected.title);
-    assert_eq!(data.timestamp, expected.timestamp);
-    assert_eq!(data.content, expected.content);
-    assert_eq!(data.todo, expected.todo);
-    assert_eq!(data.tags, expected.tags);
-    assert_eq!(data.filename, expected.filename);
+    assert_eq!(data, expected);
 
     let data = read_md_file("demo", "demo/pages/with_todo.md");
     dbg!(&data);
@@ -407,12 +402,7 @@ fn test_read() {
             "fn".to_string(),
         ],
     };
-    assert_eq!(data.title, expected.title);
-    assert_eq!(data.timestamp, expected.timestamp);
-    assert_eq!(data.content, expected.content);
-    assert_eq!(data.todo, expected.todo);
-    assert_eq!(data.tags, expected.tags);
-    assert_eq!(data.filename, expected.filename);
+    assert_eq!(data, expected);
 }
 
 fn read_languages() -> HashMap<String, String> {
