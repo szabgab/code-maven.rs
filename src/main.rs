@@ -52,6 +52,20 @@ struct Page {
     content: String,
 }
 
+impl Page {
+    pub fn new() -> Page {
+        Page {
+            title: "".to_string(),
+            timestamp: "".to_string(),
+            description: "".to_string(),
+            filename: "".to_string(),
+            content: "".to_string(),
+            todo: vec![],
+            tags: vec![],
+        }
+    }
+}
+
 fn get_empty_vector() -> Vec<String> {
     vec![]
 }
@@ -276,20 +290,6 @@ fn render(page: &Page, path: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-impl Page {
-    pub fn new() -> Page {
-        Page {
-            title: "".to_string(),
-            timestamp: "".to_string(),
-            description: "".to_string(),
-            filename: "".to_string(),
-            content: "".to_string(),
-            todo: vec![],
-            tags: vec![],
-        }
-    }
-}
-
 fn read_md_file(root: &str, path: &str) -> Page {
     let mut page: Page = Page::new();
 
@@ -387,6 +387,26 @@ fn pre_process(root: &str, text: &str) -> String {
     result.to_string()
 }
 
+fn read_languages() -> HashMap<String, String> {
+    let filename = "languages.csv";
+    let mut data = HashMap::new();
+    match File::open(filename) {
+        Ok(file) => {
+            let reader = BufReader::new(file);
+            for line in reader.lines() {
+                let line = String::from(line.unwrap());
+                let parts = line.split(",");
+                let parts: Vec<&str> = parts.collect();
+                data.insert(parts[0].to_string(), parts[1].to_string());
+            }
+        }
+        Err(error) => {
+            println!("Error opening file {}: {}", filename, error);
+        }
+    }
+    data
+}
+
 #[test]
 fn test_read() {
     let data = read_md_file("demo", "demo/pages/index.md");
@@ -420,24 +440,4 @@ fn test_read() {
         ],
     };
     assert_eq!(data, expected);
-}
-
-fn read_languages() -> HashMap<String, String> {
-    let filename = "languages.csv";
-    let mut data = HashMap::new();
-    match File::open(filename) {
-        Ok(file) => {
-            let reader = BufReader::new(file);
-            for line in reader.lines() {
-                let line = String::from(line.unwrap());
-                let parts = line.split(",");
-                let parts: Vec<&str> = parts.collect();
-                data.insert(parts[0].to_string(), parts[1].to_string());
-            }
-        }
-        Err(error) => {
-            println!("Error opening file {}: {}", filename, error);
-        }
-    }
-    data
 }
