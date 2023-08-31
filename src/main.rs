@@ -363,6 +363,7 @@ fn pre_process(root: &str, text: &str) -> String {
                 match File::open(include_path) {
                     Ok(mut file) => {
                         let mut content = "".to_string();
+                        content += &format!("**[{}](https://github.com/szabgab/rust.code-maven.com/tree/main/{})**\n", path.display(), path.display());
                         content += "```";
                         content += language;
                         content += "\n";
@@ -408,7 +409,7 @@ fn test_read() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         description: "".to_string(),
         filename: "with_todo".to_string(),
-        content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>".to_string(),
+        content: "<p>Some Content.</p>\n<p><img src=\"picture.png\" alt=\"\" /></p>\n<p><img src=\"image.jpg\" alt=\"a title\" /></p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
