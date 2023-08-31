@@ -8,6 +8,7 @@ use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
 
+use chrono::{DateTime, Utc};
 use clap::Parser;
 use regex::Captures;
 use regex::Regex;
@@ -123,7 +124,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
 
     let filtered_pages: Vec<Page> = pages
         .into_iter()
-        .filter(|page| page.filename != "index")
+        .filter(|page| page.filename != "index" && page.filename != "archive")
         .collect();
     let template_filename = String::from("templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -208,9 +209,10 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
 
     let mut archive = Page::new();
     archive.filename = "archive".to_string();
-    archive.timestamp = "2023-08-30T12:30:01".to_string(); // TODO put now
-                                                           // TODO in all the timestamp remove the part after the T for the sitemap
-                                                           //pages.push(archive);
+    let now: DateTime<Utc> = Utc::now();
+    archive.timestamp = now.format("%Y-%m-%dT%H::%M::%S").to_string();
+    // TODO in all the timestamp remove the part after the T for the sitemap
+    pages.push(archive);
 
     pages
 }
