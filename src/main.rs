@@ -66,14 +66,14 @@ fn main() {
         fs::create_dir(&args.outdir).unwrap();
         fs::create_dir(Path::new(&args.outdir).join("tags")).unwrap();
     }
-
+    let url = "https://rust.code-maven.com";
     let pages = read_pages(&args.pages, &args.root);
     let tags: Tags = collect_tags(&pages);
     render_pages(&pages, &args.outdir);
     render_tag_pages(&pages, &tags, &args.outdir);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir));
     render_archive(pages, &format!("{}/archive.html", &args.outdir));
-    render_robots_txt(&format!("{}/robots.txt", &args.outdir));
+    render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
@@ -86,8 +86,7 @@ fn collect_tags(pages: &Vec<Page>) -> Tags {
     tags
 }
 
-fn render_robots_txt(path: &str) {
-    let url = "https://rust.code-maven.com";
+fn render_robots_txt(path: &str, url: &str) {
     let text = format!("Sitemap: {}/sitemap.xml\n\nUser-agent: *\n", url);
 
     let mut file = File::create(path).unwrap();
