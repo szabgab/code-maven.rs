@@ -7,7 +7,7 @@
     {%- else -%}
       <loc>{{url}}/{{page.filename}}</loc>
     {%- endif %}
-    <lastmod>{{page.timestamp}}</lastmod>
+    <lastmod>{{page.timestamp | split:'T' | first}}</lastmod>
   </url>
   {% endfor %}
 </urlset>

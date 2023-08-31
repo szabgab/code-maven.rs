@@ -211,7 +211,6 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
     archive.filename = "archive".to_string();
     let now: DateTime<Utc> = Utc::now();
     archive.timestamp = now.format("%Y-%m-%dT%H::%M::%S").to_string();
-    // TODO in all the timestamp remove the part after the T for the sitemap
     pages.push(archive);
 
     pages
