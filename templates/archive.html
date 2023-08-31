@@ -7,7 +7,7 @@
       <div class="content">
         <ul>
           {% for page in pages %}
-             <li><a href="{{page.filename}}">{{page.title}}</a></li>
+             <li>{{page.timestamp | split:'T' | first}} <a href="{{page.filename}}">{{page.title}}</a></li>
           {% endfor %}
         </ul>
       </div>
