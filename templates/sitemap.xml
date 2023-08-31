@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  {% for page in pages %}
   <url>
-    {% if page.filename == "index" %}
+    {% if page.filename == "index" -%}
       <loc>{{url}}/</loc>
-    {% else %}
+    {%- else -%}
       <loc>{{url}}/{{page.filename}}</loc>
-    {% endif %}
+    {%- endif %}
     <lastmod>{{page.timestamp}}</lastmod>
   </url>
   {% endfor %}
