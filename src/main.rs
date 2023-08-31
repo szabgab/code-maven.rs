@@ -71,7 +71,7 @@ fn main() {
     let tags: Tags = collect_tags(&pages);
     render_pages(&pages, &args.outdir);
     render_tag_pages(&pages, &tags, &args.outdir);
-    render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir));
+    render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
     render_archive(pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
 }
@@ -93,7 +93,7 @@ fn render_robots_txt(path: &str, url: &str) {
     writeln!(&mut file, "{}", text).unwrap();
 }
 
-fn render_sitemap(pages: &Vec<Page>, path: &str) {
+fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     log::info!("render sitemap");
     let template_filename = String::from("templates/sitemap.xml");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -105,6 +105,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str) {
     let globals = liquid::object!({
         "title": "Archive".to_string(),
         "pages": &pages,
+        "url": url,
     });
     let output = template.render(&globals).unwrap();
 

@@ -3,9 +3,9 @@
  {% for page in pages %}
   <url>
     {% if page.filename == "index" %}
-      <loc>https://rust.code-maven.com/</loc>
+      <loc>{{url}}/</loc>
     {% else %}
-      <loc>https://rust.code-maven.com/{{page.filename}}</loc>
+      <loc>{{url}}/{{page.filename}}</loc>
     {% endif %}
     <lastmod>{{page.timestamp}}</lastmod>
   </url>
