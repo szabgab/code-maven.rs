@@ -20,4 +20,11 @@ jobs:
       run: cargo test --verbose
 
     - name: Build demo site
-      run: cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
+      run: |
+        cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
+
+    - name: Rebuild the demo site
+      run: |
+        cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
+        rm -rf _site/*
+        cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
