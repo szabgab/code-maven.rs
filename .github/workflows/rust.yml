@@ -28,3 +28,7 @@ jobs:
         cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
         rm -rf _site/*
         cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
+
+    - name: Check cargo fmt
+      run: cargo fmt --check
+
