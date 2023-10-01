@@ -120,7 +120,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     let template = liquid::ParserBuilder::with_stdlib()
         .build()
         .unwrap()
-        .parse_file(&template_filename)
+        .parse_file(template_filename)
         .unwrap();
 
     let globals = liquid::object!({
