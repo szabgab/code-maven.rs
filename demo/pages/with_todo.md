@@ -11,8 +11,4 @@ tags:
 
 Some Content.
 
-![](picture.png)
-
-![a title](image.jpg)
-
 ![](examples/hello_world.rs)
