@@ -151,7 +151,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
         .partials(partials)
         .build()
         .unwrap()
-        .parse_file(&template_filename)
+        .parse_file(template_filename)
         .unwrap();
 
     let globals = liquid::object!({
@@ -176,7 +176,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
                 }
             }
         }
-        let mut path = Path::new(outdir).join("tags").join(&tag);
+        let mut path = Path::new(outdir).join("tags").join(tag);
         path.set_extension("html");
         log::info!("render_tag {}", tag);
 
@@ -228,7 +228,7 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
                 continue;
             }
             // println!("{:?}", entry.file_name());
-            let page = read_md_file(root, &entry.path().to_str().unwrap());
+            let page = read_md_file(root, entry.path().to_str().unwrap());
             log::info!("{:?}", &page);
             pages.push(page);
         }
@@ -283,7 +283,7 @@ fn render(page: &Page, path: &str) {
         .partials(partials)
         .build()
         .unwrap()
-        .parse_file(&template_filename)
+        .parse_file(template_filename)
         .unwrap();
 
     let globals = liquid::object!({
@@ -402,8 +402,8 @@ fn read_languages() -> HashMap<String, String> {
         Ok(file) => {
             let reader = BufReader::new(file);
             for line in reader.lines() {
-                let line = String::from(line.unwrap());
-                let parts = line.split(",");
+                let line = line.unwrap();
+                let parts = line.split(',');
                 let parts: Vec<&str> = parts.collect();
                 data.insert(parts[0].to_string(), parts[1].to_string());
             }
