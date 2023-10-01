@@ -18,3 +18,6 @@ jobs:
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+
+    - name: Build demo site
+      run: cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
