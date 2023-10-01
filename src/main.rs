@@ -82,7 +82,10 @@ fn main() {
 
     if !Path::new(&args.outdir).exists() {
         fs::create_dir(&args.outdir).unwrap();
-        fs::create_dir(Path::new(&args.outdir).join("tags")).unwrap();
+    }
+    let tags_dir = Path::new(&args.outdir).join("tags");
+    if !Path::new(&tags_dir).exists() {
+        fs::create_dir(tags_dir).unwrap();
     }
     let url = "https://rust.code-maven.com";
     let pages = read_pages(&args.pages, &args.root);
@@ -197,6 +200,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
         });
         let output = template.render(&globals).unwrap();
 
+        log::info!("saving file at {:?}", path);
         let mut file = File::create(path).unwrap();
         writeln!(&mut file, "{}", output).unwrap();
     }
