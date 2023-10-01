@@ -6,6 +6,6 @@ tags:
 ---
 
 
-![](demo/examples/files/code_maven_440x440.png)
+![](examples/files/code_maven_440x440.png)
 
 

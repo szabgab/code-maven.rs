@@ -88,7 +88,7 @@ fn main() {
         fs::create_dir(tags_dir).unwrap();
     }
     let url = "https://rust.code-maven.com";
-    let pages = read_pages(&args.pages, &args.root);
+    let pages = read_pages(&args.pages, &args.root, &args.outdir);
     let tags: Tags = collect_tags(&pages);
     render_pages(&pages, &args.outdir);
     render_tag_pages(&pages, &tags, &args.outdir);
@@ -217,7 +217,7 @@ fn render_pages(pages: &Vec<Page>, outdir: &str) {
     }
 }
 
-fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
+fn read_pages(pages_path: &str, root: &str, outdir: &str) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
     let path = Path::new(pages_path);
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
@@ -227,7 +227,7 @@ fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
             continue;
         }
         // println!("{:?}", entry.file_name());
-        let page = read_md_file(root, entry.path().to_str().unwrap());
+        let page = read_md_file(root, entry.path().to_str().unwrap(), outdir);
         log::info!("{:?}", &page);
         pages.push(page);
     }
@@ -296,7 +296,7 @@ fn render(page: &Page, path: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn read_md_file(root: &str, path: &str) -> Page {
+fn read_md_file(root: &str, path: &str, outdir: &str) -> Page {
     let mut page: Page = Page::new();
 
     let mut content = "".to_string();
@@ -308,7 +308,7 @@ fn read_md_file(root: &str, path: &str) -> Page {
             let mut front_matter = "".to_string();
             for line in reader.lines() {
                 let line = line.unwrap();
-                log::info!("line '{}'", line);
+                log::debug!("line '{}'", line);
                 if in_front_matter {
                     if line == "---" {
                         in_front_matter = false;
@@ -339,7 +339,7 @@ fn read_md_file(root: &str, path: &str) -> Page {
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
 
-    let content = pre_process(root, &content);
+    let content = pre_process(root, outdir, &content);
     let content = content
         + &format!(
             "\n[source](https://github.com/szabgab/rust.code-maven.com/blob/main/pages/{}.md)",
@@ -356,8 +356,8 @@ fn read_md_file(root: &str, path: &str) -> Page {
     page
 }
 
-fn pre_process(root: &str, text: &str) -> String {
-    let re = Regex::new(r"!\[\]\(([^)]+)\)").unwrap();
+fn pre_process(root: &str, outdir: &str, text: &str) -> String {
+    let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
 
     let result = re.replace_all(text, |caps: &Captures| {
@@ -367,6 +367,9 @@ fn pre_process(root: &str, text: &str) -> String {
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             include_file(include_path, path, language)
         } else {
+            // TODO: we don't need to copy external images
+            let output_path = Path::new(outdir).join(path);
+            copy_file(&include_path, &output_path);
             caps[0].to_string() // .copy() // don't replace anything
         }
     });
@@ -374,7 +377,28 @@ fn pre_process(root: &str, text: &str) -> String {
     result.to_string()
 }
 
+fn copy_file(source_path: &Path, destination_path: &PathBuf) {
+    log::info!(
+        "copy_path: from {:?} to {:?}",
+        source_path,
+        destination_path
+    );
+    let destination_dir = destination_path.parent().unwrap();
+    log::info!("dir: {:?}", destination_dir);
+    if !source_path.exists() {
+        log::error!("source_path: {:?} does not exists", source_path);
+        return;
+    }
+
+    if !destination_dir.exists() {
+        fs::create_dir_all(destination_dir).unwrap();
+    }
+    fs::copy(source_path, destination_path).unwrap();
+}
+
 fn include_file(include_path: PathBuf, path: &Path, language: &str) -> String {
+    log::info!("include_path: {:?}", include_path);
+
     if include_path.exists() {
         match File::open(include_path) {
             Ok(mut file) => {
@@ -423,7 +447,7 @@ fn read_languages() -> HashMap<String, String> {
 
 #[test]
 fn test_read_index() {
-    let data = read_md_file("demo", "demo/pages/index.md");
+    let data = read_md_file("demo", "demo/pages/index.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
@@ -439,7 +463,7 @@ fn test_read_index() {
 
 #[test]
 fn test_read_todo() {
-    let data = read_md_file("demo", "demo/pages/with_todo.md");
+    let data = read_md_file("demo", "demo/pages/with_todo.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),
@@ -461,14 +485,14 @@ fn test_read_todo() {
 
 #[test]
 fn test_img_with_title() {
-    let data = read_md_file("demo", "demo/pages/img_with_title.md");
+    let data = read_md_file("demo", "demo/pages/img_with_title.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Image with title".to_string(),
         timestamp: "2023-10-12T13:30:01".to_string(),
         description: "".to_string(),
         filename: "img_with_title".to_string(),
-        content: "<p><img src=\"demo/examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>".to_string(),
+        content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>".to_string(),
         todo: vec![
         ],
         tags: vec![

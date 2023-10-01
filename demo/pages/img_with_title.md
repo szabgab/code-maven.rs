@@ -6,5 +6,5 @@ tags:
 ---
 
 
-![a title](demo/examples/files/code_maven_490_490.jpg)
+![a title](examples/files/code_maven_490_490.jpg)
 
