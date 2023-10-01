@@ -220,18 +220,16 @@ fn render_pages(pages: &Vec<Page>, outdir: &str) {
 fn read_pages(pages_path: &str, root: &str) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
     let path = Path::new(pages_path);
-    for entry in path.read_dir().expect("read_dir call failed") {
-        if let Ok(entry) = entry {
-            log::info!("path: {:?}", entry.path());
-            if entry.path().extension().unwrap() != "md" {
-                log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
-                continue;
-            }
-            // println!("{:?}", entry.file_name());
-            let page = read_md_file(root, entry.path().to_str().unwrap());
-            log::info!("{:?}", &page);
-            pages.push(page);
+    for entry in path.read_dir().expect("read_dir call failed").flatten() {
+        log::info!("path: {:?}", entry.path());
+        if entry.path().extension().unwrap() != "md" {
+            log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
+            continue;
         }
+        // println!("{:?}", entry.file_name());
+        let page = read_md_file(root, entry.path().to_str().unwrap());
+        log::info!("{:?}", &page);
+        pages.push(page);
     }
 
     let mut archive = Page::new();
