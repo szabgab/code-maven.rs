@@ -365,32 +365,40 @@ fn pre_process(root: &str, text: &str) -> String {
         let include_path = Path::new(root).join(path);
         if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
-            if include_path.exists() {
-                match File::open(include_path) {
-                    Ok(mut file) => {
-                        let mut content = "".to_string();
-                        content += &format!("**[{}](https://github.com/szabgab/rust.code-maven.com/tree/main/{})**\n", path.display(), path.display());
-                        content += "```";
-                        content += language;
-                        content += "\n";
-                        file.read_to_string(&mut content).unwrap();
-                        content += "```\n";
-                        content
-                    }
-                    Err(_error) => {
-                        //println!("Error opening file {}: {}", include_path.display(), error);
-                        "FAILED".to_string()
-                    }
-                }
-            } else {
-                "MISSING".to_string()
-            }
+            include_file(include_path, path, language)
         } else {
             caps[0].to_string() // .copy() // don't replace anything
         }
     });
 
     result.to_string()
+}
+
+fn include_file(include_path: PathBuf, path: &Path, language: &str) -> String {
+    if include_path.exists() {
+        match File::open(include_path) {
+            Ok(mut file) => {
+                let mut content = "".to_string();
+                content += &format!(
+                    "**[{}](https://github.com/szabgab/rust.code-maven.com/tree/main/{})**\n",
+                    path.display(),
+                    path.display()
+                );
+                content += "```";
+                content += language;
+                content += "\n";
+                file.read_to_string(&mut content).unwrap();
+                content += "```\n";
+                content
+            }
+            Err(_error) => {
+                //println!("Error opening file {}: {}", include_path.display(), error);
+                "FAILED".to_string()
+            }
+        }
+    } else {
+        "MISSING".to_string()
+    }
 }
 
 fn read_languages() -> HashMap<String, String> {
