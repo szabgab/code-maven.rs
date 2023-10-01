@@ -32,3 +32,5 @@ jobs:
     - name: Check cargo fmt
       run: cargo fmt --check
 
+    - name: Clippy stop at any warning
+      run: cargo clippy -- --deny warnings
