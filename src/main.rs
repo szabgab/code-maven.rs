@@ -412,6 +412,7 @@ fn include_file(include_path: PathBuf, path: &Path, language: &str) -> String {
                 content += language;
                 content += "\n";
                 file.read_to_string(&mut content).unwrap();
+                content += "\n";
                 content += "```\n";
                 content
             }
@@ -470,7 +471,7 @@ fn test_read_todo() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         description: "".to_string(),
         filename: "with_todo".to_string(),
-        content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n</code></pre>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>".to_string(),
+        content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
