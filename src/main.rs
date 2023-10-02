@@ -108,7 +108,10 @@ fn collect_tags(pages: &Vec<Page>) -> Tags {
 }
 
 fn render_robots_txt(path: &str, url: &str) {
-    let text = format!("Sitemap: {}/sitemap.xml\nSitemap: {}/slides/sitemap.xml\n\nUser-agent: *\n", url, url);
+    let text = format!(
+        "Sitemap: {}/sitemap.xml\nSitemap: {}/slides/sitemap.xml\n\nUser-agent: *\n",
+        url, url
+    );
 
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", text).unwrap();
