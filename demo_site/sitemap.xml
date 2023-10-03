@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>https://rust.code-maven.com/tags</loc>
+    <lastmod>2023-10-12</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rust.code-maven.com/with_todo</loc>
     <lastmod>2023-10-11</lastmod>
   </url>
