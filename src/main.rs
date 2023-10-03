@@ -14,6 +14,8 @@ use regex::Captures;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
+use code_maven::{topath, ToPath};
+
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
 type Tags = HashMap<String, i32>;
@@ -121,6 +123,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     log::info!("render sitemap");
     let template_filename = String::from("templates/sitemap.xml");
     let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
         .build()
         .unwrap()
         .parse_file(template_filename)
@@ -151,6 +154,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
         .collect();
     let template_filename = String::from("templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
         .partials(partials)
         .build()
         .unwrap()
@@ -186,7 +190,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
             "pages": pages_with_tag,
         });
 
-        let path = Path::new(outdir).join("tags").join(tag);
+        let path = Path::new(outdir).join("tags").join(topath(tag));
         log::info!("render_tag {}", tag);
 
         render_any("templates/tag.html", path, globals);
@@ -217,6 +221,7 @@ fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Objec
     };
 
     let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
         .partials(partials)
         .build()
         .unwrap()
@@ -302,6 +307,7 @@ fn render(page: &Page, path: &str) {
 
     let template_filename = String::from("templates/page.html");
     let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
         .partials(partials)
         .build()
         .unwrap()

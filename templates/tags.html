@@ -7,7 +7,7 @@
       <div class="content">
         <ul>
           {% for tag in tags %}
-             <li><a href="/tags/{{tag}}">{{tag}}</a></li>
+             <li><a href="/tags/{{tag | topath}}">{{tag}}</a></li>
           {% endfor %}
         </ul>
       </div>
