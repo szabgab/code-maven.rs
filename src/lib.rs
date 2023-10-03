@@ -26,6 +26,11 @@ pub fn topath(text: &str) -> String {
         "#" => "number-sign".to_string(),
         "/" => "forward-slash".to_string(),
         "\\" => "back-slash".to_string(),
+        "." => "full-stop".to_string(),
+        ";" => "semi-colon".to_string(),
+        ":" => "colon".to_string(),
+        "'" => "single-quote".to_string(),
+        "\"" => "double-quote".to_string(),
         _ => text.to_lowercase(),
     }
 }
