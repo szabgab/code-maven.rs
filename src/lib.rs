@@ -31,7 +31,7 @@ pub fn topath(text: &str) -> String {
         ":" => "colon".to_string(),
         "'" => "single-quote".to_string(),
         "\"" => "double-quote".to_string(),
-        _ => text.replace(" ", "_").to_lowercase(),
+        _ => text.replace(' ', "_").to_lowercase(),
     }
 }
 
