@@ -38,6 +38,10 @@ cargo test
 
 ## Local development
 
+* In the `demo` folder we have the files of a web site.
+* In the `demo_site` folder we have the generated version of the demo site.
+* Running the `tests.sh` will generated the demo site and compare it to the stored version.
+
 Generate the demo pages:
 
 ```
