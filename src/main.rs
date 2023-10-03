@@ -191,6 +191,21 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
 
         render_any("templates/tag.html", path, globals);
     }
+
+    let mut tags: Vec<_> = tags.keys().collect();
+    tags.sort();
+
+    let globals = liquid::object!({
+        "title": "Tags".to_string(),
+        "description": "Articles about Rust with tags",
+        "tags": tags,
+    });
+
+    render_any(
+        "templates/tags.html",
+        Path::new(outdir).join("tags").join("index"),
+        globals,
+    );
 }
 
 fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Object) {
