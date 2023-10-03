@@ -179,34 +179,40 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
                 }
             }
         }
-        let mut path = Path::new(outdir).join("tags").join(tag);
-        path.set_extension("html");
-        log::info!("render_tag {}", tag);
-
-        let partials = match load_templates() {
-            Ok(partials) => partials,
-            Err(error) => panic!("Error loading templates {}", error),
-        };
-
-        let template_filename = String::from("templates/tag.html");
-        let template = liquid::ParserBuilder::with_stdlib()
-            .partials(partials)
-            .build()
-            .unwrap()
-            .parse_file(&template_filename)
-            .unwrap();
 
         let globals = liquid::object!({
             "title": format!("Articles tagged with '{}'", tag),
             "description": format!("Articles about Rust tagged with '{}'", tag),
             "pages": pages_with_tag,
         });
-        let output = template.render(&globals).unwrap();
 
-        log::info!("saving file at {:?}", path);
-        let mut file = File::create(path).unwrap();
-        writeln!(&mut file, "{}", output).unwrap();
+        let path = Path::new(outdir).join("tags").join(tag);
+        log::info!("render_tag {}", tag);
+
+        render_any("templates/tag.html", path, globals);
     }
+}
+
+fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Object) {
+    path.set_extension("html");
+
+    let partials = match load_templates() {
+        Ok(partials) => partials,
+        Err(error) => panic!("Error loading templates {}", error),
+    };
+
+    let template = liquid::ParserBuilder::with_stdlib()
+        .partials(partials)
+        .build()
+        .unwrap()
+        .parse_file(template_filename)
+        .unwrap();
+
+    let output = template.render(&globals).unwrap();
+
+    log::info!("saving file at {:?}", path);
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
 }
 
 fn render_pages(pages: &Vec<Page>, outdir: &str) {
