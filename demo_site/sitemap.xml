@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+ 
+  <url>
+    <loc>https://rust.code-maven.com/img_with_title</loc>
+    <lastmod>2023-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/img_without_title</loc>
+    <lastmod>2023-10-12</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/with_todo</loc>
+    <lastmod>2023-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/archive</loc>
+    <lastmod>2023-10-03</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/about</loc>
+    <lastmod>2023-08-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/</loc>
+    <lastmod>2015-10-11</lastmod>
+  </url>
+  
+</urlset>
+
