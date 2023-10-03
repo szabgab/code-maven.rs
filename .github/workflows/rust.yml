@@ -29,8 +29,13 @@ jobs:
         rm -rf _site/*
         cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
 
+    - name: Generate demo site and compare to the stored version
+      run: ./test.sh
+
     - name: Check cargo fmt
       run: cargo fmt --check
 
     - name: Clippy stop at any warning
       run: cargo clippy -- --deny warnings
+
+
