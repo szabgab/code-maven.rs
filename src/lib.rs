@@ -22,10 +22,10 @@ impl Filter for ToPathFilter {
 }
 
 pub fn topath(text: &str) -> String {
-    if text == "#" {
-        return "number-sign".to_string();
+    match text {
+        "#" => "number-sign".to_string(),
+        _ => text.to_lowercase(),
     }
-    text.to_lowercase().to_string()
 }
 
 #[cfg(test)]
