@@ -24,6 +24,8 @@ impl Filter for ToPathFilter {
 pub fn topath(text: &str) -> String {
     match text {
         "#" => "number-sign".to_string(),
+        "/" => "forward-slash".to_string(),
+        "\\" => "back-slash".to_string(),
         _ => text.to_lowercase(),
     }
 }
