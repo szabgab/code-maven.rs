@@ -34,6 +34,12 @@ struct Cli {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+struct Link {
+    title: String,
+    path: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 struct Page {
     title: String,
     timestamp: String,
@@ -52,6 +58,9 @@ struct Page {
 
     #[serde(default = "get_empty_string")]
     content: String,
+
+    #[serde(default = "get_empty_links")]
+    backlinks: Vec<Link>,
 }
 
 impl Page {
@@ -64,8 +73,13 @@ impl Page {
             content: "".to_string(),
             todo: vec![],
             tags: vec![],
+            backlinks: vec![],
         }
     }
+}
+
+fn get_empty_links() -> Vec<Link> {
+    vec![]
 }
 
 fn get_empty_vector() -> Vec<String> {
@@ -370,6 +384,8 @@ fn read_md_file(root: &str, path: &str, outdir: &str) -> Page {
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
 
     let content = pre_process(root, outdir, &content);
+    page.backlinks = find_links(&content);
+
     let content = content
         + &format!(
             "\n[source](https://github.com/szabgab/rust.code-maven.com/blob/main/pages/{}.md)",
@@ -384,6 +400,23 @@ fn read_md_file(root: &str, path: &str, outdir: &str) -> Page {
 
     page.content = content;
     page
+}
+
+fn find_links(text: &str) -> Vec<Link> {
+    let mut links: Vec<Link> = vec![];
+
+    let re = Regex::new(r"[^!]\[([^\]]+)\]\(([^)]+)\)").unwrap();
+    for capture in re.captures_iter(text) {
+        if capture[2].starts_with("http://") || capture[2].starts_with("https://") {
+            continue;
+        }
+        links.push(Link {
+            title: capture[1].to_string(),
+            path: capture[2].to_string(),
+        });
+    }
+
+    links
 }
 
 fn pre_process(root: &str, outdir: &str, text: &str) -> String {
@@ -488,6 +521,12 @@ fn test_read_index() {
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>".to_string(),
         todo: vec![],
         tags: vec![],
+        backlinks: vec![
+            Link {
+                title: "with TODO".to_string(),
+                path: "/with_todo".to_string()
+            }
+        ],
     };
     assert_eq!(data, expected);
 }
@@ -510,6 +549,7 @@ fn test_read_todo() {
             "println!".to_string(),
             "fn".to_string(),
         ],
+        backlinks: vec![],
     };
     assert_eq!(data, expected);
 }
@@ -528,6 +568,30 @@ fn test_img_with_title() {
         ],
         tags: vec![
             "img".to_string(),
+        ],
+        backlinks: vec![],
+    };
+    assert_eq!(data, expected);
+}
+
+#[test]
+fn test_links() {
+    let data = read_md_file("demo", "demo/pages/links.md", "temp");
+    dbg!(&data);
+    let expected = Page {
+        title: "Links".to_string(),
+        timestamp: "2023-10-19T12:30:01".to_string(),
+        description: "".to_string(),
+        filename: "links".to_string(),
+        content: "<ul>\n<li>\n<p>An <a href=\"/with_todo\">internal link</a> and more text.</p>\n</li>\n<li>\n<p>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</p>\n</li>\n</ul>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_string(),
+        todo: vec![
+        ],
+        tags: vec![],
+        backlinks: vec![
+            Link {
+                title: "internal link".to_string(),
+                path: "/with_todo".to_string(),
+            },
         ],
     };
     assert_eq!(data, expected);
