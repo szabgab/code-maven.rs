@@ -2,23 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  
   <url>
-    <loc>https://rust.code-maven.com/links</loc>
-    <lastmod>2023-10-19</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rust.code-maven.com/img_with_title</loc>
-    <lastmod>2023-10-12</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rust.code-maven.com/img_without_title</loc>
-    <lastmod>2023-10-12</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://rust.code-maven.com/tags</loc>
-    <lastmod>2023-10-12</lastmod>
+    <loc>https://rust.code-maven.com/archive</loc>
+    <lastmod>2023-10-11</lastmod>
   </url>
   
   <url>
@@ -27,8 +12,23 @@
   </url>
   
   <url>
-    <loc>https://rust.code-maven.com/archive</loc>
-    <lastmod>2023-10-11</lastmod>
+    <loc>https://rust.code-maven.com/img_without_title</loc>
+    <lastmod>2023-10-04</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/img_with_title</loc>
+    <lastmod>2023-10-03</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/tags</loc>
+    <lastmod>2023-10-02</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/links</loc>
+    <lastmod>2023-10-01</lastmod>
   </url>
   
   <url>
