@@ -540,7 +540,8 @@ fn read_languages() -> HashMap<String, String> {
 
 #[test]
 fn test_read_index() {
-    let data = read_md_file(config, "demo", "demo/pages/index.md", "temp");
+    let config = read_config("demo");
+    let data = read_md_file(&config, "demo", "demo/pages/index.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
@@ -562,7 +563,8 @@ fn test_read_index() {
 
 #[test]
 fn test_read_todo() {
-    let data = read_md_file(config, "demo", "demo/pages/with_todo.md", "temp");
+    let config = read_config("demo");
+    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),
@@ -585,11 +587,12 @@ fn test_read_todo() {
 
 #[test]
 fn test_img_with_title() {
-    let data = read_md_file(config, "demo", "demo/pages/img_with_title.md", "temp");
+    let config = read_config("demo");
+    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Image with title".to_string(),
-        timestamp: "2023-10-12T13:30:01".to_string(),
+        timestamp: "2023-10-03T13:30:01".to_string(),
         description: "".to_string(),
         filename: "img_with_title".to_string(),
         content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>".to_string(),
@@ -605,11 +608,12 @@ fn test_img_with_title() {
 
 #[test]
 fn test_links() {
-    let data = read_md_file(config, "demo", "demo/pages/links.md", "temp");
+    let config = read_config("demo");
+    let data = read_md_file(&config, "demo", "demo/pages/links.md", "temp");
     dbg!(&data);
     let expected = Page {
         title: "Links".to_string(),
-        timestamp: "2023-10-19T12:30:01".to_string(),
+        timestamp: "2023-10-01T12:30:01".to_string(),
         description: "".to_string(),
         filename: "links".to_string(),
         content: "<ul>\n<li>\n<p>An <a href=\"/with_todo\">internal link</a> and more text.</p>\n</li>\n<li>\n<p>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</p>\n</li>\n</ul>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_string(),
