@@ -153,7 +153,6 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
         .unwrap();
 
     let globals = liquid::object!({
-        "title": "Archive".to_string(),
         "pages": &pages,
         "url": url,
     });
