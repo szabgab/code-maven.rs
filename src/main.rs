@@ -344,12 +344,21 @@ fn render(config: &serde_yaml::Value, page: &Page, path: &str) {
         .parse_file(template_filename)
         .unwrap();
 
+    let repo = config["repo"].as_str().unwrap();
+    let branch = config["branch"].as_str().unwrap();
+    let footer = &format!(
+        "[source]({}/blob/{}/pages/{}.md)",
+        repo, branch, &page.filename
+    );
+    let footer = markdown::to_html(footer);
+
     let globals = liquid::object!({
         "title": page.title,
         "description": page.description,
         "content": page.content,
         "page": page,
         "config": config,
+        "footer": footer,
     });
     let output = template.render(&globals).unwrap();
 
@@ -402,14 +411,6 @@ fn read_md_file(config: &serde_yaml::Value, root: &str, path: &str, outdir: &str
 
     let content = pre_process(config, root, outdir, &content);
     page.backlinks = find_links(&content);
-
-    let repo = config["repo"].as_str().unwrap();
-    let branch = config["branch"].as_str().unwrap();
-    let content = content
-        + &format!(
-            "\n[source]({}/blob/{}/pages/{}.md)",
-            repo, branch, &page.filename
-        );
 
     let content = markdown::to_html(&content);
     //println!("{}", content);
@@ -548,7 +549,8 @@ fn test_read_index() {
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
         filename: "index".to_string(),
-        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>".to_string(),
+        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
+        // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
         todo: vec![],
         tags: vec![],
         backlinks: vec![
@@ -571,7 +573,8 @@ fn test_read_todo() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         description: "".to_string(),
         filename: "with_todo".to_string(),
-        content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>".to_string(),
+        content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n".to_string(),
+        // footer <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
@@ -595,12 +598,11 @@ fn test_img_with_title() {
         timestamp: "2023-10-03T13:30:01".to_string(),
         description: "".to_string(),
         filename: "img_with_title".to_string(),
-        content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>".to_string(),
-        todo: vec![
-        ],
-        tags: vec![
-            "img".to_string(),
-        ],
+        content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n"
+            .to_string(),
+        // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>
+        todo: vec![],
+        tags: vec!["img".to_string()],
         backlinks: vec![],
     };
     assert_eq!(data, expected);
@@ -616,7 +618,8 @@ fn test_links() {
         timestamp: "2023-10-01T12:30:01".to_string(),
         description: "".to_string(),
         filename: "links".to_string(),
-        content: "<ul>\n<li>\n<p>An <a href=\"/with_todo\">internal link</a> and more text.</p>\n</li>\n<li>\n<p>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</p>\n</li>\n</ul>\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_string(),
+        content: "<ul>\n<li>An <a href=\"/with_todo\">internal link</a> and more text.</li>\n<li>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</li>\n</ul>\n".to_string(),
+        //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),
         todo: vec![
         ],
         tags: vec![],
