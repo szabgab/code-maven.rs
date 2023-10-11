@@ -112,7 +112,7 @@ fn main() {
         }
     };
 
-    let url = "https://rust.code-maven.com";
+    let url = config["url"].as_str().unwrap();
     let pages = read_pages(&args.pages, &args.root, &args.outdir);
     let tags: Tags = collect_tags(&pages);
     render_pages(&config, &pages, &args.outdir);
