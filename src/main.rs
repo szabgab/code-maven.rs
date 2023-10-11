@@ -104,13 +104,7 @@ fn main() {
         fs::create_dir(tags_dir).unwrap();
     }
 
-    let filepath = Path::new(&args.root).join("config.yaml");
-    let config: serde_yaml::Value = match File::open(&filepath) {
-        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
-        Err(error) => {
-            panic!("Error opening file {:?}: {}", filepath, error);
-        }
-    };
+    let config = read_config(&args.root);
 
     let url = config["url"].as_str().unwrap();
     let pages = read_pages(&config, &args.pages, &args.root, &args.outdir);
@@ -120,6 +114,17 @@ fn main() {
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
     render_archive(&config, pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
+}
+
+fn read_config(root: &str) -> serde_yaml::Value {
+    let filepath = Path::new(root).join("config.yaml");
+    let config: serde_yaml::Value = match File::open(&filepath) {
+        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
+        Err(error) => {
+            panic!("Error opening file {:?}: {}", filepath, error);
+        }
+    };
+    config
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
