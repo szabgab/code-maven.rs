@@ -103,13 +103,22 @@ fn main() {
     if !Path::new(&tags_dir).exists() {
         fs::create_dir(tags_dir).unwrap();
     }
+
+    let filepath = Path::new(&args.root).join("config.yaml");
+    let config: serde_yaml::Value = match File::open(&filepath) {
+        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
+        Err(error) => {
+            panic!("Error opening file {:?}: {}", filepath, error);
+        }
+    };
+
     let url = "https://rust.code-maven.com";
     let pages = read_pages(&args.pages, &args.root, &args.outdir);
     let tags: Tags = collect_tags(&pages);
-    render_pages(&pages, &args.outdir);
-    render_tag_pages(&pages, &tags, &args.outdir);
+    render_pages(&config, &pages, &args.outdir);
+    render_tag_pages(&config, &pages, &tags, &args.outdir);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
-    render_archive(pages, &format!("{}/archive.html", &args.outdir));
+    render_archive(&config, pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
 }
 
@@ -154,7 +163,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_archive(pages: Vec<Page>, path: &str) {
+fn render_archive(config: &serde_yaml::Value, pages: Vec<Page>, path: &str) {
     log::info!("render archive");
 
     let partials = match load_templates() {
@@ -179,6 +188,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
         "title": "Archive".to_string(),
         "description": "List of all the articles about the Rust programming language".to_string(),
         "pages": &filtered_pages,
+        "config": config,
     });
     let output = template.render(&globals).unwrap();
 
@@ -186,7 +196,7 @@ fn render_archive(pages: Vec<Page>, path: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
+fn render_tag_pages(config: &serde_yaml::Value, pages: &Vec<Page>, tags: &Tags, outdir: &str) {
     log::info!("render_tag_pages");
     for tag in tags.keys() {
         let mut pages_with_tag: Vec<Page> = vec![];
@@ -202,6 +212,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
             "title": format!("Articles tagged with '{}'", tag),
             "description": format!("Articles about Rust tagged with '{}'", tag),
             "pages": pages_with_tag,
+            "config": config,
         });
 
         let path = Path::new(outdir).join("tags").join(topath(tag));
@@ -217,6 +228,7 @@ fn render_tag_pages(pages: &Vec<Page>, tags: &Tags, outdir: &str) {
         "title": "Tags".to_string(),
         "description": "Articles about Rust with tags",
         "tags": tags,
+        "config": config,
     });
 
     render_any(
@@ -249,14 +261,14 @@ fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Objec
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_pages(pages: &Vec<Page>, outdir: &str) {
+fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str) {
     for page in pages {
         if page.filename == "archive" {
             continue;
         }
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
-        render(page, &format!("{}/{}", outdir, outfile.display()));
+        render(config, page, &format!("{}/{}", outdir, outfile.display()));
     }
 }
 
@@ -311,7 +323,7 @@ pub fn read_file(filename: &str) -> String {
     content
 }
 
-fn render(page: &Page, path: &str) {
+fn render(config: &serde_yaml::Value, page: &Page, path: &str) {
     log::info!("render path {}", path);
 
     let partials = match load_templates() {
@@ -333,6 +345,7 @@ fn render(page: &Page, path: &str) {
         "description": page.description,
         "content": page.content,
         "page": page,
+        "config": config,
     });
     let output = template.render(&globals).unwrap();
 

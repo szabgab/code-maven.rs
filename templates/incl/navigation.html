@@ -10,14 +10,15 @@
 
       <div id="navbar-home" class="navbar-menu">
         <div class="navbar-start">
-          <a href="/" class="navbar-item">Home</a>
-          <a href="/tags/" class="navbar-item">Tags</a>
-          <a href="/slides/" class="navbar-item">Slides</a>
+          {% for entry in config.navbar.start -%}
+          <a href="{{entry.path}}" class="navbar-item">{{entry.title}}</a>
+          {% endfor %}
         </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            <a class="navbar-item" href="/archive">Archive</a>
-          <a class="navbar-item" href="/about">About</a>
+            {% for entry in config.navbar.end -%}
+            <a href="{{entry.path}}" class="navbar-item">{{entry.title}}</a>
+            {% endfor %}  
           </div>
         </div>
       </div>
