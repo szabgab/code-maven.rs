@@ -112,7 +112,7 @@ fn main() {
     render_pages(&config, &pages, &args.outdir);
     render_tag_pages(&config, &pages, &tags, &args.outdir);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
-    render_archive(&config, pages, &format!("{}/archive.html", &args.outdir));
+    render_archive(&config, &pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
 }
 
@@ -167,7 +167,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_archive(config: &serde_yaml::Value, pages: Vec<Page>, path: &str) {
+fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str) {
     log::info!("render archive");
 
     let partials = match load_templates() {
@@ -175,8 +175,8 @@ fn render_archive(config: &serde_yaml::Value, pages: Vec<Page>, path: &str) {
         Err(error) => panic!("Error loading templates {}", error),
     };
 
-    let filtered_pages: Vec<Page> = pages
-        .into_iter()
+    let filtered_pages: Vec<&Page> = pages
+        .iter()
         .filter(|page| page.filename != "index" && page.filename != "archive")
         .collect();
     let template_filename = String::from("templates/archive.html");
