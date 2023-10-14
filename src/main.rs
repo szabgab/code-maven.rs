@@ -294,7 +294,7 @@ fn read_pages(config: &serde_yaml::Value, pages_path: &str, root: &str, outdir: 
     let mut archive = Page::new();
     archive.filename = "archive".to_string();
     let now: DateTime<Utc> = Utc::now();
-    archive.timestamp = now.format("%Y-%m-%dT%H::%M::%S").to_string();
+    archive.timestamp = now.format("%Y-%m-%dT%H:%M:%S").to_string();
     pages.push(archive);
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
