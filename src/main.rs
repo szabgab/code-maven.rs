@@ -8,7 +8,7 @@ use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
 
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Duration, Utc};
 use clap::Parser;
 use regex::Captures;
 use regex::Regex;
@@ -31,6 +31,9 @@ struct Cli {
 
     #[arg(long)]
     outdir: String,
+
+    #[arg(long, default_value = "")]
+    email: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
@@ -114,6 +117,50 @@ fn main() {
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
     render_archive(&config, &pages, &format!("{}/archive.html", &args.outdir));
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
+    render_email(
+        &config,
+        pages,
+        &format!("{}/email.html", &args.outdir),
+        &args.email,
+        url,
+    );
+}
+
+fn render_email(config: &serde_yaml::Value, pages: Vec<Page>, path: &str, email: &str, url: &str) {
+    if email.is_empty() {
+        return;
+    }
+    log::info!("render email");
+
+    let days: i64 = email.parse().unwrap();
+    let now: DateTime<Utc> = Utc::now();
+    let date = now - Duration::days(days);
+    let date = date.format("%Y-%m-%dT%H:%M:%S").to_string();
+    //println!("{:?}", pages);
+
+    let filtered_pages: Vec<&Page> = pages
+        .iter()
+        .filter(|page| page.filename != "index" && page.filename != "archive")
+        .filter(|page| page.timestamp > date)
+        .collect();
+
+    let template_filename = String::from("templates/email.html");
+    let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
+        .build()
+        .unwrap()
+        .parse_file(template_filename)
+        .unwrap();
+
+    let globals = liquid::object!({
+        "pages": &filtered_pages,
+        "config": config,
+        "url": url,
+    });
+    let output = template.render(&globals).unwrap();
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
 }
 
 fn read_config(root: &str) -> serde_yaml::Value {

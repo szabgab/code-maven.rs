@@ -61,3 +61,12 @@ Install [rustatic](https://rustatic.code-maven.com/) and run the following to vi
 ```
 rustatic --path _site/ --indexfile index.html --nice --port 3000
 ```
+
+
+## Generate email
+
+With links to post from the last 3 days (actually 3*24 hours)
+
+```
+cargo run -- --root ../rust.code-maven.com/ --pages ../rust.code-maven.com/pages/ --outdir _site/ --email 3
+```
