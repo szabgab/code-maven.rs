@@ -16,3 +16,6 @@ serde_yaml = "0.9"
 markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
 regex = "1.9.3"
 chrono = "0.4.26"
+image = "0.24.7"
+imageproc = "0.23.0"
+rusttype = "0.9.3"

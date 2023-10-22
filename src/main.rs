@@ -14,11 +14,13 @@ use regex::Captures;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
-use code_maven::{topath, ToPath};
+use code_maven::{draw_image, topath, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
 type Tags = HashMap<String, i32>;
+
+const IMG: &str = "img";
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -107,6 +109,11 @@ fn main() {
         fs::create_dir(tags_dir).unwrap();
     }
 
+    let images_dir = Path::new(&args.outdir).join(IMG);
+    if !Path::new(&images_dir).exists() {
+        fs::create_dir(images_dir).unwrap();
+    }
+
     let config = read_config(&args.root);
 
     let url = config["url"].as_str().unwrap();
@@ -115,10 +122,15 @@ fn main() {
 
     let pages = read_pages(&config, &pages_path, &args.root, &args.outdir);
     let tags: Tags = collect_tags(&pages);
-    render_pages(&config, &pages, &args.outdir);
-    render_tag_pages(&config, &pages, &tags, &args.outdir);
+    render_pages(&config, &pages, &args.outdir, url);
+    render_tag_pages(&config, &pages, &tags, &args.outdir, url);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
-    render_archive(&config, &pages, &format!("{}/archive.html", &args.outdir));
+    render_archive(
+        &config,
+        &pages,
+        &format!("{}/archive.html", &args.outdir),
+        url,
+    );
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
     render_email(
         &config,
@@ -224,7 +236,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str) {
+fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
     log::info!("render archive");
 
     let partials = match load_templates() {
@@ -245,11 +257,19 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str) {
         .parse_file(template_filename)
         .unwrap();
 
+    let site_name = match config.get("site_name") {
+        Some(value) => value.as_str().unwrap(),
+        _ => "",
+    };
+
     let globals = liquid::object!({
         "title": "Archive".to_string(),
         "description": "List of all the articles about the Rust programming language".to_string(),
         "pages": &filtered_pages,
         "config": config,
+        "url": url,
+        "pagepath": "archive",
+        "site_name": site_name,
     });
     let output = template.render(&globals).unwrap();
 
@@ -257,8 +277,20 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_tag_pages(config: &serde_yaml::Value, pages: &Vec<Page>, tags: &Tags, outdir: &str) {
+fn render_tag_pages(
+    config: &serde_yaml::Value,
+    pages: &Vec<Page>,
+    tags: &Tags,
+    outdir: &str,
+    url: &str,
+) {
     log::info!("render_tag_pages");
+
+    let site_name = match config.get("site_name") {
+        Some(value) => value.as_str().unwrap(),
+        _ => "",
+    };
+
     for tag in tags.keys() {
         let mut pages_with_tag: Vec<Page> = vec![];
         for page in pages {
@@ -274,6 +306,9 @@ fn render_tag_pages(config: &serde_yaml::Value, pages: &Vec<Page>, tags: &Tags, 
             "description": format!("Articles about Rust tagged with '{}'", tag),
             "pages": pages_with_tag,
             "config": config,
+            "url": url,
+            "pagepath": format!("tags/{}", topath(tag)),
+            "site_name": site_name,
         });
 
         let path = Path::new(outdir).join("tags").join(topath(tag));
@@ -290,6 +325,9 @@ fn render_tag_pages(config: &serde_yaml::Value, pages: &Vec<Page>, tags: &Tags, 
         "description": "Articles about Rust with tags",
         "tags": tags,
         "config": config,
+        "url": url,
+        "pagepath": "tags/",
+        "site_name": site_name,
     });
 
     render_any(
@@ -322,14 +360,15 @@ fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Objec
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str) {
+fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str, url: &str) {
     for page in pages {
         if page.filename == "archive" {
             continue;
         }
+
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
-        render(config, page, &format!("{}/{}", outdir, outfile.display()));
+        render_page(config, page, outfile, outdir, url);
     }
 }
 
@@ -389,8 +428,20 @@ pub fn read_file(filename: &str) -> String {
     content
 }
 
-fn render(config: &serde_yaml::Value, page: &Page, path: &str) {
+fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
+    let path = &format!("{}/{}", outdir, outfile.display());
+
     log::info!("render path {}", path);
+
+    // let image_file = image_file.join(IMG);
+    // let mut image_file = image_file.join(&page.filename);
+    // image_file.set_extension("png");
+    let mut image_path = PathBuf::from(IMG).join(&page.filename);
+    image_path.set_extension("png");
+    let image_file = PathBuf::from(outdir).join(&image_path);
+    // log::warn!("{} {:?}", page.filename, image_file);
+    // log::warn!("{}", page.title);
+    let image = draw_image(&image_file, &page.title);
 
     let partials = match load_templates() {
         Ok(partials) => partials,
@@ -414,13 +465,23 @@ fn render(config: &serde_yaml::Value, page: &Page, path: &str) {
     );
     let footer = markdown::to_html(footer);
 
+    let site_name = match config.get("site_name") {
+        Some(value) => value.as_str().unwrap(),
+        _ => "",
+    };
+
     let globals = liquid::object!({
         "title": page.title,
         "description": page.description,
         "content": page.content,
         "page": page,
+        "pagepath": page.filename,
         "config": config,
         "footer": footer,
+        "url": url,
+        "image": image,
+        "image_path": image_path,
+        "site_name": site_name,
     });
     let output = template.render(&globals).unwrap();
 
