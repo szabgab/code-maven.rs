@@ -45,13 +45,19 @@ cargo test
 Generate the demo pages:
 
 ```
+cargo run -- --root demo/ --outdir _site/
+```
+
+We can asli explicitely say where the pages are, but so far we did not need that.
+
+```
 cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
 ```
 
 Assuming you have cloned https://github.com/szabgab/rust.code-maven.com/ next to this repository then you can also try:
 
 ```
-cargo run -- --root ../rust.code-maven.com/ --pages ../rust.code-maven.com/pages/ --outdir _site/
+cargo run -- --root ../rust.code-maven.com/ --outdir _site/
 ```
 
 
@@ -68,5 +74,5 @@ rustatic --path _site/ --indexfile index.html --nice --port 3000
 With links to post from the last 3 days (actually 3*24 hours)
 
 ```
-cargo run -- --root ../rust.code-maven.com/ --pages ../rust.code-maven.com/pages/ --outdir _site/ --email 3
+cargo run -- --root ../rust.code-maven.com/  --outdir _site/ --email 3
 ```
