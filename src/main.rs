@@ -333,7 +333,7 @@ fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str) {
     }
 }
 
-fn read_pages(config: &serde_yaml::Value, path: &PathBuf, root: &str, outdir: &str) -> Vec<Page> {
+fn read_pages(config: &serde_yaml::Value, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
         log::info!("path: {:?}", entry.path());
@@ -355,10 +355,10 @@ fn read_pages(config: &serde_yaml::Value, path: &PathBuf, root: &str, outdir: &s
         let now: DateTime<Utc> = Utc::now();
         archive.timestamp = now.format("%Y-%m-%dT%H:%M:%S").to_string();
     } else {
-        archive.timestamp = pages[pages.len() - 1].timestamp.clone();
+        archive.timestamp = pages[0].timestamp.clone();
     }
 
-    pages.push(archive);
+    pages.insert(0, archive);
 
     pages
 }
