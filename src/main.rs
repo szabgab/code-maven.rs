@@ -24,10 +24,10 @@ type Tags = HashMap<String, i32>;
 #[command(version)]
 struct Cli {
     #[arg(long)]
-    pages: String,
-
-    #[arg(long)]
     root: String,
+
+    #[arg(long, default_value = "")]
+    pages: String,
 
     #[arg(long)]
     outdir: String,
@@ -110,7 +110,10 @@ fn main() {
     let config = read_config(&args.root);
 
     let url = config["url"].as_str().unwrap();
-    let pages = read_pages(&config, &args.pages, &args.root, &args.outdir);
+
+    let pages_path = get_pages_path(&args);
+
+    let pages = read_pages(&config, &pages_path, &args.root, &args.outdir);
     let tags: Tags = collect_tags(&pages);
     render_pages(&config, &pages, &args.outdir);
     render_tag_pages(&config, &pages, &tags, &args.outdir);
@@ -124,6 +127,13 @@ fn main() {
         &args.email,
         url,
     );
+}
+
+fn get_pages_path(args: &Cli) -> PathBuf {
+    if args.pages.is_empty() {
+        return PathBuf::from(&args.root).join("pages");
+    }
+    PathBuf::from(&args.pages)
 }
 
 fn render_email(config: &serde_yaml::Value, pages: Vec<Page>, path: &str, email: &str, url: &str) {
@@ -323,9 +333,8 @@ fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str) {
     }
 }
 
-fn read_pages(config: &serde_yaml::Value, pages_path: &str, root: &str, outdir: &str) -> Vec<Page> {
+fn read_pages(config: &serde_yaml::Value, path: &PathBuf, root: &str, outdir: &str) -> Vec<Page> {
     let mut pages: Vec<Page> = vec![];
-    let path = Path::new(pages_path);
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
         log::info!("path: {:?}", entry.path());
         if entry.path().extension().unwrap() != "md" {
