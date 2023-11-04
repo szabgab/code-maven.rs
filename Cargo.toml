@@ -19,3 +19,11 @@ chrono = "0.4.26"
 image = "0.24.7"
 imageproc = "0.23.0"
 rusttype = "0.9.3"
+
+[[bin]]
+name = "code-maven"
+path = "src/main.rs"
+
+[[bin]]
+name = "sendgrid"
+path = "src/cm-sendgrid.rs"
