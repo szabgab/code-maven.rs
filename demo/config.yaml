@@ -1,6 +1,7 @@
 url: https://rust.code-maven.com
 repo: https://github.com/szabgab/rust.code-maven.com
 branch: main
+site_name: Demo
 link_to_source: true
 footer: Demo of [Code Maven RS](https://github.com/szabgab/code-maven.rs) with links.
 tags:
