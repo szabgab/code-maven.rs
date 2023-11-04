@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 <link href="https://rust.code-maven.comatom" rel="self" />
-<title></title>
+<title>Demo</title>
 <id>https://rust.code-maven.com</id>
 <updated>xxx</updated>
 
