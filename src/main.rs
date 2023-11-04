@@ -237,7 +237,6 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-
 fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
     log::info!("render atom feed");
     let pages = pages.to_owned();
@@ -267,7 +266,6 @@ fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
 }
-
 
 fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
     log::info!("render archive");
