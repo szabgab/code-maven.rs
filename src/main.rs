@@ -294,8 +294,8 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &
     };
 
     let globals = liquid::object!({
-        "title": "Archive".to_string(),
-        "description": "List of all the articles about the Rust programming language".to_string(),
+        "title": config["archive"]["title"].as_str().unwrap(),
+        "description": config["archive"]["description"].as_str().unwrap(),
         "pages": &filtered_pages,
         "config": config,
         "url": url,
@@ -352,8 +352,8 @@ fn render_tag_pages(
     tags.sort();
 
     let globals = liquid::object!({
-        "title": "Tags".to_string(),
-        "description": "Articles about Rust with tags",
+        "title": config["tags"]["title"].as_str().unwrap(),
+        "description": config["tags"]["description"].as_str().unwrap(),
         "tags": tags,
         "config": config,
         "url": url,
