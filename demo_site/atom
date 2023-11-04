@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<link href="https://rust.code-maven.comatom" rel="self" />
+<title></title>
+<id>https://rust.code-maven.com</id>
+<updated>xxx</updated>
+
+  <entry>
+    <title></title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-11T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comarchive" />
+    <id>https://rust.code-maven.comarchive</id>
+    <content type="html"><![CDATA[]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Page with todos</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-11T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comwith_todo" />
+    <id>https://rust.code-maven.comwith_todo</id>
+    <content type="html"><![CDATA[<p>Some Content.</p>
+<p><strong><a href="https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs">examples/hello_world.rs</a></strong></p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello World!&quot;);
+}
+
+</code></pre>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Image without title</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-04T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comimg_without_title" />
+    <id>https://rust.code-maven.comimg_without_title</id>
+    <content type="html"><![CDATA[<p><img src="examples/files/code_maven_440x440.png" alt="" /></p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Image with title</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-03T13:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comimg_with_title" />
+    <id>https://rust.code-maven.comimg_with_title</id>
+    <content type="html"><![CDATA[<p><img src="examples/files/code_maven_490_490.jpg" alt="a title" /></p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Tags</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-02T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comtags" />
+    <id>https://rust.code-maven.comtags</id>
+    <content type="html"><![CDATA[<p>Content</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Links</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-01T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comlinks" />
+    <id>https://rust.code-maven.comlinks</id>
+    <content type="html"><![CDATA[<ul>
+<li>An <a href="/with_todo">internal link</a> and more text.</li>
+<li>An <a href="https://rust-digger.code-maven.com/">external link</a> and more text.</li>
+</ul>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>About page</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-08-11T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comabout" />
+    <id>https://rust.code-maven.comabout</id>
+    <content type="html"><![CDATA[<p>About the demo site.</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Index page</title>
+    <summary type="html"><![CDATA[The text for the search engines]]></summary>
+    <updated>2015-10-11T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.comindex" />
+    <id>https://rust.code-maven.comindex</id>
+    <content type="html"><![CDATA[<p>Some Text.</p>
+<p>Some more text after an empty row.</p>
+<h2 class="title is-4">A title with two hash-marks</h2>
+<p>More text <a href="/with_todo">with TODO</a>.</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+</feed>
+

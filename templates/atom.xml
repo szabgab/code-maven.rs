@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<link href="{{url}}atom" rel="self" />
+<title>{{site_name}}</title>
+<id>{{url}}</id>
+<updated>{{updated}}</updated>
+{% for page in pages %}
+  <entry>
+    <title>{{page.title}}</title>
+    <summary type="html"><![CDATA[{{page.description}}]]></summary>
+    <updated>{{page.timestamp}}</updated>
+    <link rel="alternate" type="text/html" href="{{url}}{{page.filename}}" />
+    <id>{{url}}{{page.filename}}</id>
+    <content type="html"><![CDATA[{{page.content}}]]></content>
+    <author>
+      <name>{{author_name}}</name>
+    </author>
+  </entry>
+{% endfor %}
+</feed>

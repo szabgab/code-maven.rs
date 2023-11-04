@@ -125,6 +125,7 @@ fn main() {
     render_pages(&config, &pages, &args.outdir, url);
     render_tag_pages(&config, &pages, &tags, &args.outdir, url);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
+    render_atom(&config, &pages, &format!("{}/atom", &args.outdir), url);
     render_archive(
         &config,
         &pages,
@@ -235,6 +236,38 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
 }
+
+
+fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
+    log::info!("render atom feed");
+    let pages = pages.to_owned();
+
+    let site_name = match config.get("site_name") {
+        Some(value) => value.as_str().unwrap(),
+        _ => "",
+    };
+
+    let template_filename = String::from("templates/atom.xml");
+    let template = liquid::ParserBuilder::with_stdlib()
+        .filter(ToPath)
+        .build()
+        .unwrap()
+        .parse_file(template_filename)
+        .unwrap();
+
+    let globals = liquid::object!({
+        "pages": &pages,
+        "url": url,
+        "site_name": site_name,
+        "author_name": "Gábor Szabó",
+        "updated": "xxx",
+    });
+    let output = template.render(&globals).unwrap();
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
+}
+
 
 fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
     log::info!("render archive");
