@@ -490,11 +490,19 @@ fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir
 
     let repo = config["repo"].as_str().unwrap();
     let branch = config["branch"].as_str().unwrap();
-    let footer = &format!(
-        "[source]({}/blob/{}/pages/{}.md)",
-        repo, branch, &page.filename
-    );
-    let footer = markdown::to_html(footer);
+    let mut footer = match config.get("footer") {
+        Some(value) => value.as_str().unwrap(),
+        _ => "",
+    }
+    .to_string();
+
+    if config["link_to_source"].as_bool().unwrap() {
+        footer = format!(
+            "{} [source]({}/blob/{}/pages/{}.md)",
+            footer, repo, branch, &page.filename
+        );
+    }
+    let footer = markdown::to_html(&footer);
 
     let site_name = match config.get("site_name") {
         Some(value) => value.as_str().unwrap(),
