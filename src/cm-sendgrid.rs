@@ -38,12 +38,7 @@ fn main() {
             to_address.name,
             to_address.email
         );
-        sendgrid(
-            &sendgrid_api_key,
-            &to_address.name,
-            &to_address.email,
-            &subject,
-        );
+        sendgrid(&sendgrid_api_key, to_address, &subject);
     }
 }
 
@@ -108,7 +103,7 @@ fn get_key() -> String {
     }
 }
 
-fn sendgrid(api_key: &str, to_name: &str, to_address: &str, subject: &str) {
+fn sendgrid(api_key: &str, to: &EmailAddress, subject: &str) {
     let sg = SGClient::new(api_key);
 
     let mut x_smtpapi = String::new();
@@ -116,8 +111,8 @@ fn sendgrid(api_key: &str, to_name: &str, to_address: &str, subject: &str) {
 
     let mail_info = Mail::new()
         .add_to(Destination {
-            address: to_address,
-            name: to_name,
+            address: &to.email,
+            name: &to.name,
         })
         .add_from("gabor@szabgab.com")
         .add_from_name("Original Sender")
