@@ -6,7 +6,7 @@ use regex::Regex;
 use sendgrid::SGClient;
 use sendgrid::{Destination, Mail};
 
-use code_maven::read_config;
+use code_maven::{read_config, read_md_file};
 
 #[derive(Parser, Debug)]
 #[command(version)]
@@ -16,8 +16,9 @@ struct Cli {
 
     #[arg(long)]
     tofile: String,
-    // #[arg(long)]
-    // mail: String,
+
+    #[arg(long)]
+    mail: String,
 }
 
 #[derive(Debug)]
@@ -31,6 +32,9 @@ fn main() {
     simple_logger::init_with_level(log::Level::Info).unwrap();
     let config = read_config(&args.root);
 
+    // outdir would be needed if there were images to be copied
+    let page = read_md_file(&config, &args.root, &args.mail, "");
+
     let from = EmailAddress {
         name: config["from"]["name"].as_str().unwrap().to_string(),
         email: config["from"]["email"].as_str().unwrap().to_string(),
@@ -39,7 +43,6 @@ fn main() {
     let addresses = read_tofile(&args.tofile);
 
     let sendgrid_api_key = get_key();
-    let subject = "Test mail".to_string();
 
     for (ix, to_address) in addresses.iter().enumerate() {
         log::info!(
@@ -49,7 +52,13 @@ fn main() {
             to_address.name,
             to_address.email
         );
-        sendgrid(&sendgrid_api_key, &from, to_address, &subject);
+        sendgrid(
+            &sendgrid_api_key,
+            &from,
+            to_address,
+            &page.title,
+            &page.content,
+        );
     }
 }
 
@@ -114,7 +123,7 @@ fn get_key() -> String {
     }
 }
 
-fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str) {
+fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str, html: &str) {
     let sg = SGClient::new(api_key);
 
     let mut x_smtpapi = String::new();
@@ -128,7 +137,7 @@ fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str
         .add_from(&from.email)
         .add_from_name(&from.name)
         .add_subject(subject)
-        .add_html("<h1>Hello from SendGrid!</h1>")
+        .add_html(html)
         .add_header("x-cool".to_string(), "indeed")
         .add_x_smtpapi(&x_smtpapi);
 
