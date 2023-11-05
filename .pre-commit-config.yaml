@@ -1,0 +1,51 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    - id: check-yaml
+      stages: [commit]
+    - id: check-json
+      stages: [commit]
+    - id: check-toml
+      stages: [commit]
+    - id: check-merge-conflict
+      stages: [commit]
+    - id: check-case-conflict
+      stages: [commit]
+    - id: detect-private-key
+      stages: [commit]
+  - repo: https://github.com/crate-ci/typos
+    rev: typos-dict-v0.11.3
+    hooks:
+    - id: typos
+      stages: [commit]
+  - repo: https://github.com/crate-ci/committed
+    rev: v1.0.20
+    hooks:
+    - id: committed
+      stages: [commit-msg]
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+    -   id: fmt
+        name: fmt
+        description: Format files with cargo fmt.
+        entry: cargo fmt --
+        language: system
+        files: \.rs$
+        args: []
+    -   id: cargo-check
+        name: cargo check
+        description: Check the package for errors.
+        entry: cargo check
+        language: system
+        files: \.rs$
+        pass_filenames: false
+          #    -   id: cargo-clippy
+          #        name: cargo clippy
+          #        description: Run the Clippy linter on the package.
+          #        entry: cargo clippy -- -D warnings
+          #        language: system
+          #        files: \.rs$
+          #        pass_filenames: false
+
