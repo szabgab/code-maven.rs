@@ -21,13 +21,13 @@ jobs:
 
     - name: Build demo site
       run: |
-        cargo run --bin code-maven -- --root demo/ --outdir _site/
+        cargo run --bin code-maven-web -- --root demo/ --outdir _site/
 
     - name: Rebuild the demo site
       run: |
-        cargo run --bin code-maven -- --root demo/  --outdir _site/
+        cargo run --bin code-maven-web -- --root demo/  --outdir _site/
         rm -rf _site/*
-        cargo run --bin code-maven -- --root demo/  --outdir _site/
+        cargo run --bin code-maven-web -- --root demo/  --outdir _site/
 
     - name: Generate demo site and compare to the stored version
       run: ./test.sh
