@@ -7,6 +7,9 @@ footer: Demo of [Code Maven RS](https://github.com/szabgab/code-maven.rs) with l
 tags:
   title: Tags
   description: Articles about Rust with tags
+from:
+  name: Gabor Szabo
+  email: gabor@szabgab.com
 archive:
   title: Archive
   description: List of all the articles about the Rust programming language
