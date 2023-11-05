@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use clap::Parser;
+use regex::Regex;
 use sendgrid::SGClient;
 use sendgrid::{Destination, Mail};
 
@@ -14,6 +15,12 @@ struct Cli {
     // mail: String,
 }
 
+#[derive(Debug)]
+struct EmailAddress {
+    name: String,
+    email: String,
+}
+
 fn main() {
     let args = Cli::parse();
     simple_logger::init_with_level(log::Level::Info).unwrap();
@@ -21,19 +28,30 @@ fn main() {
     let addresses = read_tofile(&args.tofile);
 
     let sendgrid_api_key = get_key();
-    let to_name = "Gabor Szabo".to_string();
     let subject = "Test mail".to_string();
 
     for (ix, to_address) in addresses.iter().enumerate() {
-        log::info!("Sending {}/{}", ix + 1, addresses.len());
-        sendgrid(&sendgrid_api_key, &to_name, to_address, &subject);
+        log::info!(
+            "Sending {}/{}  {} <{}>",
+            ix + 1,
+            addresses.len(),
+            to_address.name,
+            to_address.email
+        );
+        sendgrid(
+            &sendgrid_api_key,
+            &to_address.name,
+            &to_address.email,
+            &subject,
+        );
     }
 }
 
-fn read_tofile(path: &str) -> Vec<String> {
+fn read_tofile(path: &str) -> Vec<EmailAddress> {
     log::info!("Read addresses from '{}'", path);
+    let re_full = Regex::new(r"(.+?)\s*<(.+)>").unwrap();
 
-    let mut addresses: Vec<String> = vec![];
+    let mut addresses: Vec<EmailAddress> = vec![];
     match File::open(path) {
         Ok(file) => {
             let reader = BufReader::new(file);
@@ -46,7 +64,19 @@ fn read_tofile(path: &str) -> Vec<String> {
                     continue;
                 }
                 log::info!("line '{}'", line);
-                addresses.push(line);
+                let address = match re_full.captures(&line) {
+                    Some(value) => EmailAddress {
+                        name: value[1].to_owned(),
+                        email: value[2].to_owned(),
+                    },
+                    None => EmailAddress {
+                        name: "".to_string(),
+                        email: line,
+                    },
+                };
+                println!("{:?}", address);
+
+                addresses.push(address);
             }
         }
         Err(error) => {
@@ -98,6 +128,6 @@ fn sendgrid(api_key: &str, to_name: &str, to_address: &str, subject: &str) {
 
     match sg.send(mail_info) {
         Err(err) => println!("Error: {}", err),
-        Ok(body) => println!("Response: {:?}", body),
+        Ok(_body) => (), //println!("Response: {:?}", body),
     };
 }
