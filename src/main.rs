@@ -14,7 +14,7 @@ use regex::Captures;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 
-use code_maven::{draw_image, topath, ToPath};
+use code_maven::{draw_image, read_config, topath, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -184,17 +184,6 @@ fn render_email(config: &serde_yaml::Value, pages: Vec<Page>, path: &str, email:
 
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
-}
-
-fn read_config(root: &str) -> serde_yaml::Value {
-    let filepath = Path::new(root).join("config.yaml");
-    let config: serde_yaml::Value = match File::open(&filepath) {
-        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
-        Err(error) => {
-            panic!("Error opening file {:?}: {}", filepath, error);
-        }
-    };
-    config
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {

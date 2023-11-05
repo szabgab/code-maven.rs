@@ -40,6 +40,17 @@ pub fn topath(text: &str) -> String {
     }
 }
 
+pub fn read_config(root: &str) -> serde_yaml::Value {
+    let filepath = std::path::Path::new(root).join("config.yaml");
+    let config: serde_yaml::Value = match std::fs::File::open(&filepath) {
+        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
+        Err(error) => {
+            panic!("Error opening file {:?}: {}", filepath, error);
+        }
+    };
+    config
+}
+
 pub fn draw_image(path: &PathBuf, text: &str) -> bool {
     let width = 1000;
     let height = 500;
