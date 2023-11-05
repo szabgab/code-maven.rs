@@ -8,6 +8,29 @@
 
 * Read .md files with a header that looks like this (we'll define the exact fields later)
 
+
+## Installation
+
+* Install Rust
+* Clone https://github.com/szabgab/code-maven.rs
+* cd code-maven.rs
+
+
+* cargo install --path .   # TODO: we need to integrate the templates in order to make this work.
+
+
+## Setup web site
+
+* Create a new folder
+* In the folder create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs)
+* Create a folder called `pages`.
+* In the `pages` folder create a file called `index.md`. See the format below.
+* Run `code-maven-web`
+
+* Open issues on the [project](https://github.com/szabgab/code-maven.rs) if something is unclear or does not work as you expected.
+
+## Format
+
 ```
 ---
 title: Title text
@@ -71,7 +94,7 @@ rustatic --path _site/ --indexfile index.html --nice --port 3000
 ```
 
 
-## Generate email
+## Generate list of recent posts
 
 With links to post from the last 3 days (actually 3*24 hours)
 
