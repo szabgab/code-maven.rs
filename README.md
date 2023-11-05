@@ -38,6 +38,8 @@ cargo test
 
 ## Local development
 
+Install [pre-commit](https://pre-commit.com/) and run `pre-commit install` to configure it for this repo.
+
 * In the `demo` folder we have the files of a web site.
 * In the `demo_site` folder we have the generated version of the demo site.
 * Running the `tests.sh` will generated the demo site and compare it to the stored version.
@@ -48,7 +50,7 @@ Generate the demo pages:
 cargo run --bin code-maven -- --root demo/ --outdir _site/
 ```
 
-We can also explicitely say where the pages are, but so far we did not need that.
+We can also explicitly say where the pages are, but so far we did not need that.
 
 ```
 cargo run --bin code-maven -- --root demo/ --pages demo/pages/ --outdir _site/
