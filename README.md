@@ -45,19 +45,19 @@ cargo test
 Generate the demo pages:
 
 ```
-cargo run -- --root demo/ --outdir _site/
+cargo run --bin code-maven -- --root demo/ --outdir _site/
 ```
 
-We can asli explicitely say where the pages are, but so far we did not need that.
+We can also explicitely say where the pages are, but so far we did not need that.
 
 ```
-cargo run -- --root demo/ --pages demo/pages/ --outdir _site/
+cargo run --bin code-maven -- --root demo/ --pages demo/pages/ --outdir _site/
 ```
 
 Assuming you have cloned https://github.com/szabgab/rust.code-maven.com/ next to this repository then you can also try:
 
 ```
-cargo run -- --root ../rust.code-maven.com/ --outdir _site/
+cargo run --bin code-maven -- --root ../rust.code-maven.com/ --outdir _site/
 ```
 
 
