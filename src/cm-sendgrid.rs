@@ -78,15 +78,17 @@ fn read_tofile(path: &str) -> Vec<EmailAddress> {
                 if !line.contains('@') {
                     continue;
                 }
-                log::info!("line '{}'", line);
-                let address = match re_full.captures(&line) {
+                let parts = line.split(',').collect::<Vec<&str>>();
+
+                log::info!("line '{}'", parts[1]);
+                let address = match re_full.captures(parts[1]) {
                     Some(value) => EmailAddress {
                         name: value[1].to_owned(),
                         email: value[2].to_owned(),
                     },
                     None => EmailAddress {
                         name: "".to_string(),
-                        email: line,
+                        email: parts[1].to_string(),
                     },
                 };
                 println!("{:?}", address);
