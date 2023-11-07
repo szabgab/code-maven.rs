@@ -7,19 +7,19 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.3", features = ["derive"] }
-liquid = "0.26.4"
+liquid = "0.26"
 liquid-core = "0.26"
 simple_logger = "4.2"
 log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
 markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
-regex = "1.9.3"
-chrono = "0.4.26"
-image = "0.24.7"
-imageproc = "0.23.0"
-rusttype = "0.9.3"
-sendgrid = "0.19.2"
+regex = "1.9"
+chrono = "0.4"
+image = "0.24"
+imageproc = "0.23"
+rusttype = "0.9"
+sendgrid = "0.19"
 
 [[bin]]
 name = "code-maven-web"
