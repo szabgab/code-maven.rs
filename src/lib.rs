@@ -267,7 +267,7 @@ fn include_file(
 }
 
 fn read_languages() -> HashMap<String, String> {
-    let filename = "languages.csv";
+    let filename = "data/languages.csv";
     let mut data = HashMap::new();
     match File::open(filename) {
         Ok(file) => {
