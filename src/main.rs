@@ -2,7 +2,6 @@ use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 use std::fs::File;
-use std::io::Read;
 use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
@@ -378,19 +377,6 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
         include_str!("../templates/incl/navigation.html"),
     );
     Ok(partials)
-}
-
-pub fn read_file(filename: &str) -> String {
-    let mut content = String::new();
-    match File::open(filename) {
-        Ok(mut file) => {
-            file.read_to_string(&mut content).unwrap();
-        }
-        Err(error) => {
-            println!("Error opening file {}: {}", filename, error);
-        }
-    }
-    content
 }
 
 fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
