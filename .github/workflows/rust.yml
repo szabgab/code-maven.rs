@@ -15,6 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Checkout repo of Rust Maven
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/rust.code-maven.com'
+        token: ${{ github.token }}
+        path: rust.code-maven.com
+
     - name: Build debug version
       run: cargo build --verbose
 
@@ -42,12 +49,6 @@ jobs:
 
     - name: Clippy stop at any warning
       run: cargo clippy -- --deny warnings
-
-    - name: Checkout repo of Rust Maven
-      uses: actions/checkout@v3
-      with:
-        repository: 'szabgab/rust.code-maven.com'
-        path: rust.code-maven.com
 
     - name: Build the Code-Maven site
       run: |
