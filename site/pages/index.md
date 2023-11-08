@@ -11,6 +11,17 @@ This is a placeholder for a web site for the static site generator behind the [R
 If you use it, make sure you follow the development as I don't yet promise any stability of the API or any warning.
 Consider this as pre-alpha.
 
+## Linux:
 
+Download [code-maven-web](/code-maven-web) and make it executable
 
+```
+chmod +x code-maven-web
+```
+
+Download [code-maven-sendgrid](/code-maven-sendgrid) and make it executable
+
+```
+chmod +x code-maven-sendgrid
+```
 
