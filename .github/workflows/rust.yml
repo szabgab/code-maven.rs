@@ -39,3 +39,14 @@ jobs:
       run: cargo clippy -- --deny warnings
 
 
+    - name: Checkout this repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/rust.code-maven.com'
+        path: rust.code-maven.com
+
+    - name: Rebuild the demo site
+      run: |
+        rm -rf _site/*
+        cargo run --bin code-maven-web -- --root rust.code-maven.com  --outdir _site/
+
