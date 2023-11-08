@@ -15,14 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Checkout repo of https://israel.szabgab.com/
-      uses: actions/checkout@v3
-      with:
-        repository: 'szabgab/israel.szabgab.com'
-        token: ${{ secrets.MY_GITHUB_TOKEN }}
-        path: israel.szabgab.com
-
-
     - name: Build debug version
       run: cargo build --verbose
 
@@ -62,8 +54,27 @@ jobs:
         rm -rf _site/*
         cargo run --bin code-maven-web -- --root rust.code-maven.com  --outdir _site/
 
+    - name: Checkout repo of https://israel.szabgab.com/
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/israel.szabgab.com'
+        token: ${{ secrets.MY_GITHUB_TOKEN }}
+        path: israel.szabgab.com
+
     - name: Build the israel.szabgab.com site
       run: |
         rm -rf _site/*
         cargo run --bin code-maven-web -- --root israel.szabgab.com  --outdir _site/
+
+    - name: Checkout repo of https://izrael.szabgab.com/
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/izrael.szabgab.com'
+        token: ${{ secrets.MY_GITHUB_TOKEN }}
+        path: izrael.szabgab.com
+
+    - name: Build the izrael.szabgab.com site
+      run: |
+        rm -rf _site/*
+        cargo run --bin code-maven-web -- --root izrael.szabgab.com  --outdir _site/
 
