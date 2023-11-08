@@ -95,6 +95,8 @@ jobs:
       run: |
         rm -rf _site/*
         cargo run --bin code-maven-web -- --root site  --outdir _site/
+        cp target/release/code-maven-web _site/code-maven-web
+        cp target/release/code-maven-sendgrid _site/code-maven-sendgrid
 
     - name: Setup Pages
       uses: actions/configure-pages@v3
