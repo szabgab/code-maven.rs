@@ -106,12 +106,12 @@ fn render_email(config: &serde_yaml::Value, pages: Vec<Page>, path: &str, email:
         .filter(|page| page.timestamp > date)
         .collect();
 
-    let template_filename = String::from("templates/email.html");
+    let template = include_str!("../templates/email.html");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let globals = liquid::object!({
@@ -147,12 +147,12 @@ fn render_robots_txt(path: &str, url: &str) {
 
 fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     log::info!("render sitemap");
-    let template_filename = String::from("templates/sitemap.xml");
+    let template = include_str!("../templates/sitemap.xml");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let globals = liquid::object!({
@@ -174,12 +174,12 @@ fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str
         _ => "",
     };
 
-    let template_filename = String::from("templates/atom.xml");
+    let template = include_str!("../templates/atom.xml");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let globals = liquid::object!({
@@ -207,13 +207,13 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &
         .iter()
         .filter(|page| page.filename != "index" && page.filename != "archive")
         .collect();
-    let template_filename = String::from("templates/archive.html");
+    let template = include_str!("../templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
         .partials(partials)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let site_name = match config.get("site_name") {
@@ -273,7 +273,7 @@ fn render_tag_pages(
         let path = Path::new(outdir).join("tags").join(topath(tag));
         log::info!("render_tag {}", tag);
 
-        render_any("templates/tag.html", path, globals);
+        render_any(include_str!("../templates/tag.html"), path, globals);
     }
 
     let mut tags: Vec<_> = tags.keys().collect();
@@ -290,13 +290,13 @@ fn render_tag_pages(
     });
 
     render_any(
-        "templates/tags.html",
+        include_str!("../templates/tags.html"),
         Path::new(outdir).join("tags").join("index"),
         globals,
     );
 }
 
-fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Object) {
+fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
     path.set_extension("html");
 
     let partials = match load_templates() {
@@ -309,7 +309,7 @@ fn render_any(template_filename: &str, mut path: PathBuf, globals: liquid::Objec
         .partials(partials)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let output = template.render(&globals).unwrap();
@@ -365,12 +365,18 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     // log::info!("load_templates");
 
     let mut partials = Partials::empty();
-    let filename = "templates/incl/header.html";
-    partials.add(filename, read_file(filename));
-    let filename = "templates/incl/footer.html";
-    partials.add(filename, read_file(filename));
-    let filename = "templates/incl/navigation.html";
-    partials.add(filename, read_file(filename));
+    partials.add(
+        "templates/incl/header.html",
+        include_str!("../templates/incl/header.html"),
+    );
+    partials.add(
+        "templates/incl/footer.html",
+        include_str!("../templates/incl/footer.html"),
+    );
+    partials.add(
+        "templates/incl/navigation.html",
+        include_str!("../templates/incl/navigation.html"),
+    );
     Ok(partials)
 }
 
@@ -407,13 +413,13 @@ fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir
         Err(error) => panic!("Error loading templates {}", error),
     };
 
-    let template_filename = String::from("templates/page.html");
+    let template = include_str!("../templates/page.html");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
         .partials(partials)
         .build()
         .unwrap()
-        .parse_file(template_filename)
+        .parse(template)
         .unwrap();
 
     let repo = config["repo"].as_str().unwrap();
