@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: 'szabgab/israel.szabgab.com'
-        token: ${{ github.token }}
+        token: ${{ secrets.MY_GITHUB_TOKEN }}
         path: israel.szabgab.com
 
 
