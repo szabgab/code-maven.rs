@@ -267,22 +267,18 @@ fn include_file(
 }
 
 fn read_languages() -> HashMap<String, String> {
-    let filename = "data/languages.csv";
+    let text = include_str!("../data/languages.csv");
+
     let mut data = HashMap::new();
-    match File::open(filename) {
-        Ok(file) => {
-            let reader = BufReader::new(file);
-            for line in reader.lines() {
-                let line = line.unwrap();
-                let parts = line.split(',');
-                let parts: Vec<&str> = parts.collect();
-                data.insert(parts[0].to_string(), parts[1].to_string());
-            }
+    for line in text.split('\n') {
+        if line.is_empty() {
+            continue;
         }
-        Err(error) => {
-            println!("Error opening file {}: {}", filename, error);
-        }
+        let parts = line.split(',');
+        let parts: Vec<&str> = parts.collect();
+        data.insert(parts[0].to_string(), parts[1].to_string());
     }
+
     data
 }
 
