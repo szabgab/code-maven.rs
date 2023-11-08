@@ -14,10 +14,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
+
+    - name: Build debug version
       run: cargo build --verbose
+
     - name: Run tests
       run: cargo test --verbose
+
+    - name: Build release version
+      run: cargo build --release --verbose
 
     - name: Build demo site
       run: |
@@ -38,15 +43,25 @@ jobs:
     - name: Clippy stop at any warning
       run: cargo clippy -- --deny warnings
 
-
-    - name: Checkout this repo
+    - name: Checkout repo of Rust Maven
       uses: actions/checkout@v3
       with:
         repository: 'szabgab/rust.code-maven.com'
         path: rust.code-maven.com
 
-    - name: Rebuild the demo site
+    - name: Build the Code-Maven site
       run: |
         rm -rf _site/*
         cargo run --bin code-maven-web -- --root rust.code-maven.com  --outdir _site/
+
+    - name: Checkout repo of https://israel.szabgab.com/
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/israel.szabgab.com'
+        path: israel.szabgab.com
+
+    - name: Build the israel.szabgab.com site
+      run: |
+        rm -rf _site/*
+        cargo run --bin code-maven-web -- --root israel.szabgab.com  --outdir _site/
 
