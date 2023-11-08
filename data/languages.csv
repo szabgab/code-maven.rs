@@ -3,3 +3,4 @@ sh,bash
 toml,toml
 lock,toml
 csv,csv
+txt,txt
