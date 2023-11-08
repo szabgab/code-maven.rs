@@ -3,4 +3,10 @@ sh,bash
 toml,toml
 lock,toml
 csv,csv
+xml,xml
+json,json
 txt,txt
+pl,perl
+pm,perl
+py,python
+rb,ruby
