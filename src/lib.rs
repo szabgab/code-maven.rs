@@ -159,7 +159,18 @@ pub fn read_md_file(config: &serde_yaml::Value, root: &str, path: &str, outdir: 
     let content = pre_process(config, root, outdir, &content);
     page.backlinks = find_links(&content);
 
-    let content = markdown::to_html_with_options(&content, &markdown::Options::gfm()).unwrap();
+    let content = markdown::to_html_with_options(
+        &content,
+        &markdown::Options {
+            compile: markdown::CompileOptions {
+                allow_dangerous_html: true,
+                //allow_dangerous_protocol: true,
+                ..markdown::CompileOptions::default()
+            },
+            ..markdown::Options::gfm()
+        },
+    )
+    .unwrap();
     //println!("{}", content);
     let content = content.replace("<h1>", "<h1 class=\"title\">");
     let content = content.replace("<h2>", "<h2 class=\"title is-4\">");
