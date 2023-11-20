@@ -2,3 +2,4 @@
 /_site
 /temp/
 config.txt
+*.bak
