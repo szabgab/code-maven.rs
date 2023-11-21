@@ -1,6 +1,8 @@
 rs,rust
 sh,bash
 toml,toml
+yaml,yaml
+yml,yaml
 lock,toml
 csv,csv
 xml,xml
