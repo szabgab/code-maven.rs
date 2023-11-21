@@ -1,4 +1,4 @@
-url: https://rust.code-maven.com
+url: https://ssg.rust.code-maven.com
 repo: https://github.com/szabgab/code-maven.rs
 branch: main
 site_name: Code Maven site generator
