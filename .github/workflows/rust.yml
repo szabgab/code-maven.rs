@@ -86,10 +86,21 @@ jobs:
         token: ${{ secrets.MY_GITHUB_TOKEN }}
         path: izrael.szabgab.com
 
+    - name: Checkout repo of banner-builder.rs
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/banner-builder.rs'
+        path: banner-builder.rs
+
     - name: Build the izrael.szabgab.com site
       run: |
         rm -rf _site/*
         cargo run --bin code-maven-web -- --root izrael.szabgab.com  --outdir _site/
+
+    - name: Check all the sites
+      run: |
+        ./check_sites.sh
+
 
     - name: Generate the web site of the generator
       run: |
