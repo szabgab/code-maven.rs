@@ -326,7 +326,7 @@ fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str, url
 
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
-        render_page(config, page, outfile, outdir, url);
+        render_single_page(config, page, outfile, outdir, url);
     }
 }
 
@@ -379,7 +379,13 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     Ok(partials)
 }
 
-fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
+fn render_single_page(
+    config: &serde_yaml::Value,
+    page: &Page,
+    outfile: PathBuf,
+    outdir: &str,
+    url: &str,
+) {
     let path = &format!("{}/{}", outdir, outfile.display());
 
     log::info!("render path {}", path);
