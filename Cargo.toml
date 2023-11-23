@@ -16,10 +16,8 @@ serde_yaml = "0.9"
 markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
 regex = "1.9"
 chrono = "0.4"
-image = "0.24"
-imageproc = "0.23"
-rusttype = "0.9"
 sendgrid = "0.19"
+banner-builder = "0.2"
 
 [[bin]]
 name = "code-maven-web"

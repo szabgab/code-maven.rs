@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Duration, Utc};
 use clap::Parser;
 
-use code_maven::{draw_image, read_config, read_md_file, topath, Page, ToPath};
+use code_maven::{read_config, read_md_file, topath, Page, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -392,7 +392,13 @@ fn render_page(config: &serde_yaml::Value, page: &Page, outfile: PathBuf, outdir
     let image_file = PathBuf::from(outdir).join(&image_path);
     // log::warn!("{} {:?}", page.filename, image_file);
     // log::warn!("{}", page.title);
-    let image = draw_image(&image_file, &page.title);
+    let banner = banner_builder::Banner {
+        width: 1000,
+        height: 500,
+        text: page.title.clone(),
+        background_color: "FFFFFF".to_owned(),
+    };
+    let image = banner_builder::draw_image(&banner, &image_file);
 
     let partials = match load_templates() {
         Ok(partials) => partials,
