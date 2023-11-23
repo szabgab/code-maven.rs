@@ -64,12 +64,7 @@ fn main() {
     render_tag_pages(&config, &pages, &tags, &args.outdir, url);
     render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
     render_atom(&config, &pages, &format!("{}/atom", &args.outdir), url);
-    render_archive(
-        &config,
-        &pages,
-        &format!("{}/archive.html", &args.outdir),
-        url,
-    );
+    render_archive(&config, &pages, &args.outdir, url);
     render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
     render_email(
         &config,
@@ -194,7 +189,7 @@ fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
+fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url: &str) {
     log::info!("render archive");
 
     let partials = match load_templates() {
@@ -231,8 +226,19 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &
     });
     let output = template.render(&globals).unwrap();
 
+    let path = &format!("{}/{}/archive.html", outdir, IMG);
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
+
+    let image_file = PathBuf::from(outdir).join("archive.png");
+
+    let banner = banner_builder::Banner {
+        width: 1000,
+        height: 500,
+        text: config["archive"]["title"].as_str().unwrap().to_owned(),
+        background_color: "FFFFFF".to_owned(),
+    };
+    banner_builder::draw_image(&banner, &image_file);
 }
 
 fn render_tag_pages(
