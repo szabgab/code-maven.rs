@@ -12,14 +12,14 @@ do
     rm -rf _site/*
     cargo run --bin code-maven-web -- --root $project  --outdir _site/
 
-    #echo "---------------------------"
-    #for page in _site/*.html
-    #do
-    #    page=$(basename $page)
-    #    echo $page
-    #    page=$(sed "s/html/png/" <<< "$page")
-    #    echo _site/img/$page
-    #    test -f _site/img/$page
-    #done
+    echo "---------------------------"
+    for page in _site/*.html
+    do
+        page=$(basename $page)
+        echo $page
+        page=$(sed "s/html/png/" <<< "$page")
+        echo _site/img/$page
+        test -f _site/img/$page
+    done
 
 done
