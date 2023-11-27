@@ -226,11 +226,12 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url:
     });
     let output = template.render(&globals).unwrap();
 
-    let path = &format!("{}/{}/archive.html", outdir, IMG);
+    let path = &format!("{}/archive.html", outdir);
+    log::info!("archive file {}", path);
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
 
-    let image_file = PathBuf::from(outdir).join("archive.png");
+    let image_file = PathBuf::from(outdir).join(IMG).join("archive.png");
 
     let banner = banner_builder::Banner {
         width: 1000,
