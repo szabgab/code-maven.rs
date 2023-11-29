@@ -7,6 +7,7 @@ footer: Demo of [Code Maven RS](https://github.com/szabgab/code-maven.rs) with l
 tags:
   title: Tags
   description: Articles about Rust with tags
+# google_analytics: ABC
 from:
   name: Gabor Szabo
   email: gabor@szabgab.com
