@@ -383,6 +383,10 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
         "templates/incl/navigation.html",
         include_str!("../templates/incl/navigation.html"),
     );
+    partials.add(
+        "templates/incl/google.html",
+        include_str!("../templates/incl/google.html"),
+    );
     Ok(partials)
 }
 
