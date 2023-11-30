@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Duration, Utc};
 use clap::Parser;
 
-use code_maven::{read_config, read_md_file, topath, Page, ToPath};
+use code_maven::{filter_words, read_config, read_md_file, topath, Page, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -218,6 +218,7 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url:
     let globals = liquid::object!({
         "title": config["archive"]["title"].as_str().unwrap(),
         "description": config["archive"]["description"].as_str().unwrap(),
+        "keywords": vec!["archive"], // TODO use something from config
         "pages": &filtered_pages,
         "config": config,
         "url": url,
@@ -269,6 +270,7 @@ fn render_tag_pages(
         let globals = liquid::object!({
             "title": format!("Articles tagged with '{}'", tag),
             "description": format!("Articles about Rust tagged with '{}'", tag),
+            "keywords": vec![""], // TODO: include tag, but make sure we only put there letters and numbers
             "pages": pages_with_tag,
             "config": config,
             "url": url,
@@ -288,6 +290,7 @@ fn render_tag_pages(
     let globals = liquid::object!({
         "title": config["tags"]["title"].as_str().unwrap(),
         "description": config["tags"]["description"].as_str().unwrap(),
+        "keywords": vec!["tags"], // TODO use something from config
         "tags": tags,
         "config": config,
         "url": url,
@@ -455,6 +458,7 @@ fn render_single_page(
     let globals = liquid::object!({
         "title": page.title,
         "description": page.description,
+        "keywords": filter_words(&page.tags),
         "content": page.content,
         "page": page,
         "pagepath": page.filename,

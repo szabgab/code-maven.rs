@@ -301,6 +301,15 @@ pub fn read_config(root: &str) -> serde_yaml::Value {
     config
 }
 
+pub fn filter_words(words: &[String]) -> Vec<String> {
+    words
+        .to_owned()
+        .clone()
+        .into_iter()
+        .filter(|word| word.chars().all(|chr| chr.is_alphanumeric() || chr == ' '))
+        .collect::<Vec<_>>()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -418,4 +427,17 @@ fn test_links() {
         ],
     };
     assert_eq!(data, expected);
+}
+
+#[test]
+fn test_filter_words() {
+    let original = vec![
+        "hello".to_string(),
+        "one 2 three".to_string(),
+        "'".to_string(),
+    ];
+    let expected = vec!["hello".to_string(), "one 2 three".to_string()];
+
+    let filtered = filter_words(&original);
+    assert_eq!(filtered, expected);
 }
