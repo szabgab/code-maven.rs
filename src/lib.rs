@@ -169,6 +169,11 @@ pub fn read_md_file(config: &serde_yaml::Value, root: &str, path: &str, outdir: 
         }
     }
 
+    if page.tags.iter().any(std::string::String::is_empty) {
+        eprintln!("There is an empty tag in {}", path);
+        std::process::exit(1);
+    }
+
     let mut p = PathBuf::from(path);
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
