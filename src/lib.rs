@@ -220,6 +220,7 @@ fn find_links(text: &str) -> Vec<Link> {
 }
 
 fn pre_process(config: &serde_yaml::Value, root: &str, outdir: &str, text: &str) -> String {
+    log::info!("pre_process");
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
 
@@ -232,6 +233,7 @@ fn pre_process(config: &serde_yaml::Value, root: &str, outdir: &str, text: &str)
         } else {
             // TODO: we don't need to copy external images
             let output_path = Path::new(outdir).join(path);
+            log::info!("copy file from '{:?}' to '{:?}'", include_path, output_path);
             copy_file(&include_path, &output_path);
             caps[0].to_string() // .copy() // don't replace anything
         }
