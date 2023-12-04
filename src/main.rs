@@ -36,7 +36,7 @@ struct Cli {
 fn main() {
     let args = Cli::parse();
     //println!("{:?}", &args);
-    simple_logger::init_with_level(log::Level::Info).unwrap();
+    simple_logger::init_with_env().unwrap();
     log::info!("Generate pages");
 
     if !Path::new(&args.outdir).exists() {
