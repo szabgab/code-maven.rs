@@ -53,8 +53,9 @@ fn main() {
     }
 
     let config = read_config(&args.root);
-
+    log::info!("config");
     let url = config["url"].as_str().unwrap();
+    log::info!("pages_path");
 
     let pages_path = get_pages_path(&args);
 
@@ -341,6 +342,7 @@ fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str, url
 }
 
 fn read_pages(config: &serde_yaml::Value, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
+    log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
         log::info!("path: {:?}", entry.path());

@@ -317,8 +317,15 @@ fn read_languages() -> HashMap<String, String> {
 
 pub fn read_config(root: &str) -> serde_yaml::Value {
     let filepath = std::path::Path::new(root).join("config.yaml");
+    log::info!("read_config {:?}", filepath);
     let config: serde_yaml::Value = match std::fs::File::open(&filepath) {
-        Ok(file) => serde_yaml::from_reader(file).expect("YAML parsing error"),
+        Ok(file) => match serde_yaml::from_reader(file) {
+            Ok(data) => data,
+            Err(err) => {
+                log::error!("Invalid YAML format in {:?}: {}", filepath, err);
+                std::process::exit(1);
+            }
+        },
         Err(error) => {
             panic!("Error opening file {:?}: {}", filepath, error);
         }
