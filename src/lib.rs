@@ -146,7 +146,7 @@ pub fn read_md_file(config: &serde_yaml::Value, root: &str, path: &str, outdir: 
                 if in_front_matter {
                     if line == "---" {
                         in_front_matter = false;
-                        log::info!("'{}'", &front_matter);
+                        log::info!("front_matter: '{}'", &front_matter);
                         page = serde_yaml::from_str(&front_matter).expect("YAML parsing error");
                         continue;
                     }

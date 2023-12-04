@@ -352,7 +352,7 @@ fn read_pages(config: &serde_yaml::Value, path: &Path, root: &str, outdir: &str)
         }
         // println!("{:?}", entry.file_name());
         let page = read_md_file(config, root, entry.path().to_str().unwrap(), outdir);
-        log::info!("{:?}", &page);
+        log::debug!("page: {:?}", &page);
         pages.push(page);
     }
 
