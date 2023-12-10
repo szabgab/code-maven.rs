@@ -251,6 +251,11 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
     let content = content.replace("<h3>", "<h3 class=\"title is-5\">");
 
     page.content = content;
+
+    if page.title.is_empty() {
+        return Err(format!("Missing title in '{}'", path));
+    }
+
     Ok(page)
 }
 
@@ -535,6 +540,18 @@ fn test_missing_md_file() {
         Err(err) => assert_eq!(
             err,
             "File 'demo/pages/no_such_file.md' not found".to_string()
+        ),
+    }
+}
+
+#[test]
+fn test_missing_title() {
+    let config = read_config("demo");
+    match read_md_file(&config, "demo", "demo/bad/missing_front_matter.md", "temp") {
+        Ok(_) => assert!(false),
+        Err(err) => assert_eq!(
+            err,
+            "Missing title in 'demo/bad/missing_front_matter.md'".to_string()
         ),
     }
 }
