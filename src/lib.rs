@@ -184,6 +184,10 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
 
     let mut content = "".to_string();
 
+    if !std::path::Path::new(path).exists() {
+        return Err(format!("File '{}' not found", path));
+    }
+
     match File::open(path) {
         Ok(file) => {
             let reader = BufReader::new(file);
@@ -521,4 +525,16 @@ fn test_filter_words() {
 
     let filtered = filter_words(&original);
     assert_eq!(filtered, expected);
+}
+
+#[test]
+fn test_missing_md_file() {
+    let config = read_config("demo");
+    match read_md_file(&config, "demo", "demo/pages/no_such_file.md", "temp") {
+        Ok(_) => assert!(false),
+        Err(err) => assert_eq!(
+            err,
+            "File 'demo/pages/no_such_file.md' not found".to_string()
+        ),
+    }
 }
