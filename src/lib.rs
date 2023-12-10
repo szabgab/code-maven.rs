@@ -227,7 +227,12 @@ fn pre_process(config: &serde_yaml::Value, root: &str, outdir: &str, text: &str)
     let result = re.replace_all(text, |caps: &Captures| {
         let path = Path::new(&caps[1]);
         let include_path = Path::new(root).join(path);
-        if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
+        log::debug!("path '{:?}'", path);
+        // TODO remove the hard coded mapping of .gitignore
+        // TODO properly handle files that do not have an extension
+        if path.file_name().unwrap().to_str().unwrap() == ".gitignore" {
+            include_file(config, include_path, path, "gitignore")
+        } else if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             include_file(config, include_path, path, language)
         } else {
