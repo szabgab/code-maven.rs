@@ -330,7 +330,13 @@ fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec<Pag
             continue;
         }
         // println!("{:?}", entry.file_name());
-        let page = read_md_file(config, root, entry.path().to_str().unwrap(), outdir);
+        let page = match read_md_file(config, root, entry.path().to_str().unwrap(), outdir) {
+            Ok(page) => page,
+            Err(err) => {
+                log::error!("{}", err);
+                std::process::exit(1);
+            }
+        };
         log::debug!("page: {:?}", &page);
         pages.push(page);
     }

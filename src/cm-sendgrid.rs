@@ -33,7 +33,13 @@ fn main() {
     let config = read_config(&args.root);
 
     // outdir would be needed if there were images to be copied
-    let page = read_md_file(&config, &args.root, &args.mail, "");
+    let page = match read_md_file(&config, &args.root, &args.mail, "") {
+        Ok(page) => page,
+        Err(err) => {
+            log::error!("{}", err);
+            std::process::exit(1);
+        }
+    };
 
     let from = EmailAddress {
         name: config.from.name,

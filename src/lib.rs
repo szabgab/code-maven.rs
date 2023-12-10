@@ -179,7 +179,7 @@ fn get_empty_string() -> String {
     "".to_string()
 }
 
-pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Page {
+pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Result<Page, String> {
     let mut page: Page = Page::new();
 
     let mut content = "".to_string();
@@ -219,8 +219,7 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Pa
     }
 
     if page.tags.iter().any(std::string::String::is_empty) {
-        eprintln!("There is an empty tag in {}", path);
-        std::process::exit(1);
+        return Err(format!("There is an empty tag in {}", path));
     }
 
     let mut p = PathBuf::from(path);
@@ -248,7 +247,7 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Pa
     let content = content.replace("<h3>", "<h3 class=\"title is-5\">");
 
     page.content = content;
-    page
+    Ok(page)
 }
 
 fn find_links(text: &str) -> Vec<Link> {
@@ -420,7 +419,7 @@ mod tests {
 #[test]
 fn test_read_index() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/index.md", "temp");
+    let data = read_md_file(&config, "demo", "demo/pages/index.md", "temp").unwrap();
     dbg!(&data);
     let expected = Page {
         title: "Index page".to_string(),
@@ -444,7 +443,7 @@ fn test_read_index() {
 #[test]
 fn test_read_todo() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md", "temp");
+    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md", "temp").unwrap();
     dbg!(&data);
     let expected = Page {
         title: "Page with todos".to_string(),
@@ -469,7 +468,7 @@ fn test_read_todo() {
 #[test]
 fn test_img_with_title() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md", "temp");
+    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md", "temp").unwrap();
     dbg!(&data);
     let expected = Page {
         title: "Image with title".to_string(),
@@ -489,7 +488,7 @@ fn test_img_with_title() {
 #[test]
 fn test_links() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/links.md", "temp");
+    let data = read_md_file(&config, "demo", "demo/pages/links.md", "temp").unwrap();
     dbg!(&data);
     let expected = Page {
         title: "Links".to_string(),
