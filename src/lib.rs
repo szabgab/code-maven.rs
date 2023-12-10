@@ -255,6 +255,17 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
     if page.title.is_empty() {
         return Err(format!("Missing title in '{}'", path));
     }
+    match chrono::NaiveDateTime::parse_from_str(&page.timestamp, "%Y-%m-%dT%H:%M:%S") {
+        Ok(_) => {
+            let _x = 1;
+        }
+        Err(err) => {
+            return Err(format!(
+                "Invalid date '{}' in {}: {}",
+                page.timestamp, path, err
+            ));
+        }
+    }
 
     Ok(page)
 }
@@ -552,6 +563,18 @@ fn test_missing_title() {
         Err(err) => assert_eq!(
             err,
             "Missing title in 'demo/bad/missing_front_matter.md'".to_string()
+        ),
+    }
+}
+
+#[test]
+fn test_bad_timestamp() {
+    let config = read_config("demo");
+    match read_md_file(&config, "demo", "demo/bad/incorrect_timestamp.md", "temp") {
+        Ok(_) => assert!(false),
+        Err(err) => assert_eq!(
+            err,
+            "Invalid date '2015-02-30T12:30:01' in demo/bad/incorrect_timestamp.md: input is out of range".to_string()
         ),
     }
 }
