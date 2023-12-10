@@ -36,8 +36,8 @@ fn main() {
     let page = read_md_file(&config, &args.root, &args.mail, "");
 
     let from = EmailAddress {
-        name: config["from"]["name"].as_str().unwrap().to_string(),
-        email: config["from"]["email"].as_str().unwrap().to_string(),
+        name: config.from.name,
+        email: config.from.email,
     };
 
     let addresses = read_tofile(&args.tofile);

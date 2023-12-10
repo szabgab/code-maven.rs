@@ -67,6 +67,55 @@ pub fn topath(text: &str) -> String {
     }
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ConfigNavbarLink {
+    pub path: String,
+    pub title: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ConfigNavbar {
+    pub start: Vec<ConfigNavbarLink>,
+    pub end: Vec<ConfigNavbarLink>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ConfigFrom {
+    pub name: String,
+    pub email: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ConfigArchive {
+    pub title: String,
+    pub description: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ConfigTag {
+    pub description: String,
+    pub title: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Config {
+    pub url: String,
+    pub repo: String,
+    pub branch: String,
+    pub link_to_source: bool,
+    pub tags: ConfigTag,
+    pub archive: ConfigArchive,
+    pub from: ConfigFrom,
+
+    #[serde(default = "get_empty_string")]
+    pub footer: String,
+
+    #[serde(default = "get_empty_string")]
+    pub site_name: String,
+
+    pub navbar: ConfigNavbar,
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct Link {
     title: String,
@@ -130,7 +179,7 @@ fn get_empty_string() -> String {
     "".to_string()
 }
 
-pub fn read_md_file(config: &serde_yaml::Value, root: &str, path: &str, outdir: &str) -> Page {
+pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Page {
     let mut page: Page = Page::new();
 
     let mut content = "".to_string();
@@ -219,7 +268,7 @@ fn find_links(text: &str) -> Vec<Link> {
     links
 }
 
-fn pre_process(config: &serde_yaml::Value, root: &str, outdir: &str, text: &str) -> String {
+fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> String {
     log::info!("pre_process");
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
@@ -266,16 +315,8 @@ fn copy_file(source_path: &Path, destination_path: &PathBuf) {
     fs::copy(source_path, destination_path).unwrap();
 }
 
-fn include_file(
-    config: &serde_yaml::Value,
-    include_path: PathBuf,
-    path: &Path,
-    language: &str,
-) -> String {
+fn include_file(config: &Config, include_path: PathBuf, path: &Path, language: &str) -> String {
     log::info!("include_path: {:?}", include_path);
-
-    let repo = config["repo"].as_str().unwrap();
-    let branch = config["branch"].as_str().unwrap();
 
     if include_path.exists() {
         match File::open(include_path) {
@@ -284,8 +325,8 @@ fn include_file(
                 content += &format!(
                     "**[{}]({}/tree/{}/{})**\n",
                     path.display(),
-                    repo,
-                    branch,
+                    &config.repo,
+                    &config.branch,
                     path.display()
                 );
                 content += "```";
@@ -322,10 +363,11 @@ fn read_languages() -> HashMap<String, String> {
     data
 }
 
-pub fn read_config(root: &str) -> serde_yaml::Value {
+pub fn read_config(root: &str) -> Config {
     let filepath = std::path::Path::new(root).join("config.yaml");
     log::info!("read_config {:?}", filepath);
-    let config: serde_yaml::Value = match std::fs::File::open(&filepath) {
+
+    let config: Config = match std::fs::File::open(&filepath) {
         Ok(file) => match serde_yaml::from_reader(file) {
             Ok(data) => data,
             Err(err) => {
@@ -337,6 +379,7 @@ pub fn read_config(root: &str) -> serde_yaml::Value {
             panic!("Error opening file {:?}: {}", filepath, error);
         }
     };
+
     config
 }
 

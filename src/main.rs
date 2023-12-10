@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Duration, Utc};
 use clap::Parser;
 
-use code_maven::{filter_words, read_config, read_md_file, topath, Page, ToPath};
+use code_maven::{filter_words, read_config, read_md_file, topath, Config, Page, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -54,7 +54,7 @@ fn main() {
 
     let config = read_config(&args.root);
     log::info!("config");
-    let url = config["url"].as_str().unwrap();
+    let url = &config.url;
     log::info!("pages_path");
 
     let pages_path = get_pages_path(&args);
@@ -83,7 +83,7 @@ fn get_pages_path(args: &Cli) -> PathBuf {
     PathBuf::from(&args.pages)
 }
 
-fn render_email(config: &serde_yaml::Value, pages: Vec<Page>, path: &str, email: &str, url: &str) {
+fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url: &str) {
     if email.is_empty() {
         return;
     }
@@ -160,14 +160,9 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str) {
+fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
     log::info!("render atom feed");
     let pages = pages.to_owned();
-
-    let site_name = match config.get("site_name") {
-        Some(value) => value.as_str().unwrap(),
-        _ => "",
-    };
 
     let template = include_str!("../templates/atom.xml");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -180,7 +175,7 @@ fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str
     let globals = liquid::object!({
         "pages": &pages,
         "url": url,
-        "site_name": site_name,
+        "site_name": config.site_name,
         "author_name": "Gábor Szabó",
         "updated": "xxx",
     });
@@ -190,7 +185,7 @@ fn render_atom(config: &serde_yaml::Value, pages: &[Page], path: &str, url: &str
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url: &str) {
+fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     log::info!("render archive");
 
     let partials = match load_templates() {
@@ -211,20 +206,15 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url:
         .parse(template)
         .unwrap();
 
-    let site_name = match config.get("site_name") {
-        Some(value) => value.as_str().unwrap(),
-        _ => "",
-    };
-
     let globals = liquid::object!({
-        "title": config["archive"]["title"].as_str().unwrap(),
-        "description": config["archive"]["description"].as_str().unwrap(),
+        "title": config.archive.title,
+        "description": config.archive.description,
         "keywords": vec!["archive"], // TODO use something from config
         "pages": &filtered_pages,
         "config": config,
         "url": url,
         "pagepath": "archive",
-        "site_name": site_name,
+        "site_name": config.site_name,
     });
     let output = template.render(&globals).unwrap();
 
@@ -238,25 +228,14 @@ fn render_archive(config: &serde_yaml::Value, pages: &[Page], outdir: &str, url:
     let banner = banner_builder::Banner {
         width: 1000,
         height: 500,
-        text: config["archive"]["title"].as_str().unwrap().to_owned(),
+        text: config.archive.title.clone(),
         background_color: "FFFFFF".to_owned(),
     };
     banner_builder::draw_image(&banner, &image_file);
 }
 
-fn render_tag_pages(
-    config: &serde_yaml::Value,
-    pages: &Vec<Page>,
-    tags: &Tags,
-    outdir: &str,
-    url: &str,
-) {
+fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &str, url: &str) {
     log::info!("render_tag_pages");
-
-    let site_name = match config.get("site_name") {
-        Some(value) => value.as_str().unwrap(),
-        _ => "",
-    };
 
     for tag in tags.keys() {
         let mut pages_with_tag: Vec<Page> = vec![];
@@ -276,7 +255,7 @@ fn render_tag_pages(
             "config": config,
             "url": url,
             "pagepath": format!("tags/{}", topath(tag)),
-            "site_name": site_name,
+            "site_name": config.site_name,
         });
 
         let path = Path::new(outdir).join("tags").join(topath(tag));
@@ -289,14 +268,14 @@ fn render_tag_pages(
     tags.sort();
 
     let globals = liquid::object!({
-        "title": config["tags"]["title"].as_str().unwrap(),
-        "description": config["tags"]["description"].as_str().unwrap(),
+        "title": config.tags.title,
+        "description": config.tags.description,
         "keywords": vec!["tags"], // TODO use something from config
         "tags": tags,
         "config": config,
         "url": url,
         "pagepath": "tags/",
-        "site_name": site_name,
+        "site_name": config.site_name,
     });
 
     render_any(
@@ -329,7 +308,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
     writeln!(&mut file, "{}", output).unwrap();
 }
 
-fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str, url: &str) {
+fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
     for page in pages {
         if page.filename == "archive" {
             continue;
@@ -341,7 +320,7 @@ fn render_pages(config: &serde_yaml::Value, pages: &Vec<Page>, outdir: &str, url
     }
 }
 
-fn read_pages(config: &serde_yaml::Value, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
+fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
@@ -395,13 +374,7 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     Ok(partials)
 }
 
-fn render_single_page(
-    config: &serde_yaml::Value,
-    page: &Page,
-    outfile: PathBuf,
-    outdir: &str,
-    url: &str,
-) {
+fn render_single_page(config: &Config, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
     let path = &format!("{}/{}", outdir, outfile.display());
 
     log::info!("render path {}", path);
@@ -436,26 +409,15 @@ fn render_single_page(
         .parse(template)
         .unwrap();
 
-    let repo = config["repo"].as_str().unwrap();
-    let branch = config["branch"].as_str().unwrap();
-    let mut footer = match config.get("footer") {
-        Some(value) => value.as_str().unwrap(),
-        _ => "",
-    }
-    .to_string();
+    let mut footer = config.footer.clone();
 
-    if config["link_to_source"].as_bool().unwrap() {
+    if config.link_to_source {
         footer = format!(
             "{} [source]({}/blob/{}/pages/{}.md)",
-            footer, repo, branch, &page.filename
+            footer, config.repo, config.branch, &page.filename
         );
     }
     let footer = markdown::to_html(&footer);
-
-    let site_name = match config.get("site_name") {
-        Some(value) => value.as_str().unwrap(),
-        _ => "",
-    };
 
     let globals = liquid::object!({
         "title": page.title,
@@ -469,7 +431,7 @@ fn render_single_page(
         "url": url,
         "image": image,
         "image_path": image_path,
-        "site_name": site_name,
+        "site_name": config.site_name,
     });
     let output = template.render(&globals).unwrap();
 
