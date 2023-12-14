@@ -114,6 +114,9 @@ pub struct Config {
     pub site_name: String,
 
     pub navbar: ConfigNavbar,
+
+    #[serde(default = "get_empty_string")]
+    pub google_analytics: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
