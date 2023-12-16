@@ -404,7 +404,8 @@ pub fn read_config(root: &str) -> Config {
             }
         },
         Err(error) => {
-            panic!("Error opening file {:?}: {}", filepath, error);
+            log::error!("Error opening file {:?}: {}", filepath, error);
+            std::process::exit(1);
         }
     };
 
