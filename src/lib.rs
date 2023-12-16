@@ -207,7 +207,8 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
                         in_front_matter = false;
                         log::info!("front_matter: '{}'", &front_matter);
                         page = serde_yaml::from_str(&front_matter).unwrap_or_else(|err| {
-                            panic!("YAML parsing error in '{}' {}", path, err)
+                            log::error!("YAML parsing error in '{}' {}", path, err);
+                            std::process::exit(1);
                         });
                         continue;
                     }
