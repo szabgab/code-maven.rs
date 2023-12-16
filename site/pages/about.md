@@ -1,6 +1,7 @@
 ---
 title: About the Code Maven Static Site Generator
 timestamp: 2023-11-08T11:30:02
+published: true
 description: Static Site Generator
 ---
 

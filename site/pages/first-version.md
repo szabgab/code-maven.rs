@@ -1,6 +1,7 @@
 ---
 title: First version of the Code Maven Static Site Generator
 timestamp: 2023-11-20T15:50:02
+published: true
 description: Static Site Generator
 ---
 
