@@ -140,7 +140,7 @@ fn render_robots_txt(path: &str, url: &str) {
     writeln!(&mut file, "{}", text).unwrap();
 }
 
-fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
+fn render_sitemap(pages: &[Page], path: &str, url: &str) {
     log::info!("render sitemap");
     let template = include_str!("../templates/sitemap.xml");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -149,6 +149,8 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
         .unwrap()
         .parse(template)
         .unwrap();
+
+    let pages: Vec<&Page> = pages.iter().filter(|page| page.published).collect();
 
     let globals = liquid::object!({
         "pages": &pages,
@@ -162,7 +164,7 @@ fn render_sitemap(pages: &Vec<Page>, path: &str, url: &str) {
 
 fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
     log::info!("render atom feed");
-    let pages = pages.to_owned();
+    let pages: Vec<&Page> = pages.iter().filter(|page| page.published).collect();
 
     let template = include_str!("../templates/atom.xml");
     let template = liquid::ParserBuilder::with_stdlib()

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Draft page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <!--
+      https://highlightjs.org/
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://rust.code-maven.com/draft" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Draft page" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Demo" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://rust.code-maven.com/img/draft.png" />
+
+    <meta name="twitter:creator" content="@szabgab">
+    <meta name="twitter:title" content="Draft page">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:widgets:new-embed-design" content="on">
+    <meta name="twitter:image:src" content="https://rust.code-maven.com/img/draft.png">
+
+  </head>
+  <body>
+
+    <section class="section">
+      <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-home">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbar-home" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="/" class="navbar-item">Home</a>
+          <a href="/tags/" class="navbar-item">Tags</a>
+          <a href="/slides/" class="navbar-item">Slides</a>
+          
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a href="/archive" class="navbar-item">Archive</a>
+            <a href="/about" class="navbar-item">About</a>
+              
+          </div>
+        </div>
+      </div>
+    </nav>
+
+      </div>
+    </section>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Draft page
+      </h1>
+      
+      <div class="content">
+        <p>This is an unpublished page. It should be generated, but it should not be included in any indexing.
+Exclude from</p>
+<ul>
+<li>archive</li>
+<li>sitemap</li>
+<li>atom</li>
+</ul>
+
+      </div>
+    </div>   
+  </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>Demo of <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a> with links. <a href="https://github.com/szabgab/rust.code-maven.com/blob/main/pages/draft.md">source</a></p>
+    </div>
+  </footer>  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Add a click event on each of them
+$navbarBurgers.forEach( el => {
+  el.addEventListener('click', () => {
+
+    // Get the target from the "data-target" attribute
+    const target = el.dataset.target;
+    const $target = document.getElementById(target);
+
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    el.classList.toggle('is-active');
+    $target.classList.toggle('is-active');
+
+  });
+});
+
+});
+</script>
+
+  </body>
+</html>
+
+
+
