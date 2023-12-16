@@ -20,13 +20,13 @@ const IMG: &str = "img";
 #[derive(Parser, Debug)]
 #[command(version)]
 struct Cli {
-    #[arg(long)]
+    #[arg(long, default_value = ".")]
     root: String,
 
     #[arg(long, default_value = "")]
     pages: String,
 
-    #[arg(long)]
+    #[arg(long, default_value = "_site")]
     outdir: String,
 
     #[arg(long, default_value = "")]
