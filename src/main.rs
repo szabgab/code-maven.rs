@@ -195,6 +195,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
 
     let filtered_pages: Vec<&Page> = pages
         .iter()
+        .filter(|page| page.published)
         .filter(|page| page.filename != "index" && page.filename != "archive")
         .collect();
     let template = include_str!("../templates/archive.html");

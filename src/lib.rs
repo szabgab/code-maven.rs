@@ -147,6 +147,8 @@ pub struct Page {
 
     #[serde(default = "get_empty_links")]
     backlinks: Vec<Link>,
+
+    pub published: bool,
 }
 
 impl Page {
@@ -160,6 +162,7 @@ impl Page {
             todo: vec![],
             tags: vec![],
             backlinks: vec![],
+            published: true,
         }
     }
 }
@@ -203,7 +206,9 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
                     if line == "---" {
                         in_front_matter = false;
                         log::info!("front_matter: '{}'", &front_matter);
-                        page = serde_yaml::from_str(&front_matter).expect("YAML parsing error");
+                        page = serde_yaml::from_str(&front_matter).unwrap_or_else(|err| {
+                            panic!("YAML parsing error in '{}' {}", path, err)
+                        });
                         continue;
                     }
                     //dbg!(&line);
@@ -459,6 +464,7 @@ fn test_read_index() {
                 path: "/with_todo".to_string()
             }
         ],
+        published: true,
     };
     assert_eq!(data, expected);
 }
@@ -484,6 +490,7 @@ fn test_read_todo() {
             "fn".to_string(),
         ],
         backlinks: vec![],
+        published: true,
     };
     assert_eq!(data, expected);
 }
@@ -504,6 +511,7 @@ fn test_img_with_title() {
         todo: vec![],
         tags: vec!["img".to_string()],
         backlinks: vec![],
+        published: true,
     };
     assert_eq!(data, expected);
 }
@@ -529,6 +537,7 @@ fn test_links() {
                 path: "/with_todo".to_string(),
             },
         ],
+        published: true,
     };
     assert_eq!(data, expected);
 }
