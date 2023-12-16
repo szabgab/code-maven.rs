@@ -221,8 +221,8 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     });
     let output = template.render(&globals).unwrap();
 
-    let path = &format!("{}/archive.html", outdir);
-    log::info!("archive file {}", path);
+    let path = Path::new(outdir).join("archive.html");
+    log::info!("archive file {:?}", path);
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{}", output).unwrap();
 
@@ -384,9 +384,9 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
 }
 
 fn render_single_page(config: &Config, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
-    let path = &format!("{}/{}", outdir, outfile.display());
+    let path = Path::new(outdir).join(outfile);
 
-    log::info!("render path {}", path);
+    log::info!("render path {:?}", path);
 
     // let image_file = image_file.join(IMG);
     // let mut image_file = image_file.join(&page.filename);
