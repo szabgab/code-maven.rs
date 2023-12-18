@@ -62,22 +62,12 @@ jobs:
         repository: 'szabgab/rust.code-maven.com'
         path: rust.code-maven.com
 
-    - name: Build the Code-Maven site
-      run: |
-        rm -rf _site/*
-        cargo run --bin code-maven-web -- --root rust.code-maven.com  --outdir _site/
-
     - name: Checkout repo of https://israel.szabgab.com/
       uses: actions/checkout@v3
       with:
         repository: 'szabgab/israel.szabgab.com'
         token: ${{ secrets.MY_GITHUB_TOKEN }}
         path: israel.szabgab.com
-
-    - name: Build the israel.szabgab.com site
-      run: |
-        rm -rf _site/*
-        cargo run --bin code-maven-web -- --root israel.szabgab.com  --outdir _site/
 
     - name: Checkout repo of https://izrael.szabgab.com/
       uses: actions/checkout@v3
@@ -104,16 +94,9 @@ jobs:
         repository: 'szabgab/rust.org.il'
         path: rust.org.il
 
-
-    - name: Build the izrael.szabgab.com site
-      run: |
-        rm -rf _site/*
-        cargo run --bin code-maven-web -- --root izrael.szabgab.com  --outdir _site/
-
     - name: Check all the sites
       run: |
         ./check_sites.sh
-
 
     - name: Generate the web site of the generator
       run: |
