@@ -41,9 +41,14 @@ fn main() {
         }
     };
 
+    let from = config.from.unwrap_or_else(|| {
+        log::error!("The 'from' field is missing from the config file");
+        std::process::exit(1);
+    });
+
     let from = EmailAddress {
-        name: config.from.name,
-        email: config.from.email,
+        name: from.name,
+        email: from.email,
     };
 
     let addresses = read_tofile(&args.tofile);

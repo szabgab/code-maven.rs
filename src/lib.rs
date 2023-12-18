@@ -105,7 +105,7 @@ pub struct Config {
     pub link_to_source: bool,
     pub tags: ConfigTag,
     pub archive: ConfigArchive,
-    pub from: ConfigFrom,
+    pub from: Option<ConfigFrom>,
 
     #[serde(default = "get_empty_string")]
     pub footer: String,
