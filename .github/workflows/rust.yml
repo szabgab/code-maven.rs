@@ -92,6 +92,19 @@ jobs:
         repository: 'szabgab/banner-builder.rs'
         path: banner-builder.rs
 
+    - name: Checkout repo of site-checker.rs
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/site-checker.rs'
+        path: site-checker.rs
+
+    - name: Checkout repo of rust.org.il
+      uses: actions/checkout@v3
+      with:
+        repository: 'szabgab/rust.org.il'
+        path: rust.org.il
+
+
     - name: Build the izrael.szabgab.com site
       run: |
         rm -rf _site/*
