@@ -1,7 +1,7 @@
 set -e
 
 
-for project in izrael.szabgab.com israel.szabgab.com rust.code-maven.com site
+for project in rust.org.il izrael.szabgab.com israel.szabgab.com rust.code-maven.com site
 #for project in site
 do
     if ! test -d "$project"; then
@@ -24,6 +24,7 @@ do
     done
 
 done
+
 
 echo "-------------------------------"
 echo Finished successfully
