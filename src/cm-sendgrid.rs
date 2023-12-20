@@ -11,7 +11,7 @@ use code_maven::{read_config, read_md_file};
 #[derive(Parser, Debug)]
 #[command(version)]
 struct Cli {
-    #[arg(long)]
+    #[arg(long, default_value = ".")]
     root: String,
 
     #[arg(long)]
