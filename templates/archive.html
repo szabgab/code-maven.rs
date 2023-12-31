@@ -5,6 +5,7 @@
         {{title}}
       </h1>
       <div class="content">
+          Total: {{pages | size}}
         <ul>
           {% for page in pages %}
              <li>{{page.timestamp | split:'T' | first}} <a href="/{{page.filename}}">{{page.title}}</a></li>
