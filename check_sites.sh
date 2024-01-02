@@ -18,7 +18,7 @@ function check_project
     do
         page=$(basename $page)
         echo $page in $project in $project
-        page=$(sed "s/html/png/" <<< "$page")
+        page=$(sed "s/html$/png/" <<< "$page")
         echo _site/img/$page
         test -f _site/img/$page
     done
