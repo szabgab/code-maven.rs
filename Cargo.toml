@@ -22,7 +22,3 @@ banner-builder = "0.2"
 [[bin]]
 name = "code-maven"
 path = "src/main.rs"
-
-[[bin]]
-name = "code-maven-sendgrid"
-path = "src/cm-sendgrid.rs"

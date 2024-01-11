@@ -1,25 +1,11 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-use clap::Parser;
 use regex::Regex;
 use sendgrid::SGClient;
 use sendgrid::{Destination, Mail};
 
-use code_maven::{read_config, read_md_file};
-
-#[derive(Parser, Debug)]
-#[command(version)]
-struct Cli {
-    #[arg(long, default_value = ".")]
-    root: String,
-
-    #[arg(long)]
-    tofile: String,
-
-    #[arg(long)]
-    mail: String,
-}
+use crate::{read_config, read_md_file};
 
 #[derive(Debug)]
 struct EmailAddress {
@@ -27,13 +13,12 @@ struct EmailAddress {
     email: String,
 }
 
-fn main() {
-    let args = Cli::parse();
+pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) {
     simple_logger::init_with_level(log::Level::Info).unwrap();
-    let config = read_config(&args.root);
+    let config = read_config(root);
 
     // outdir would be needed if there were images to be copied
-    let page = match read_md_file(&config, &args.root, &args.mail, "") {
+    let page = match read_md_file(&config, root, mail, "") {
         Ok(page) => page,
         Err(err) => {
             log::error!("{}", err);
@@ -51,7 +36,7 @@ fn main() {
         email: from.email,
     };
 
-    let addresses = read_tofile(&args.tofile);
+    let addresses = read_tofile(tofile);
 
     let sendgrid_api_key = get_key();
 

@@ -9,6 +9,7 @@ use std::path::PathBuf;
 use chrono::{DateTime, Duration, Utc};
 use clap::{Parser, Subcommand};
 
+use code_maven::cm_sendgrid::cm_sendgrid;
 use code_maven::{filter_words, read_config, read_md_file, topath, Config, Page, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
@@ -39,6 +40,17 @@ enum Commands {
         #[arg(long, default_value = "")]
         email: String,
     },
+
+    Sendgrid {
+        #[arg(long, default_value = ".")]
+        root: String,
+
+        #[arg(long)]
+        tofile: String,
+
+        #[arg(long)]
+        mail: String,
+    },
 }
 
 fn main() {
@@ -54,6 +66,7 @@ fn main() {
             outdir,
             email,
         } => web(root, pages, outdir, email),
+        Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
     }
 }
 

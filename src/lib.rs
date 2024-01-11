@@ -14,6 +14,8 @@ use liquid_core::{
     Display_filter, Filter, FilterReflection, ParseFilter, Result, Runtime, Value, ValueView,
 };
 
+pub mod cm_sendgrid;
+
 #[derive(Clone, ParseFilter, FilterReflection)]
 #[filter(
     name = "topath",
