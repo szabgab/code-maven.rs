@@ -14,15 +14,9 @@ Consider this as pre-alpha.
 
 ## Linux:
 
-Download [code-maven-web](/code-maven-web) and make it executable
+Download [code-maven](/code-maven) and make it executable
 
 ```
-chmod +x code-maven-web
-```
-
-Download [code-maven-sendgrid](/code-maven-sendgrid) and make it executable
-
-```
-chmod +x code-maven-sendgrid
+chmod +x code-maven
 ```
 
