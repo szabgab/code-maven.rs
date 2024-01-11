@@ -37,6 +37,13 @@ impl Filter for ToPathFilter {
     }
 }
 
+fn get_pages_path(root: &str, pages: &str) -> PathBuf {
+    if pages.is_empty() {
+        return PathBuf::from(root).join("pages");
+    }
+    PathBuf::from(pages)
+}
+
 pub fn topath(text: &str) -> String {
     match text {
         "!" => "exclamation-mark".to_string(),

@@ -8,7 +8,7 @@ use std::path::PathBuf;
 
 use chrono::{DateTime, Duration, Utc};
 
-use crate::{filter_words, read_config, read_pages, topath, Config, Page, ToPath};
+use crate::{filter_words, get_pages_path, read_config, read_pages, topath, Config, Page, ToPath};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -51,13 +51,6 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
         email,
         url,
     );
-}
-
-fn get_pages_path(root: &str, pages: &str) -> PathBuf {
-    if pages.is_empty() {
-        return PathBuf::from(root).join("pages");
-    }
-    PathBuf::from(pages)
 }
 
 fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url: &str) {
