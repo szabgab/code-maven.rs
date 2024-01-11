@@ -11,7 +11,7 @@ function check_project
     echo "project: $project"
     echo "folder:  $folder"
     rm -rf _site/*
-    cargo run --bin code-maven-web -- --root $project/$folder  --outdir _site/
+    cargo run --bin code-maven -- web --root $project/$folder  --outdir _site/
 
     echo "---------------------------"
     for page in _site/*.html

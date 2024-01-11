@@ -7,7 +7,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use chrono::{DateTime, Duration, Utc};
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
 use code_maven::{filter_words, read_config, read_md_file, topath, Config, Page, ToPath};
 
@@ -20,17 +20,25 @@ const IMG: &str = "img";
 #[derive(Parser, Debug)]
 #[command(version)]
 struct Cli {
-    #[arg(long, default_value = ".")]
-    root: String,
+    #[command(subcommand)]
+    command: Commands,
+}
 
-    #[arg(long, default_value = "")]
-    pages: String,
+#[derive(Subcommand, Debug)]
+enum Commands {
+    Web {
+        #[arg(long, default_value = ".")]
+        root: String,
 
-    #[arg(long, default_value = "_site")]
-    outdir: String,
+        #[arg(long, default_value = "")]
+        pages: String,
 
-    #[arg(long, default_value = "")]
-    email: String,
+        #[arg(long, default_value = "_site")]
+        outdir: String,
+
+        #[arg(long, default_value = "")]
+        email: String,
+    },
 }
 
 fn main() {
@@ -39,48 +47,59 @@ fn main() {
     simple_logger::init_with_env().unwrap();
     log::info!("Generate pages");
 
-    if !Path::new(&args.outdir).exists() {
-        fs::create_dir(&args.outdir).unwrap();
+    match &args.command {
+        Commands::Web {
+            root,
+            pages,
+            outdir,
+            email,
+        } => web(root, pages, outdir, email),
     }
-    let tags_dir = Path::new(&args.outdir).join("tags");
+}
+
+fn web(root: &str, pages: &str, outdir: &str, email: &str) {
+    if !Path::new(outdir).exists() {
+        fs::create_dir(outdir).unwrap();
+    }
+    let tags_dir = Path::new(outdir).join("tags");
     if !Path::new(&tags_dir).exists() {
         fs::create_dir(tags_dir).unwrap();
     }
 
-    let images_dir = Path::new(&args.outdir).join(IMG);
+    let images_dir = Path::new(outdir).join(IMG);
     if !Path::new(&images_dir).exists() {
         fs::create_dir(images_dir).unwrap();
     }
 
-    let config = read_config(&args.root);
+    let config = read_config(root);
     log::info!("config");
     let url = &config.url;
     log::info!("pages_path");
 
-    let pages_path = get_pages_path(&args);
+    let pages_path = get_pages_path(root, pages);
 
-    let pages = read_pages(&config, &pages_path, &args.root, &args.outdir);
+    let pages = read_pages(&config, &pages_path, root, outdir);
     let tags: Tags = collect_tags(&pages);
-    render_pages(&config, &pages, &args.outdir, url);
-    render_tag_pages(&config, &pages, &tags, &args.outdir, url);
-    render_sitemap(&pages, &format!("{}/sitemap.xml", &args.outdir), url);
-    render_atom(&config, &pages, &format!("{}/atom", &args.outdir), url);
-    render_archive(&config, &pages, &args.outdir, url);
-    render_robots_txt(&format!("{}/robots.txt", &args.outdir), url);
+    render_pages(&config, &pages, outdir, url);
+    render_tag_pages(&config, &pages, &tags, outdir, url);
+    render_sitemap(&pages, &format!("{}/sitemap.xml", outdir), url);
+    render_atom(&config, &pages, &format!("{}/atom", outdir), url);
+    render_archive(&config, &pages, outdir, url);
+    render_robots_txt(&format!("{}/robots.txt", outdir), url);
     render_email(
         &config,
         pages,
-        &format!("{}/email.html", &args.outdir),
-        &args.email,
+        &format!("{}/email.html", outdir),
+        email,
         url,
     );
 }
 
-fn get_pages_path(args: &Cli) -> PathBuf {
-    if args.pages.is_empty() {
-        return PathBuf::from(&args.root).join("pages");
+fn get_pages_path(root: &str, pages: &str) -> PathBuf {
+    if pages.is_empty() {
+        return PathBuf::from(root).join("pages");
     }
-    PathBuf::from(&args.pages)
+    PathBuf::from(pages)
 }
 
 fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url: &str) {

@@ -20,7 +20,7 @@ sendgrid = "0.19"
 banner-builder = "0.2"
 
 [[bin]]
-name = "code-maven-web"
+name = "code-maven"
 path = "src/main.rs"
 
 [[bin]]
