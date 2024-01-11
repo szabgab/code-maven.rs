@@ -25,7 +25,7 @@
 * In the folder create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs)
 * Create a folder called `pages`.
 * In the `pages` folder create a file called `index.md`. See the format below.
-* Run `code-maven-web`
+* Run `code-maven`
 
 * Open issues on the [project](https://github.com/szabgab/code-maven.rs) if something is unclear or does not work as you expected.
 
@@ -70,19 +70,19 @@ Install [pre-commit](https://pre-commit.com/) and run `pre-commit install` to co
 Generate the demo pages:
 
 ```
-cargo run --bin code-maven-web -- --root demo/ --outdir _site/
+cargo run --bin code-maven -- web --root demo/ --outdir _site/
 ```
 
 We can also explicitly say where the pages are, but so far we did not need that.
 
 ```
-cargo run --bin code-maven-web -- --root demo/ --pages demo/pages/ --outdir _site/
+cargo run --bin code-maven -- web --root demo/ --pages demo/pages/ --outdir _site/
 ```
 
 Assuming you have cloned https://github.com/szabgab/rust.code-maven.com/ next to this repository then you can also try:
 
 ```
-cargo run --bin code-maven-web -- --root ../rust.code-maven.com/ --outdir _site/
+cargo run --bin code-maven -- web --root ../rust.code-maven.com/ --outdir _site/
 ```
 
 
