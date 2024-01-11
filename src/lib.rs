@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -186,6 +187,43 @@ fn get_empty_vector() -> Vec<String> {
 
 fn get_empty_string() -> String {
     "".to_string()
+}
+
+pub fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
+    log::info!("read_page from path '{:?}'", path);
+    let mut pages: Vec<Page> = vec![];
+    for entry in path.read_dir().expect("read_dir call failed").flatten() {
+        log::info!("path: {:?}", entry.path());
+        if entry.path().extension().unwrap() != "md" {
+            log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
+            continue;
+        }
+        // println!("{:?}", entry.file_name());
+        let page = match read_md_file(config, root, entry.path().to_str().unwrap(), outdir) {
+            Ok(page) => page,
+            Err(err) => {
+                log::error!("{}", err);
+                std::process::exit(1);
+            }
+        };
+        log::debug!("page: {:?}", &page);
+        pages.push(page);
+    }
+
+    pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
+
+    let mut archive = Page::new();
+    archive.filename = "archive".to_string();
+    if pages.is_empty() {
+        let now: DateTime<Utc> = Utc::now();
+        archive.timestamp = now.format("%Y-%m-%dT%H:%M:%S").to_string();
+    } else {
+        archive.timestamp = pages[0].timestamp.clone();
+    }
+
+    pages.insert(0, archive);
+
+    pages
 }
 
 pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Result<Page, String> {
