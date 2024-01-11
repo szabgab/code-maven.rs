@@ -15,6 +15,7 @@ use liquid_core::{
 };
 
 pub mod cm_sendgrid;
+pub mod web;
 
 #[derive(Clone, ParseFilter, FilterReflection)]
 #[filter(
