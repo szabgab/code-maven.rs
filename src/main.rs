@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 use code_maven::cm_sendgrid::cm_sendgrid;
+use code_maven::todo::list_todo;
 use code_maven::web::web;
 
 #[derive(Parser, Debug)]
@@ -36,6 +37,11 @@ enum Commands {
         #[arg(long)]
         mail: String,
     },
+
+    Todo {
+        #[arg(long, default_value = ".")]
+        root: String,
+    },
 }
 
 fn main() {
@@ -52,5 +58,6 @@ fn main() {
             email,
         } => web(root, pages, outdir, email),
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
+        Commands::Todo { root } => list_todo(root),
     }
 }
