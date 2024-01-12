@@ -11,7 +11,11 @@ pub fn list_todo(root: &str, pages: &str) {
     let (pages, _paths) = read_pages(&config, &pages_path, root);
     for page in pages {
         if !page.todo.is_empty() {
-            println!("{}", page.title);
+            println!(
+                "{:<30} {}",
+                pages_path.join(page.filename).as_os_str().to_str().unwrap(),
+                page.title
+            );
             for todo in page.todo {
                 println!("   {}", todo);
             }
