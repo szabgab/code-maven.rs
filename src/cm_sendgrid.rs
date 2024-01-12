@@ -14,7 +14,6 @@ struct EmailAddress {
 }
 
 pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) {
-    simple_logger::init_with_level(log::Level::Info).unwrap();
     let config = read_config(root);
 
     let (page, _paths) = match read_md_file(&config, root, mail) {
