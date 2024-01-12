@@ -8,6 +8,9 @@ use code_maven::web::web;
 #[derive(Parser, Debug)]
 #[command(version)]
 struct Cli {
+    #[arg(long)]
+    debug: bool,
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -58,7 +61,12 @@ enum Commands {
 
 fn main() {
     let args = Cli::parse();
-    simple_logger::init_with_env().unwrap();
+    let log_level = if args.debug {
+        log::Level::Debug
+    } else {
+        log::Level::Warn
+    };
+    simple_logger::init_with_level(log_level).unwrap();
 
     match &args.command {
         Commands::Web {
