@@ -198,12 +198,7 @@ fn get_empty_string() -> String {
     "".to_string()
 }
 
-pub fn read_pages(
-    config: &Config,
-    path: &Path,
-    root: &str,
-    outdir: &str,
-) -> (Vec<Page>, Vec<PathBuf>) {
+pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
     let mut paths_to_copy: Vec<PathBuf> = vec![];
@@ -215,8 +210,7 @@ pub fn read_pages(
             continue;
         }
         // println!("{:?}", entry.file_name());
-        let (page, paths) = match read_md_file(config, root, entry.path().to_str().unwrap(), outdir)
-        {
+        let (page, paths) = match read_md_file(config, root, entry.path().to_str().unwrap()) {
             Ok(res) => res,
             Err(err) => {
                 log::error!("{}", err);
@@ -248,7 +242,6 @@ pub fn read_md_file(
     config: &Config,
     root: &str,
     path: &str,
-    outdir: &str,
 ) -> Result<(Page, Vec<PathBuf>), String> {
     let mut page: Page = Page::new();
 
@@ -303,7 +296,7 @@ pub fn read_md_file(
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
 
-    let (content, paths) = pre_process(config, root, outdir, &content);
+    let (content, paths) = pre_process(config, root, &content);
     page.backlinks = find_links(&content);
 
     let content = markdown::to_html_with_options(
@@ -360,11 +353,11 @@ fn find_links(text: &str) -> Vec<Link> {
     links
 }
 
-fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> (String, Vec<PathBuf>) {
+fn pre_process(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("pre_process");
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
-    let paths: Vec<PathBuf> = vec![];
+    let mut paths: Vec<PathBuf> = vec![];
 
     let result = re.replace_all(text, |caps: &Captures| {
         let path = Path::new(&caps[1]);
@@ -379,14 +372,21 @@ fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> (String
             include_file(config, include_path, path, language)
         } else {
             // TODO: we don't need to copy external images
-            let output_path = Path::new(outdir).join(path);
-            log::info!("copy file from '{:?}' to '{:?}'", include_path, output_path);
-            copy_file(&include_path, &output_path);
+            paths.push(path.to_path_buf());
             caps[0].to_string() // .copy() // don't replace anything
         }
     });
 
     (result.to_string(), paths)
+}
+
+fn copy_files(root: &str, outdir: &str, paths: Vec<PathBuf>) {
+    for path in paths {
+        let include_path = Path::new(root).join(&path);
+        let output_path = Path::new(outdir).join(path);
+        log::info!("copy file from '{:?}' to '{:?}'", include_path, output_path);
+        copy_file(&include_path, &output_path);
+    }
 }
 
 fn copy_file(source_path: &Path, destination_path: &PathBuf) {
@@ -514,7 +514,7 @@ mod tests {
 #[test]
 fn test_read_index() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/index.md", "temp").unwrap();
+    let data = read_md_file(&config, "demo", "demo/pages/index.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Index page".to_string(),
@@ -540,7 +540,7 @@ fn test_read_index() {
 #[test]
 fn test_read_todo() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md", "temp").unwrap();
+    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Page with todos".to_string(),
@@ -567,7 +567,7 @@ fn test_read_todo() {
 #[test]
 fn test_img_with_title() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md", "temp").unwrap();
+    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Image with title".to_string(),
@@ -582,14 +582,17 @@ fn test_img_with_title() {
         backlinks: vec![],
         published: true,
     };
-    let expected = (expected_page, vec![]);
+    let expected = (
+        expected_page,
+        vec![PathBuf::from("examples/files/code_maven_490_490.jpg")],
+    );
     assert_eq!(data, expected);
 }
 
 #[test]
 fn test_links() {
     let config = read_config("demo");
-    let data = read_md_file(&config, "demo", "demo/pages/links.md", "temp").unwrap();
+    let data = read_md_file(&config, "demo", "demo/pages/links.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Links".to_string(),
@@ -629,7 +632,7 @@ fn test_filter_words() {
 #[test]
 fn test_missing_md_file() {
     let config = read_config("demo");
-    match read_md_file(&config, "demo", "demo/pages/no_such_file.md", "temp") {
+    match read_md_file(&config, "demo", "demo/pages/no_such_file.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
@@ -641,7 +644,7 @@ fn test_missing_md_file() {
 #[test]
 fn test_missing_title() {
     let config = read_config("demo");
-    match read_md_file(&config, "demo", "demo/bad/missing_front_matter.md", "temp") {
+    match read_md_file(&config, "demo", "demo/bad/missing_front_matter.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
@@ -653,7 +656,7 @@ fn test_missing_title() {
 #[test]
 fn test_bad_timestamp() {
     let config = read_config("demo");
-    match read_md_file(&config, "demo", "demo/bad/incorrect_timestamp.md", "temp") {
+    match read_md_file(&config, "demo", "demo/bad/incorrect_timestamp.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,

@@ -8,7 +8,9 @@ use std::path::PathBuf;
 
 use chrono::{DateTime, Duration, Utc};
 
-use crate::{filter_words, get_pages_path, read_config, read_pages, topath, Config, Page, ToPath};
+use crate::{
+    copy_files, filter_words, get_pages_path, read_config, read_pages, topath, Config, Page, ToPath,
+};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
@@ -38,8 +40,10 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
 
     let pages_path = get_pages_path(root, pages);
 
-    let (pages, _paths) = read_pages(&config, &pages_path, root, outdir);
+    let (pages, paths) = read_pages(&config, &pages_path, root);
     let tags: Tags = collect_tags(&pages);
+    copy_files(root, outdir, paths);
+
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);
     render_sitemap(&pages, &format!("{}/sitemap.xml", outdir), url);
