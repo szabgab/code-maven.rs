@@ -41,6 +41,9 @@ enum Commands {
     Todo {
         #[arg(long, default_value = ".")]
         root: String,
+
+        #[arg(long, default_value = "")]
+        pages: String,
     },
 }
 
@@ -58,6 +61,6 @@ fn main() {
             email,
         } => web(root, pages, outdir, email),
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
-        Commands::Todo { root } => list_todo(root),
+        Commands::Todo { root, pages } => list_todo(root, pages),
     }
 }

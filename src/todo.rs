@@ -1,12 +1,12 @@
 use crate::{get_pages_path, read_config, read_pages};
 
-pub fn list_todo(root: &str) {
+pub fn list_todo(root: &str, pages: &str) {
     log::info!("Read all the pages and list all the todo items");
 
     let config = read_config(root);
     log::info!("config");
 
-    let pages_path = get_pages_path(root, "");
+    let pages_path = get_pages_path(root, pages);
 
     // TODO remove the need to pass the outdir to the read_pages
     let outdir = "_site";
