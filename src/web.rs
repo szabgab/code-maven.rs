@@ -16,6 +16,8 @@ type Tags = HashMap<String, i32>;
 const IMG: &str = "img";
 
 pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
+    log::info!("Generate pages for web site");
+
     if !Path::new(outdir).exists() {
         fs::create_dir(outdir).unwrap();
     }

@@ -58,9 +58,7 @@ enum Commands {
 
 fn main() {
     let args = Cli::parse();
-    //println!("{:?}", &args);
     simple_logger::init_with_env().unwrap();
-    log::info!("Generate pages");
 
     match &args.command {
         Commands::Web {
