@@ -18,7 +18,7 @@ pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) {
     let config = read_config(root);
 
     // outdir would be needed if there were images to be copied
-    let page = match read_md_file(&config, root, mail, "") {
+    let (page, _paths) = match read_md_file(&config, root, mail, "") {
         Ok(page) => page,
         Err(err) => {
             log::error!("{}", err);

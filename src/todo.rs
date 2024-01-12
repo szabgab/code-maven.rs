@@ -10,7 +10,7 @@ pub fn list_todo(root: &str, pages: &str) {
 
     // TODO remove the need to pass the outdir to the read_pages
     let outdir = "_site";
-    let pages = read_pages(&config, &pages_path, root, outdir);
+    let (pages, _paths) = read_pages(&config, &pages_path, root, outdir);
     for page in pages {
         if !page.todo.is_empty() {
             println!("{}", page.title);

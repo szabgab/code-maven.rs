@@ -38,7 +38,7 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
 
     let pages_path = get_pages_path(root, pages);
 
-    let pages = read_pages(&config, &pages_path, root, outdir);
+    let (pages, _paths) = read_pages(&config, &pages_path, root, outdir);
     let tags: Tags = collect_tags(&pages);
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);

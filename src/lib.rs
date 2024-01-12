@@ -198,9 +198,16 @@ fn get_empty_string() -> String {
     "".to_string()
 }
 
-pub fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec<Page> {
+pub fn read_pages(
+    config: &Config,
+    path: &Path,
+    root: &str,
+    outdir: &str,
+) -> (Vec<Page>, Vec<PathBuf>) {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
+    let mut paths_to_copy: Vec<PathBuf> = vec![];
+
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
         log::info!("path: {:?}", entry.path());
         if entry.path().extension().unwrap() != "md" {
@@ -208,14 +215,16 @@ pub fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec
             continue;
         }
         // println!("{:?}", entry.file_name());
-        let page = match read_md_file(config, root, entry.path().to_str().unwrap(), outdir) {
-            Ok(page) => page,
+        let (page, paths) = match read_md_file(config, root, entry.path().to_str().unwrap(), outdir)
+        {
+            Ok(res) => res,
             Err(err) => {
                 log::error!("{}", err);
                 std::process::exit(1);
             }
         };
         log::debug!("page: {:?}", &page);
+        paths_to_copy.extend(paths);
         pages.push(page);
     }
 
@@ -232,10 +241,15 @@ pub fn read_pages(config: &Config, path: &Path, root: &str, outdir: &str) -> Vec
 
     pages.insert(0, archive);
 
-    pages
+    (pages, paths_to_copy)
 }
 
-pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Result<Page, String> {
+pub fn read_md_file(
+    config: &Config,
+    root: &str,
+    path: &str,
+    outdir: &str,
+) -> Result<(Page, Vec<PathBuf>), String> {
     let mut page: Page = Page::new();
 
     let mut content = "".to_string();
@@ -289,7 +303,7 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
 
-    let content = pre_process(config, root, outdir, &content);
+    let (content, paths) = pre_process(config, root, outdir, &content);
     page.backlinks = find_links(&content);
 
     let content = markdown::to_html_with_options(
@@ -326,7 +340,7 @@ pub fn read_md_file(config: &Config, root: &str, path: &str, outdir: &str) -> Re
         }
     }
 
-    Ok(page)
+    Ok((page, paths))
 }
 
 fn find_links(text: &str) -> Vec<Link> {
@@ -346,10 +360,11 @@ fn find_links(text: &str) -> Vec<Link> {
     links
 }
 
-fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> String {
+fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("pre_process");
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
+    let paths: Vec<PathBuf> = vec![];
 
     let result = re.replace_all(text, |caps: &Captures| {
         let path = Path::new(&caps[1]);
@@ -371,7 +386,7 @@ fn pre_process(config: &Config, root: &str, outdir: &str, text: &str) -> String 
         }
     });
 
-    result.to_string()
+    (result.to_string(), paths)
 }
 
 fn copy_file(source_path: &Path, destination_path: &PathBuf) {
@@ -501,7 +516,7 @@ fn test_read_index() {
     let config = read_config("demo");
     let data = read_md_file(&config, "demo", "demo/pages/index.md", "temp").unwrap();
     dbg!(&data);
-    let expected = Page {
+    let expected_page = Page {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
@@ -518,6 +533,7 @@ fn test_read_index() {
         ],
         published: true,
     };
+    let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
 }
 
@@ -526,7 +542,7 @@ fn test_read_todo() {
     let config = read_config("demo");
     let data = read_md_file(&config, "demo", "demo/pages/with_todo.md", "temp").unwrap();
     dbg!(&data);
-    let expected = Page {
+    let expected_page = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
         description: "".to_string(),
@@ -544,6 +560,7 @@ fn test_read_todo() {
         backlinks: vec![],
         published: true,
     };
+    let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
 }
 
@@ -552,7 +569,7 @@ fn test_img_with_title() {
     let config = read_config("demo");
     let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md", "temp").unwrap();
     dbg!(&data);
-    let expected = Page {
+    let expected_page = Page {
         title: "Image with title".to_string(),
         timestamp: "2023-10-03T13:30:01".to_string(),
         description: "".to_string(),
@@ -565,6 +582,7 @@ fn test_img_with_title() {
         backlinks: vec![],
         published: true,
     };
+    let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
 }
 
@@ -573,7 +591,7 @@ fn test_links() {
     let config = read_config("demo");
     let data = read_md_file(&config, "demo", "demo/pages/links.md", "temp").unwrap();
     dbg!(&data);
-    let expected = Page {
+    let expected_page = Page {
         title: "Links".to_string(),
         timestamp: "2023-10-01T12:30:01".to_string(),
         description: "".to_string(),
@@ -591,6 +609,7 @@ fn test_links() {
         ],
         published: true,
     };
+    let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
 }
 
