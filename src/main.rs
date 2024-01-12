@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 use code_maven::cm_sendgrid::cm_sendgrid;
+use code_maven::drafts::list_drafts;
 use code_maven::todo::list_todo;
 use code_maven::web::web;
 
@@ -45,6 +46,14 @@ enum Commands {
         #[arg(long, default_value = "")]
         pages: String,
     },
+
+    Drafts {
+        #[arg(long, default_value = ".")]
+        root: String,
+
+        #[arg(long, default_value = "")]
+        pages: String,
+    },
 }
 
 fn main() {
@@ -62,5 +71,6 @@ fn main() {
         } => web(root, pages, outdir, email),
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
         Commands::Todo { root, pages } => list_todo(root, pages),
+        Commands::Drafts { root, pages } => list_drafts(root, pages),
     }
 }

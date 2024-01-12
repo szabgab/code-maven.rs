@@ -16,6 +16,7 @@ use liquid_core::{
 };
 
 pub mod cm_sendgrid;
+pub mod drafts;
 pub mod todo;
 pub mod web;
 
