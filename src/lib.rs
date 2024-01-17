@@ -2,7 +2,6 @@ use chrono::{DateTime, Utc};
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
-use std::io::Read;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
@@ -431,32 +430,28 @@ fn copy_file(source_path: &Path, destination_path: &PathBuf) {
 fn include_file(config: &Config, include_path: PathBuf, path: &Path, language: &str) -> String {
     log::info!("include_path: {:?}", include_path);
 
-    if include_path.exists() {
-        match File::open(include_path) {
-            Ok(mut file) => {
-                let mut content = "".to_string();
-                content += &format!(
-                    "**[{}]({}/tree/{}/{})**\n",
-                    path.display(),
-                    &config.repo,
-                    &config.branch,
-                    path.display()
-                );
-                content += "```";
-                content += language;
-                content += "\n";
-                file.read_to_string(&mut content).unwrap();
-                content += "\n";
-                content += "```\n";
-                content
-            }
-            Err(_error) => {
-                //println!("Error opening file {}: {}", include_path.display(), error);
-                "FAILED".to_string()
-            }
+    match std::fs::read_to_string(&include_path) {
+        Ok(file_content) => {
+            let mut content = "".to_string();
+            content += &format!(
+                "**[{}]({}/tree/{}/{})**\n",
+                path.display(),
+                &config.repo,
+                &config.branch,
+                path.display()
+            );
+            content += "```";
+            content += language;
+            content += "\n";
+            content += &file_content;
+            content += "\n";
+            content += "```\n";
+            content
         }
-    } else {
-        "MISSING".to_string()
+        Err(err) => {
+            log::info!("Failed to include file {:?}: {}", include_path, err);
+            "MISSING".to_string()
+        }
     }
 }
 
