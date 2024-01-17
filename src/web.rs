@@ -295,7 +295,7 @@ fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
 
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
-        render_single_page(config, page, outfile, outdir, url);
+        render_and_save_single_page(config, page, outfile, outdir, url);
     }
 }
 
@@ -322,7 +322,13 @@ pub fn load_templates() -> Result<Partials, Box<dyn Error>> {
     Ok(partials)
 }
 
-pub fn render_single_page(config: &Config, page: &Page, outfile: PathBuf, outdir: &str, url: &str) {
+pub fn render_and_save_single_page(
+    config: &Config,
+    page: &Page,
+    outfile: PathBuf,
+    outdir: &str,
+    url: &str,
+) {
     let path = Path::new(outdir).join(outfile);
 
     log::info!("render path {:?}", path);
@@ -343,6 +349,19 @@ pub fn render_single_page(config: &Config, page: &Page, outfile: PathBuf, outdir
     };
     let image = banner_builder::draw_image(&banner, &image_file);
 
+    let output = render_single_page(config, page, url, image, image_path);
+
+    let mut file = File::create(path).unwrap();
+    writeln!(&mut file, "{}", output).unwrap();
+}
+
+fn render_single_page(
+    config: &Config,
+    page: &Page,
+    url: &str,
+    image: bool,
+    image_path: PathBuf,
+) -> String {
     let partials = match load_templates() {
         Ok(partials) => partials,
         Err(error) => panic!("Error loading templates {}", error),
@@ -381,8 +400,5 @@ pub fn render_single_page(config: &Config, page: &Page, outfile: PathBuf, outdir
         "image_path": image_path,
         "site_name": config.site_name,
     });
-    let output = template.render(&globals).unwrap();
-
-    let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    template.render(&globals).unwrap()
 }
