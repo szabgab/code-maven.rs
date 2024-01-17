@@ -311,18 +311,7 @@ pub fn read_md_file(
     let (content, paths) = pre_process(config, root, &content);
     page.backlinks = find_links(&content);
 
-    let content = markdown::to_html_with_options(
-        &content,
-        &markdown::Options {
-            compile: markdown::CompileOptions {
-                allow_dangerous_html: true,
-                //allow_dangerous_protocol: true,
-                ..markdown::CompileOptions::default()
-            },
-            ..markdown::Options::gfm()
-        },
-    )
-    .unwrap();
+    let content = markdown2html(content);
     //println!("{}", content);
     let content = content.replace("<h1>", "<h1 class=\"title\">");
     let content = content.replace("<h2>", "<h2 class=\"title is-4\">");
@@ -346,6 +335,21 @@ pub fn read_md_file(
     }
 
     Ok((page, paths))
+}
+
+fn markdown2html(content: String) -> String {
+    markdown::to_html_with_options(
+        &content,
+        &markdown::Options {
+            compile: markdown::CompileOptions {
+                allow_dangerous_html: true,
+                //allow_dangerous_protocol: true,
+                ..markdown::CompileOptions::default()
+            },
+            ..markdown::Options::gfm()
+        },
+    )
+    .unwrap()
 }
 
 fn find_links(text: &str) -> Vec<Link> {
