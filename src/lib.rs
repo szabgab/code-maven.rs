@@ -314,7 +314,7 @@ pub fn read_md_file(
     let (content, paths) = pre_process(config, root, &content);
     page.backlinks = find_links(&content);
 
-    let content = markdown2html(content);
+    let content = markdown2html(&content);
     //println!("{}", content);
     let content = content.replace("<h1>", "<h1 class=\"title\">");
     let content = content.replace("<h2>", "<h2 class=\"title is-4\">");
@@ -340,9 +340,9 @@ pub fn read_md_file(
     Ok((page, paths))
 }
 
-fn markdown2html(content: String) -> String {
+fn markdown2html(content: &str) -> String {
     markdown::to_html_with_options(
-        &content,
+        content,
         &markdown::Options {
             compile: markdown::CompileOptions {
                 allow_dangerous_html: true,
@@ -497,7 +497,7 @@ pub fn read_config(root: &str) -> Config {
                 .join("authors")
                 .join(format!("{}.md", author.nickname));
             let content = std::fs::read_to_string(filepath).unwrap_or("".to_string());
-            author.text = markdown2html(content);
+            author.text = markdown2html(&content);
             author
         })
         .collect::<Vec<Author>>();
