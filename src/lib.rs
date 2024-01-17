@@ -400,9 +400,9 @@ fn pre_process(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>
     (result.to_string(), paths)
 }
 
-fn copy_files(root: &str, outdir: &str, paths: Vec<PathBuf>) {
+fn copy_files(root: &str, outdir: &str, paths: &Vec<PathBuf>) {
     for path in paths {
-        let include_path = Path::new(root).join(&path);
+        let include_path = Path::new(root).join(path);
         let output_path = Path::new(outdir).join(path);
         log::info!("copy file from '{:?}' to '{:?}'", include_path, output_path);
         copy_file(&include_path, &output_path);

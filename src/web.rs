@@ -43,7 +43,17 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
 
     let (pages, paths) = read_pages(&config, &pages_path, root);
     let tags: Tags = collect_tags(&pages);
-    copy_files(root, outdir, paths);
+    copy_files(root, outdir, &paths);
+    copy_files(
+        root,
+        outdir,
+        &config
+            .authors
+            .iter()
+            .map(|author| PathBuf::from("images").join(author.picture.clone()))
+            .filter(|path| path.exists())
+            .collect::<Vec<PathBuf>>(),
+    );
 
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);
