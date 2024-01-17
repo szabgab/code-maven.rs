@@ -85,7 +85,7 @@ fn read_tofile(path: &str) -> Vec<EmailAddress> {
                         email: parts[1].to_string(),
                     },
                 };
-                println!("{:?}", address);
+                println!("{address:?}");
 
                 addresses.push(address);
             }
