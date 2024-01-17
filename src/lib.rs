@@ -263,7 +263,7 @@ pub fn read_md_file(
     let mut content = "".to_string();
 
     if !std::path::Path::new(path).exists() {
-        return Err(format!("File '{}' not found", path));
+        return Err(format!("File '{path}' not found"));
     }
 
     match File::open(path) {
@@ -299,12 +299,12 @@ pub fn read_md_file(
             }
         }
         Err(error) => {
-            println!("Error opening file {}: {}", path, error);
+            println!("Error opening file {path}: {error}");
         }
     }
 
     if page.tags.iter().any(std::string::String::is_empty) {
-        return Err(format!("There is an empty tag in {}", path));
+        return Err(format!("There is an empty tag in {path}"));
     }
 
     let mut p = PathBuf::from(path);
@@ -323,7 +323,7 @@ pub fn read_md_file(
     page.content = content;
 
     if page.title.is_empty() {
-        return Err(format!("Missing title in '{}'", path));
+        return Err(format!("Missing title in '{path}'"));
     }
     match chrono::NaiveDateTime::parse_from_str(&page.timestamp, "%Y-%m-%dT%H:%M:%S") {
         Ok(_) => {

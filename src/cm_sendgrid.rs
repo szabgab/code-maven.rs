@@ -91,7 +91,7 @@ fn read_tofile(path: &str) -> Vec<EmailAddress> {
             }
         }
         Err(error) => {
-            println!("Error opening file {}: {}", path, error);
+            println!("Error opening file {path}: {error}");
         }
     }
 
@@ -114,7 +114,7 @@ fn get_key() -> String {
             panic!("Could not find line");
         }
         Err(error) => {
-            panic!("Error opening file {}: {}", filename, error);
+            panic!("Error opening file {filename}: {error}");
         }
     }
 }
@@ -138,7 +138,7 @@ fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str
         .add_x_smtpapi(&x_smtpapi);
 
     match sg.send(mail_info) {
-        Err(err) => println!("Error: {}", err),
+        Err(err) => println!("Error: {err}"),
         Ok(_body) => (), //println!("Response: {:?}", body),
     };
 }

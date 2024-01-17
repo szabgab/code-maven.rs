@@ -17,7 +17,7 @@ pub fn list_todo(root: &str, pages: &str) {
                 page.title
             );
             for todo in page.todo {
-                println!("   {}", todo);
+                println!("   {todo}");
             }
         }
     }

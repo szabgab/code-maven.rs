@@ -57,17 +57,11 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
 
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);
-    render_sitemap(&pages, &format!("{}/sitemap.xml", outdir), url);
-    render_atom(&config, &pages, &format!("{}/atom", outdir), url);
+    render_sitemap(&pages, &format!("{outdir}/sitemap.xml"), url);
+    render_atom(&config, &pages, &format!("{outdir}/atom"), url);
     render_archive(&config, &pages, outdir, url);
-    render_robots_txt(&format!("{}/robots.txt", outdir), url);
-    render_email(
-        &config,
-        pages,
-        &format!("{}/email.html", outdir),
-        email,
-        url,
-    );
+    render_robots_txt(&format!("{outdir}/robots.txt"), url);
+    render_email(&config, pages, &format!("{outdir}/email.html"), email, url);
 }
 
 fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url: &str) {
@@ -104,7 +98,7 @@ fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url:
     let output = template.render(&globals).unwrap();
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
@@ -118,13 +112,11 @@ fn collect_tags(pages: &Vec<Page>) -> Tags {
 }
 
 fn render_robots_txt(path: &str, url: &str) {
-    let text = format!(
-        "Sitemap: {}/sitemap.xml\nSitemap: {}/slides/sitemap.xml\n\nUser-agent: *\n",
-        url, url
-    );
+    let text =
+        format!("Sitemap: {url}/sitemap.xml\nSitemap: {url}/slides/sitemap.xml\n\nUser-agent: *\n");
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", text).unwrap();
+    writeln!(&mut file, "{text}").unwrap();
 }
 
 fn render_sitemap(pages: &[Page], path: &str, url: &str) {
@@ -146,7 +138,7 @@ fn render_sitemap(pages: &[Page], path: &str, url: &str) {
     let output = template.render(&globals).unwrap();
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
@@ -171,7 +163,7 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
     let output = template.render(&globals).unwrap();
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
@@ -179,7 +171,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
 
     let partials = match load_templates() {
         Ok(partials) => partials,
-        Err(error) => panic!("Error loading templates {}", error),
+        Err(error) => panic!("Error loading templates {error}"),
     };
 
     let filtered_pages: Vec<&Page> = pages
@@ -211,7 +203,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     let path = Path::new(outdir).join("archive.html");
     log::info!("archive file {:?}", path);
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 
     let image_file = PathBuf::from(outdir).join(IMG).join("archive.png");
 
@@ -280,7 +272,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
 
     let partials = match load_templates() {
         Ok(partials) => partials,
-        Err(error) => panic!("Error loading templates {}", error),
+        Err(error) => panic!("Error loading templates {error}"),
     };
 
     let template = liquid::ParserBuilder::with_stdlib()
@@ -295,7 +287,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
 
     log::info!("saving file at {:?}", path);
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
@@ -363,7 +355,7 @@ pub fn render_and_save_single_page(
     let output = render_single_page(config, page, url, image, image_path);
 
     let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{}", output).unwrap();
+    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn render_single_page(
@@ -375,7 +367,7 @@ fn render_single_page(
 ) -> String {
     let partials = match load_templates() {
         Ok(partials) => partials,
-        Err(error) => panic!("Error loading templates {}", error),
+        Err(error) => panic!("Error loading templates {error}"),
     };
 
     let template = include_str!("../templates/page.html");
