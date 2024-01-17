@@ -10,6 +10,12 @@
       <div class="content">
         {{content}}
       </div>
+
+      {% if page.author != "" %}
+        <h3>Author</h3>
+        {{ author.name }} ({{ author.nickname }})
+        {{ author.text }}
+      {% endif %}
     </div>   
   </section>
   <footer class="footer">

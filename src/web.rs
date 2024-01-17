@@ -9,7 +9,8 @@ use std::path::PathBuf;
 use chrono::{DateTime, Duration, Utc};
 
 use crate::{
-    copy_files, filter_words, get_pages_path, read_config, read_pages, topath, Config, Page, ToPath,
+    copy_files, filter_words, get_pages_path, read_config, read_pages, topath, Author, Config,
+    Page, ToPath,
 };
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
@@ -386,6 +387,22 @@ fn render_single_page(
     }
     let footer = markdown::to_html(&footer);
 
+    let author = if page.author.is_empty() {
+        Author {
+            name: "".to_string(),
+            nickname: "".to_string(),
+            picture: "".to_string(),
+            text: "".to_string(),
+        }
+    } else {
+        let authors = config
+            .authors
+            .iter()
+            .filter(|author| author.nickname == page.author)
+            .collect::<Vec<&Author>>();
+        authors[0].clone()
+    };
+
     let globals = liquid::object!({
         "title": page.title,
         "description": page.description,
@@ -399,6 +416,27 @@ fn render_single_page(
         "image": image,
         "image_path": image_path,
         "site_name": config.site_name,
+        "author": author,
     });
     template.render(&globals).unwrap()
+}
+
+#[test]
+fn test_show_author_text() {
+    use crate::read_md_file;
+
+    let config = read_config("tests/config_with_authors/");
+    let (page, _includes) = read_md_file(
+        &config,
+        "tests/config_with_authors/",
+        "tests/config_with_authors/pages/index.md",
+    )
+    .unwrap();
+    let url = &config.url;
+    let image = false;
+    let image_path = PathBuf::from("");
+    let output = render_single_page(&config, &page, url, image, image_path);
+    assert!(output.contains("Gabor Szabo"));
+    assert!(output.contains("the author of the Rust Maven web site"));
+    //assert_eq!(output, "");
 }

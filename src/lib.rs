@@ -110,7 +110,7 @@ pub struct ConfigTag {
     pub title: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Clone)]
 pub struct Author {
     pub name: String,
     pub nickname: String,
@@ -173,6 +173,9 @@ pub struct Page {
     #[serde(default = "get_empty_links")]
     backlinks: Vec<Link>,
 
+    #[serde(default = "get_empty_string")]
+    author: String,
+
     pub published: bool,
 }
 
@@ -188,6 +191,7 @@ impl Page {
             tags: vec![],
             backlinks: vec![],
             published: true,
+            author: "".to_string(),
         }
     }
 }
@@ -498,7 +502,7 @@ pub fn read_config(root: &str) -> Config {
                 .join("authors")
                 .join(format!("{}.md", author.nickname));
             let content = std::fs::read_to_string(filepath).unwrap_or("".to_string());
-            author.text = content;
+            author.text = markdown2html(content);
             author
         })
         .collect::<Vec<Author>>();
@@ -561,6 +565,7 @@ fn test_read_index() {
             }
         ],
         published: true,
+        author: "".to_string(),
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
@@ -588,6 +593,7 @@ fn test_read_todo() {
         ],
         backlinks: vec![],
         published: true,
+        author: "".to_string(),
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
@@ -610,6 +616,7 @@ fn test_img_with_title() {
         tags: vec!["img".to_string()],
         backlinks: vec![],
         published: true,
+        author: "".to_string(),
     };
     let expected = (
         expected_page,
@@ -640,6 +647,8 @@ fn test_links() {
             },
         ],
         published: true,
+        author: "".to_string(),
+
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
@@ -724,10 +733,17 @@ fn test_config_with_author_files() {
         config.repo,
         "https://github.com/szabgab/rust.code-maven.com"
     );
-    assert_eq!(config.authors, vec![Author {
-        name: "Gabor Szabo".to_string(),
-        nickname: s!("szabgab"),
-        picture: s!("szabgab.png"),
-        text: s!("[Gabor Szabo](https://szabgab.com/), the author of the Rust Maven web site\nteaches Rust, Python, git, CI, and testing.\n"),
-    }]);
+    assert_eq!(
+        config.authors,
+        vec![Author {
+            name: "Gabor Szabo".to_string(),
+            nickname: s!("szabgab"),
+            picture: s!("szabgab.png"),
+            text: s!(
+                r#"<p><a href="https://szabgab.com/">Gabor Szabo</a>, the author of the Rust Maven web site
+teaches Rust, Python, git, CI, and testing.</p>
+"#
+            ),
+        }]
+    );
 }
