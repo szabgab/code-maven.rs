@@ -110,6 +110,16 @@ pub struct ConfigTag {
     pub title: String,
 }
 
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+pub struct Author {
+    pub name: String,
+    pub nickname: String,
+    pub picture: String,
+
+    #[serde(default = "get_empty_string")]
+    pub text: String,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub url: String,
@@ -119,6 +129,8 @@ pub struct Config {
     pub tags: ConfigTag,
     pub archive: ConfigArchive,
     pub from: Option<ConfigFrom>,
+
+    pub authors: Vec<Author>,
 
     #[serde(default = "get_empty_string")]
     pub footer: String,
@@ -460,7 +472,7 @@ pub fn read_config(root: &str) -> Config {
     let filepath = std::path::Path::new(root).join("config.yaml");
     log::info!("read_config {:?}", filepath);
 
-    let config: Config = match std::fs::File::open(&filepath) {
+    let mut config: Config = match std::fs::File::open(&filepath) {
         Ok(file) => match serde_yaml::from_reader(file) {
             Ok(data) => data,
             Err(err) => {
@@ -473,6 +485,19 @@ pub fn read_config(root: &str) -> Config {
             std::process::exit(1);
         }
     };
+
+    config.authors = config
+        .authors
+        .into_iter()
+        .map(|mut author| {
+            let filepath = std::path::Path::new(root)
+                .join("authors")
+                .join(format!("{}.md", author.nickname));
+            let content = std::fs::read_to_string(filepath).unwrap_or("".to_string());
+            author.text = content;
+            author
+        })
+        .collect::<Vec<Author>>();
 
     config
 }
@@ -663,4 +688,42 @@ fn test_bad_timestamp() {
             "Invalid date '2015-02-30T12:30:01' in demo/bad/incorrect_timestamp.md: input is out of range".to_string()
         ),
     }
+}
+
+#[allow(unused_macros)]
+macro_rules! s(($result:expr) => ($result.to_string()));
+
+#[test]
+fn test_config_of_demo() {
+    let config = read_config("demo");
+    assert_eq!(config.url, "https://rust.code-maven.com");
+    assert_eq!(
+        config.repo,
+        "https://github.com/szabgab/rust.code-maven.com"
+    );
+    assert_eq!(
+        config.authors,
+        vec![Author {
+            name: "Gabor Szabo".to_string(),
+            nickname: s!("szabgab"),
+            picture: s!("szabgab.png"),
+            text: s!(""),
+        }]
+    );
+}
+
+#[test]
+fn test_config_with_author_files() {
+    let config = read_config("tests/config_with_authors/");
+    assert_eq!(config.url, "https://rust.code-maven.com");
+    assert_eq!(
+        config.repo,
+        "https://github.com/szabgab/rust.code-maven.com"
+    );
+    assert_eq!(config.authors, vec![Author {
+        name: "Gabor Szabo".to_string(),
+        nickname: s!("szabgab"),
+        picture: s!("szabgab.png"),
+        text: s!("[Gabor Szabo](https://szabgab.com/), the author of the Rust Maven web site\nteaches Rust, Python, git, CI, and testing.\n"),
+    }]);
 }
