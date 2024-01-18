@@ -27,7 +27,7 @@ path = "src/main.rs"
 [lints.clippy]
 #unwrap_used = "deny"
 #unwrap_or_default = "deny"
-pedantic = "deny"
+pedantic = { priority = -1, level = "deny" }
 must_use_candidate = "allow"
 manual_string_new = "allow"
 needless_pass_by_value = "allow"
