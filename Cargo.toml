@@ -16,7 +16,7 @@ serde_yaml = "0.9"
 markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
 regex = "1.10"
 chrono = "0.4"
-sendgrid = "0.19"
+sendgrid = { version = "0.20", features = ["blocking"] }
 banner-builder = "0.2"
 
 [[bin]]

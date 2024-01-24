@@ -2,8 +2,10 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use regex::Regex;
-use sendgrid::SGClient;
-use sendgrid::{Destination, Mail};
+use sendgrid::v3::{
+    ClickTrackingSetting, Content, Email, Message, OpenTrackingSetting, Personalization, Sender,
+    SubscriptionTrackingSetting, TrackingSettings,
+};
 
 use crate::{read_config, read_md_file};
 
@@ -120,25 +122,29 @@ fn get_key() -> String {
 }
 
 fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str, html: &str) {
-    let sg = SGClient::new(api_key);
+    let person = Personalization::new(Email::new(&to.email).set_name(&to.name));
 
-    let mut x_smtpapi = String::new();
-    x_smtpapi.push_str(r#"{"unique_args":{"test":7}}"#);
-
-    let mail_info = Mail::new()
-        .add_to(Destination {
-            address: &to.email,
-            name: &to.name,
+    let message = Message::new(Email::new(&from.email).set_name(&from.name))
+        .set_subject(subject)
+        .add_content(Content::new().set_content_type("text/html").set_value(html))
+        .set_tracking_settings(TrackingSettings {
+            click_tracking: Some(ClickTrackingSetting {
+                enable: Some(false),
+                enable_text: None,
+            }),
+            subscription_tracking: Some(SubscriptionTrackingSetting {
+                enable: Some(false),
+            }),
+            open_tracking: Some(OpenTrackingSetting {
+                enable: Some(false),
+                substitution_tag: None,
+            }),
         })
-        .add_from(&from.email)
-        .add_from_name(&from.name)
-        .add_subject(subject)
-        .add_html(html)
-        .add_header("x-cool".to_string(), "indeed")
-        .add_x_smtpapi(&x_smtpapi);
+        .add_personalization(person);
 
-    match sg.send(mail_info) {
-        Err(err) => println!("Error: {err}"),
-        Ok(_body) => (), //println!("Response: {:?}", body),
-    };
+    let sender = Sender::new(api_key.to_owned());
+    match sender.blocking_send(&message) {
+        Ok(res) => println!("sent {}", res.status()),
+        Err(err) => eprintln!("err: {err}",),
+    }
 }
