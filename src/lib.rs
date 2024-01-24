@@ -14,8 +14,8 @@ use liquid_core::{
     Display_filter, Filter, FilterReflection, ParseFilter, Result, Runtime, Value, ValueView,
 };
 
-pub mod cm_sendgrid;
 pub mod drafts;
+pub mod notifications;
 pub mod todo;
 pub mod web;
 

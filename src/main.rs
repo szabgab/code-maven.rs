@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
-use code_maven::cm_sendgrid::cm_sendgrid;
 use code_maven::drafts::list_drafts;
+use code_maven::notifications::cm_sendgrid;
 use code_maven::todo::list_todo;
 use code_maven::web::web;
 
