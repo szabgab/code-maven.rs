@@ -11,35 +11,17 @@
 
 ## Installation
 
-* Install Rust
-* Clone https://github.com/szabgab/code-maven.rs
-* cd code-maven.rs
+See [the web site](https://ssg.code-maven.com/)
 
 
-* cargo install --path .   # TODO: we need to integrate the templates in order to make this work.
+## Setup a web site
 
+See [the web site](https://ssg.code-maven.com/)
 
-## Setup web site
-
-* Create a new folder
-* In the folder create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs)
-* Create a folder called `pages`.
-* In the `pages` folder create a file called `index.md`. See the format below.
-* Run `code-maven`
-
-* Open issues on the [project](https://github.com/szabgab/code-maven.rs) if something is unclear or does not work as you expected.
 
 ## Format
 
-```
----
-title: Title text
-timestamp: 2015-10-11T12:30:01
-todo:
-  - Add another article extending on the topic
-  - Add an article describing a prerequisite
----
-```
+See [the web site](https://ssg.code-maven.com/)
 
 Not yet implemented fields
 
@@ -47,19 +29,16 @@ Not yet implemented fields
 indexes: open, File, read, readline, gets, while, each
 status: show
 books: ruby
-author: szabgab
 archive: 1
 comments_disqus_enable: 0
 ```
 
 
-## Testing
-
-```
-cargo test
-```
-
 ## Local development
+
+* Install Rust
+* Clone https://github.com/szabgab/code-maven.rs
+* cd code-maven.rs
 
 Install [pre-commit](https://pre-commit.com/) and run `pre-commit install` to configure it for this repo.
 
@@ -86,11 +65,16 @@ cargo run --bin code-maven -- web --root ../rust.code-maven.com/ --outdir _site/
 ```
 
 
-
 Install [rustatic](https://rustatic.code-maven.com/) and run the following to view the generated site
 
 ```
 rustatic --path _site/ --indexfile index.html --nice --port 3000
+```
+
+## Testing
+
+```
+cargo test
 ```
 
 

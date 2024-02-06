@@ -24,13 +24,32 @@ chmod +x code-maven
 
 Create a folder to hold the site.
 
-Create a file called `config.yaml` based on [this config.yaml](https://github.com/szabgab/code-maven.rs/blob/main/site/config.yaml)
+* In the folder create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs) or based on [this config.yaml](https://github.com/szabgab/code-maven.rs/blob/main/site/config.yaml).
 
 Create a folder called `pages`.
 
-In the `pages` folder create a file called `index.md` based on [this file](https://raw.githubusercontent.com/szabgab/code-maven.rs/main/site/pages/index.md). The field in the front-matter, at the top are the important bit.
+In the `pages` folder create a file called `index.md` based on [this file](https://raw.githubusercontent.com/szabgab/code-maven.rs/main/site/pages/index.md). The field in the front-matter, at the top are the important bit. See the format below.
 
 Run `code-maven web`.   It will generated the site in the `_site` folder.
+
+* If something is unclear or does not work as you expected open issues on the [project](https://github.com/szabgab/code-maven.rs).
+
+## Format
+
+```
+---
+title: Title text
+timestamp: 2015-10-11T12:30:01
+author:
+published: false
+tags:
+  - web
+  - rust
+todo:
+  - Add another article extending on the topic
+  - Add an article describing a prerequisite
+---
+```
 
 
 ## View the site locally
