@@ -43,3 +43,11 @@ For the latter download [rustatic](https://rustatic.code-maven.com/) and run
 rustatic --path _site/ --nice --indexfile index.html --port 500
 ```
 
+## GitHub pages
+
+In order to setup a site on GitHub pages crate a file called `/.github/workflows/gh-pages.yml`  (the folder matters, the actual name of the file can be anything as long as the extension is `.yml` or `.yaml`.)
+
+The content of the file:
+
+![](include/gh-pages.yml)
+
