@@ -35,3 +35,39 @@ no_effect_underscore_binding = "allow"
 missing_errors_doc = "allow"
 missing_panics_doc = "allow"
 module_name_repetitions = "allow"
+
+suspicious = { priority = -1, level = "deny" }
+complexity = { priority = -1, level = "deny" }
+perf = { priority = -1, level = "deny" }
+style = { priority = -1, level = "deny" }
+restriction  = { priority = -1, level = "deny" }
+
+single_call_fn = "allow"
+missing_docs_in_private_items = "allow"
+missing_inline_in_public_items = "allow"
+implicit_return = "allow"
+min_ident_chars = "allow"
+absolute_paths = "allow"
+shadow_unrelated = "allow"
+exit = "allow" 
+indexing_slicing = "allow"
+str_to_string = "allow"
+shadow_reuse = "allow"
+arithmetic_side_effects = "allow"
+format_push_string = "allow"
+unwrap_used = "allow"
+expect_used = "allow"
+panic = "allow"
+std_instead_of_alloc = "allow"
+print_stdout = "allow"
+print_stderr = "allow"
+redundant_type_annotations = "allow"
+default_numeric_fallback = "allow"
+exhaustive_structs = "allow"
+non_ascii_literal = "allow"
+create_dir = "allow"
+use_debug = "allow"
+partial_pub_fields = "allow"
+pattern_type_mismatch = "allow"
+
+blanket_clippy_restriction_lints = "allow"
