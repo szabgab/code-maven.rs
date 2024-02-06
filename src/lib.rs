@@ -491,10 +491,10 @@ pub fn read_config(root: &str) -> Config {
         .authors
         .into_iter()
         .map(|mut author| {
-            let filepath = std::path::Path::new(root)
+            let author_file = std::path::Path::new(root)
                 .join("authors")
                 .join(format!("{}.md", author.nickname));
-            let content = std::fs::read_to_string(filepath).unwrap_or_default();
+            let content = std::fs::read_to_string(author_file).unwrap_or_default();
             author.text = markdown2html(&content);
             author
         })

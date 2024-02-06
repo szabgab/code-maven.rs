@@ -18,7 +18,7 @@ pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySo
 type Tags = HashMap<String, i32>;
 const IMG: &str = "img";
 
-pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
+pub fn web(root: &str, path_to_pages: &str, outdir: &str, email: &str) {
     log::info!("Generate pages for web site");
 
     if !Path::new(outdir).exists() {
@@ -39,7 +39,7 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
     let url = &config.url;
     log::info!("pages_path");
 
-    let pages_path = get_pages_path(root, pages);
+    let pages_path = get_pages_path(root, path_to_pages);
 
     let (pages, paths) = read_pages(&config, &pages_path, root);
     let tags: Tags = collect_tags(&pages);
