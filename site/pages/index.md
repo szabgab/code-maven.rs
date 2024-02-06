@@ -7,7 +7,7 @@ description: Static Site Generator
 
 # Code Maven SSG
 
-This is a placeholder for a web site for the static site generator behind the [Rust Maven](https://rust.code-maven.com/) web site.
+This is the static site generator behind the [Rust Maven](https://rust.code-maven.com/) web site and a [couple of other sites](/where-is-it-used).
 
 If you use it, make sure you follow the development as I don't yet promise any stability of the API or any warning.
 Consider this as pre-alpha.
