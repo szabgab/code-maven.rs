@@ -20,3 +20,26 @@ Download [code-maven](/code-maven) and make it executable
 chmod +x code-maven
 ```
 
+## Setup
+
+Create a folder to hold the site.
+
+Create a file called `config.yaml` based on [this config.yaml](https://github.com/szabgab/code-maven.rs/blob/main/site/config.yaml)
+
+Create a folder called `pages`.
+
+In the `pages` folder create a file called `index.md` based on [this file](https://raw.githubusercontent.com/szabgab/code-maven.rs/main/site/pages/index.md). The field in the front-matter, at the top are the important bit.
+
+Run `code-maven web`.   It will generated the site in the `_site` folder.
+
+
+## View the site locally
+
+You can open the individual pages in the `_site` folder using your browser or you can run a mini web server serving static pages.
+
+For the latter download [rustatic](https://rustatic.code-maven.com/) and run
+
+```
+rustatic --path _site/ --nice --indexfile index.html --port 500
+```
+
