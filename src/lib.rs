@@ -314,11 +314,10 @@ pub fn read_md_file(
     let (content, paths) = pre_process(config, root, &content);
     page.backlinks = find_links(&content);
 
-    let content = markdown2html(&content);
-    //println!("{}", content);
-    let content = content.replace("<h1>", "<h1 class=\"title\">");
-    let content = content.replace("<h2>", "<h2 class=\"title is-4\">");
-    let content = content.replace("<h3>", "<h3 class=\"title is-5\">");
+    let content = markdown2html(&content)
+        .replace("<h1>", "<h1 class=\"title\">")
+        .replace("<h2>", "<h2 class=\"title is-4\">")
+        .replace("<h3>", "<h3 class=\"title is-5\">");
 
     page.content = content;
 
@@ -463,8 +462,7 @@ fn read_languages() -> HashMap<String, String> {
         if line.is_empty() {
             continue;
         }
-        let parts = line.split(',');
-        let parts: Vec<&str> = parts.collect();
+        let parts = line.split(',').collect::<Vec<&str>>();
         data.insert(parts[0].to_string(), parts[1].to_string());
     }
 
