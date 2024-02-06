@@ -721,7 +721,7 @@ fn test_config_of_demo() {
 
 #[test]
 fn test_config_with_author_files() {
-    let config = read_config("tests/config_with_authors/");
+    let config = read_config("test_cases/config_with_authors/");
     assert_eq!(config.url, "https://rust.code-maven.com");
     assert_eq!(
         config.repo,

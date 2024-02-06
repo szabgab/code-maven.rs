@@ -387,11 +387,11 @@ fn render_single_page(
 fn test_show_author_text() {
     use crate::read_md_file;
 
-    let config = read_config("tests/config_with_authors/");
+    let config = read_config("test_cases/config_with_authors/");
     let (page, _includes) = read_md_file(
         &config,
-        "tests/config_with_authors/",
-        "tests/config_with_authors/pages/index.md",
+        "test_cases/config_with_authors/",
+        "test_cases/config_with_authors/pages/index.md",
     )
     .unwrap();
     let url = &config.url;
