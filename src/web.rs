@@ -6,8 +6,6 @@ use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 
-use chrono::{DateTime, Duration, Utc};
-
 use crate::{
     copy_files, filter_words, get_pages_path, read_config, read_pages, topath, Author, Config,
     Page, ToPath,
@@ -18,7 +16,7 @@ pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySo
 type Tags = HashMap<String, i32>;
 const IMG: &str = "img";
 
-pub fn web(root: &str, path_to_pages: &str, outdir: &str, email: &str) {
+pub fn web(root: &str, path_to_pages: &str, outdir: &str) {
     log::info!("Generate pages for web site");
 
     if !Path::new(outdir).exists() {
@@ -61,44 +59,6 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str, email: &str) {
     render_atom(&config, &pages, &format!("{outdir}/atom"), url);
     render_archive(&config, &pages, outdir, url);
     render_robots_txt(&format!("{outdir}/robots.txt"), url);
-    render_email(&config, pages, &format!("{outdir}/email.html"), email, url);
-}
-
-fn render_email(config: &Config, pages: Vec<Page>, path: &str, email: &str, url: &str) {
-    if email.is_empty() {
-        return;
-    }
-    log::info!("render email");
-
-    let days: i64 = email.parse().unwrap();
-    let now: DateTime<Utc> = Utc::now();
-    let date = now - Duration::days(days);
-    let date = date.format("%Y-%m-%dT%H:%M:%S").to_string();
-    //println!("{:?}", pages);
-
-    let filtered_pages: Vec<&Page> = pages
-        .iter()
-        .filter(|page| page.filename != "index" && page.filename != "archive")
-        .filter(|page| page.timestamp > date)
-        .collect();
-
-    let template = include_str!("../templates/email.html");
-    let template = liquid::ParserBuilder::with_stdlib()
-        .filter(ToPath)
-        .build()
-        .unwrap()
-        .parse(template)
-        .unwrap();
-
-    let globals = liquid::object!({
-        "pages": &filtered_pages,
-        "config": config,
-        "url": url,
-    });
-    let output = template.render(&globals).unwrap();
-
-    let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{output}").unwrap();
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {

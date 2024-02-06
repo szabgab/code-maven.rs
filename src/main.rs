@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand};
 
 use code_maven::drafts::list_drafts;
 use code_maven::notifications::cm_sendgrid;
+use code_maven::recent::get_recent;
 use code_maven::todo::list_todo;
 use code_maven::web::web;
 
@@ -26,9 +27,17 @@ enum Commands {
 
         #[arg(long, default_value = "_site")]
         outdir: String,
+    },
+
+    Recent {
+        #[arg(long, default_value = ".")]
+        root: String,
 
         #[arg(long, default_value = "")]
-        email: String,
+        pages: String,
+
+        #[arg(long, default_value = "")]
+        days: String,
     },
 
     Sendgrid {
@@ -73,8 +82,9 @@ fn main() {
             root,
             pages,
             outdir,
-            email,
-        } => web(root, pages, outdir, email),
+        } => web(root, pages, outdir),
+        Commands::Recent { root, pages, days } => get_recent(root, pages, days),
+
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
         Commands::Todo { root, pages } => list_todo(root, pages),
         Commands::Drafts { root, pages } => list_drafts(root, pages),
