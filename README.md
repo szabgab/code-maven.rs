@@ -83,5 +83,5 @@ cargo test
 With links to post from the last 3 days (actually 3*24 hours)
 
 ```
-cargo run -- --root ../rust.code-maven.com/  --outdir _site/ --email 3
+cargo run -- recent --root ../rust.code-maven.com/ --days 3
 ```
