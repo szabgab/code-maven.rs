@@ -303,7 +303,7 @@ pub fn read_md_file(
         }
     }
 
-    if page.tags.iter().any(std::string::String::is_empty) {
+    if page.tags.iter().any(String::is_empty) {
         return Err(format!("There is an empty tag in {path}"));
     }
 
