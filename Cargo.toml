@@ -66,7 +66,6 @@ default_numeric_fallback = "allow"
 exhaustive_structs = "allow"
 non_ascii_literal = "allow"
 create_dir = "allow"
-use_debug = "allow"
 partial_pub_fields = "allow"
 pattern_type_mismatch = "allow"
 
