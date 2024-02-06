@@ -289,7 +289,7 @@ pub fn read_md_file(
                     front_matter += "\n";
                     continue;
                 }
-                if line == "---" {
+                if line == "---" && front_matter.is_empty() {
                     in_front_matter = true;
                     continue;
                 }
