@@ -181,16 +181,16 @@ pub struct Page {
 impl Page {
     pub fn new() -> Page {
         Page {
-            title: "".to_string(),
-            timestamp: "".to_string(),
-            description: "".to_string(),
-            filename: "".to_string(),
-            content: "".to_string(),
+            title: String::new(),
+            timestamp: String::new(),
+            description: String::new(),
+            filename: String::new(),
+            content: String::new(),
             todo: vec![],
             tags: vec![],
             backlinks: vec![],
             published: true,
-            author: "".to_string(),
+            author: String::new(),
         }
     }
 }
@@ -210,7 +210,7 @@ fn get_empty_vector() -> Vec<String> {
 }
 
 fn get_empty_string() -> String {
-    "".to_string()
+    String::new()
 }
 
 pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
@@ -260,7 +260,7 @@ pub fn read_md_file(
 ) -> Result<(Page, Vec<PathBuf>), String> {
     let mut page: Page = Page::new();
 
-    let mut content = "".to_string();
+    let mut content = String::new();
 
     if !std::path::Path::new(path).exists() {
         return Err(format!("File '{path}' not found"));
@@ -270,7 +270,7 @@ pub fn read_md_file(
         Ok(file) => {
             let reader = BufReader::new(file);
             let mut in_front_matter = false;
-            let mut front_matter = "".to_string();
+            let mut front_matter = String::new();
             for line in reader.lines() {
                 let line = line.unwrap();
                 log::debug!("line '{}'", line);
@@ -432,7 +432,7 @@ fn include_file(config: &Config, include_path: PathBuf, path: &Path, language: &
 
     match std::fs::read_to_string(&include_path) {
         Ok(file_content) => {
-            let mut content = "".to_string();
+            let mut content = String::new();
             content += &format!(
                 "**[{}]({}/tree/{}/{})**\n",
                 path.display(),

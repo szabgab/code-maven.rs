@@ -391,10 +391,10 @@ fn render_single_page(
 
     let author = if page.author.is_empty() {
         Author {
-            name: "".to_string(),
-            nickname: "".to_string(),
-            picture: "".to_string(),
-            text: "".to_string(),
+            name: String::new(),
+            nickname: String::new(),
+            picture: String::new(),
+            text: String::new(),
         }
     } else {
         let authors = config

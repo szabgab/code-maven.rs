@@ -29,7 +29,6 @@ path = "src/main.rs"
 #unwrap_or_default = "deny"
 pedantic = { priority = -1, level = "deny" }
 must_use_candidate = "allow"
-manual_string_new = "allow"
 needless_pass_by_value = "allow"
 no_effect_underscore_binding = "allow"
 missing_errors_doc = "allow"

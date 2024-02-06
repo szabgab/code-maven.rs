@@ -83,7 +83,7 @@ fn read_tofile(path: &str) -> Vec<EmailAddress> {
                         email: value[2].to_owned(),
                     },
                     None => EmailAddress {
-                        name: "".to_string(),
+                        name: String::new(),
                         email: parts[1].to_string(),
                     },
                 };
