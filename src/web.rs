@@ -22,16 +22,16 @@ pub fn web(root: &str, pages: &str, outdir: &str, email: &str) {
     log::info!("Generate pages for web site");
 
     if !Path::new(outdir).exists() {
-        fs::create_dir(outdir).unwrap();
+        fs::create_dir_all(outdir).unwrap();
     }
     let tags_dir = Path::new(outdir).join("tags");
     if !Path::new(&tags_dir).exists() {
-        fs::create_dir(tags_dir).unwrap();
+        fs::create_dir_all(tags_dir).unwrap();
     }
 
     let images_dir = Path::new(outdir).join(IMG);
     if !Path::new(&images_dir).exists() {
-        fs::create_dir(images_dir).unwrap();
+        fs::create_dir_all(images_dir).unwrap();
     }
 
     let config = read_config(root);
