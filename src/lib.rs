@@ -299,7 +299,7 @@ pub fn read_md_file(
             }
         }
         Err(error) => {
-            println!("Error opening file {path}: {error}");
+            log::error!("Error opening file {path}: {error}");
         }
     }
 

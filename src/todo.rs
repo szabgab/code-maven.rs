@@ -10,12 +10,14 @@ pub fn list_todo(root: &str, pages: &str) {
 
     let (pages, _paths) = read_pages(&config, &pages_path, root);
     for page in pages {
+        #[allow(clippy::print_stdout)]
         if !page.todo.is_empty() {
             println!(
                 "{:<30} {}",
                 pages_path.join(page.filename).as_os_str().to_str().unwrap(),
                 page.title
             );
+            #[allow(clippy::print_stdout)]
             for todo in page.todo {
                 println!("   {todo}");
             }

@@ -87,13 +87,13 @@ fn read_tofile(path: &str) -> Vec<EmailAddress> {
                         email: parts[1].to_string(),
                     },
                 };
-                println!("{} {}", address.name, address.email);
+                log::info!("{} {}", address.name, address.email);
 
                 addresses.push(address);
             }
         }
         Err(error) => {
-            println!("Error opening file {path}: {error}");
+            log::error!("Error opening file {path}: {error}");
         }
     }
 
@@ -144,7 +144,7 @@ fn sendgrid(api_key: &str, from: &EmailAddress, to: &EmailAddress, subject: &str
 
     let sender = Sender::new(api_key.to_owned());
     match sender.blocking_send(&message) {
-        Ok(res) => println!("sent {}", res.status()),
-        Err(err) => eprintln!("err: {err}",),
+        Ok(res) => log::info!("sent {}", res.status()),
+        Err(err) => log::error!("err: {err}",),
     }
 }
