@@ -58,7 +58,6 @@ panic = "allow"
 redundant_type_annotations = "allow"
 default_numeric_fallback = "allow"
 exhaustive_structs = "allow"
-non_ascii_literal = "allow"
 partial_pub_fields = "allow"
 pattern_type_mismatch = "allow"
 

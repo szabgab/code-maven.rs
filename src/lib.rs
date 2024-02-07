@@ -139,6 +139,9 @@ pub struct Config {
     #[serde(default = "get_empty_string")]
     pub site_name: String,
 
+    #[serde(default = "get_empty_string")]
+    pub author_name: String,
+
     pub navbar: ConfigNavbar,
 
     #[serde(default = "get_empty_string")]

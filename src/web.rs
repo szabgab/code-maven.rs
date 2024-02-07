@@ -117,7 +117,7 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
         "pages": &pages,
         "url": url,
         "site_name": config.site_name,
-        "author_name": "Gábor Szabó",
+        "author_name": config.author_name,
         "updated": pages[0].timestamp,
     });
     let output = template.render(&globals).unwrap();
