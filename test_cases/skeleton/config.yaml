@@ -1,0 +1,32 @@
+url: https://rust.code-maven.com
+repo: https://github.com/szabgab/rust.code-maven.com
+branch: main
+site_name: Demo
+link_to_source: false
+footer: Demo of [Code Maven RS](https://github.com/szabgab/code-maven.rs) with links.
+tags:
+  title: Tags
+  description: Articles about Foo Bar
+# google_analytics: ABC
+from:
+  name: Foo Bar
+  email: foo@bar.com
+archive:
+  title: Archive
+  description: Archive of this site
+authors:
+  - name: Foo Bar
+    nickname: foobar
+    picture: foobar.png
+navbar:
+  start:
+    - path: /
+      title: Home
+    - path: /tags/
+      title: Tags
+  end:
+    - path: /archive
+      title: Archive
+    - path: /about
+      title: About
+

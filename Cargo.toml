@@ -18,6 +18,7 @@ regex = "1.10"
 chrono = "0.4"
 sendgrid = { version = "0.20", features = ["blocking"] }
 banner-builder = "0.2"
+tempdir = "0.3"
 
 [[bin]]
 name = "code-maven"

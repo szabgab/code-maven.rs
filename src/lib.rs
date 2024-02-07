@@ -15,6 +15,7 @@ use liquid_core::{
 };
 
 pub mod drafts;
+pub mod new;
 pub mod notifications;
 pub mod recent;
 pub mod todo;
