@@ -263,7 +263,7 @@ pub fn read_md_file(
     root: &str,
     path: &str,
 ) -> Result<(Page, Vec<PathBuf>), String> {
-    let mut page: Page = Page::new();
+    let mut page = Page::new();
 
     let mut content = String::new();
 
