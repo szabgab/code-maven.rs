@@ -436,21 +436,15 @@ fn include_file(config: &Config, include_path: PathBuf, path: &Path, language: &
 
     match std::fs::read_to_string(&include_path) {
         Ok(file_content) => {
-            let mut content = String::new();
-            content += &format!(
-                "**[{}]({}/tree/{}/{})**\n",
+            format!(
+                "**[{}]({}/tree/{}/{})**\n```{}\n{}\n```\n",
                 path.display(),
                 &config.repo,
                 &config.branch,
-                path.display()
-            );
-            content += "```";
-            content += language;
-            content += "\n";
-            content += &file_content;
-            content += "\n";
-            content += "```\n";
-            content
+                path.display(),
+                language,
+                &file_content
+            )
         }
         Err(err) => {
             log::info!("Failed to include file {:?}: {}", include_path, err);
