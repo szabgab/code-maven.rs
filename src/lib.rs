@@ -166,7 +166,7 @@ pub struct Page {
     pub description: String,
 
     #[serde(default = "get_empty_vector")]
-    todo: Vec<String>,
+    pub todo: Vec<String>,
 
     #[serde(default = "get_empty_vector")]
     pub tags: Vec<String>,
@@ -175,10 +175,10 @@ pub struct Page {
     pub content: String,
 
     #[serde(default = "get_empty_links")]
-    backlinks: Vec<Link>,
+    pub backlinks: Vec<Link>,
 
     #[serde(default = "get_empty_string")]
-    author: String,
+    pub author: String,
 
     pub published: bool,
 }
