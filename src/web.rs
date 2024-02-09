@@ -312,10 +312,16 @@ pub fn render_and_save_single_page(
     };
     let image = banner_builder::draw_image(&banner, &image_file);
 
-    let output = render_single_page(config, page, url, image, image_path);
-
-    let mut file = File::create(path).unwrap();
-    writeln!(&mut file, "{output}").unwrap();
+    match render_single_page(config, page, url, image, image_path) {
+        Ok(output) => {
+            let mut file = File::create(path).unwrap();
+            writeln!(&mut file, "{output}").unwrap();
+        }
+        Err(err) => {
+            log::error!("{err}");
+            std::process::exit(1);
+        }
+    };
 }
 
 fn render_single_page(
@@ -324,10 +330,10 @@ fn render_single_page(
     url: &str,
     image: bool,
     image_path: PathBuf,
-) -> String {
+) -> Result<String, String> {
     let partials = match load_templates() {
         Ok(partials) => partials,
-        Err(error) => panic!("Error loading templates {error}"),
+        Err(error) => return Err(format!("Error loading templates {error}")),
     };
 
     let template = include_str!("../templates/page.html");
@@ -380,7 +386,7 @@ fn render_single_page(
         "site_name": config.site_name,
         "author": author,
     });
-    template.render(&globals).unwrap()
+    Ok(template.render(&globals).unwrap())
 }
 
 #[test]
@@ -397,7 +403,7 @@ fn test_show_author_text() {
     let url = &config.url;
     let image = false;
     let image_path = PathBuf::from("");
-    let output = render_single_page(&config, &page, url, image, image_path);
+    let output = render_single_page(&config, &page, url, image, image_path).unwrap();
     assert!(output.contains("Gabor Szabo"));
     assert!(output.contains("the author of the Rust Maven web site"));
     //assert_eq!(output, "");
