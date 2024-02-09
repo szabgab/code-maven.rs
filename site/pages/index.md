@@ -15,7 +15,7 @@ Download [code-maven](/code-maven) and make it executable
 chmod +x code-maven
 ```
 
-## Setup
+## Setup - Create new site locally
 
 Run
 
@@ -30,6 +30,8 @@ This will create a folder to hold the site.
 It will create a folder called `pages` with a number of pages:
 
 A file called `index.md` based on [this file](https://raw.githubusercontent.com/szabgab/code-maven.rs/main/site/pages/index.md). The field in the front-matter, at the top are the important bit. See the format below.
+
+## Generate the web site
 
 ```
 cd path-to-new-site
@@ -68,6 +70,8 @@ todo:                                # As I write articles I often have ideas fo
 ---
 ```
 
+After this front-matter feel free to write any Markdown.
+
 
 ## View the site locally
 
@@ -103,4 +107,9 @@ In order to setup a site on GitHub pages crate a file called `/.github/workflows
 The content of the file:
 
 ![](include/gh-pages.yml)
+
+
+## Questions and Support
+
+If you have encountered a bug, or if you would like to have a new feature, or just would like to ask a question, please open an [issue](https://github.com/szabgab/code-maven.rs/).
 
