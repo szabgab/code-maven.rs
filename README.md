@@ -76,12 +76,3 @@ rustatic --path _site/ --indexfile index.html --nice --port 3000
 ```
 cargo test
 ```
-
-
-## Generate list of recent posts
-
-With links to post from the last 3 days (actually 3*24 hours)
-
-```
-cargo run -- recent --root ../rust.code-maven.com/ --days 3
-```
