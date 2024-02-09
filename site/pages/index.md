@@ -76,6 +76,14 @@ cd source-of-the-site
 code-maven recent --days 3
 ```
 
+## Logging
+
+You can add the `--debug` flag to get detailed logging of what's going on, the flag must come **before** the command:
+
+```
+code-maven --debug web
+```
+
 ## GitHub pages
 
 In order to setup a site on GitHub pages crate a file called `/.github/workflows/gh-pages.yml`  (the folder matters, the actual name of the file can be anything as long as the extension is `.yml` or `.yaml`.)
