@@ -5,8 +5,6 @@ published: true
 description: Static Site Generator
 ---
 
-# Code Maven SSG
-
 This is the static site generator behind the [Rust Maven](https://rust.code-maven.com/) web site and a [couple of other sites](/where-is-it-used).
 
 ## Linux:
