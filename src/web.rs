@@ -369,6 +369,14 @@ fn render_single_page(
             .iter()
             .filter(|author| author.nickname == page.author)
             .collect::<Vec<&Author>>();
+
+        if authors.is_empty() {
+            return Err(format!(
+                "The nickname '{}' used in the file '{}' is not in the config.yaml file.",
+                page.author, page.filename
+            ));
+        }
+
         authors[0].clone()
     };
 
@@ -408,4 +416,27 @@ fn test_show_author_text() {
     assert!(output.contains("Gabor Szabo"));
     assert!(output.contains("the author of the Rust Maven web site"));
     //assert_eq!(output, "");
+}
+
+#[test]
+fn test_bad_author() {
+    use crate::read_md_file;
+
+    let config = read_config("test_cases/config_with_authors/");
+    let (page, _includes) = read_md_file(
+        &config,
+        "test_cases/config_with_authors/",
+        "test_cases/config_with_authors/pages/bad_author.md",
+    )
+    .unwrap();
+    let url = &config.url;
+    let image = false;
+    let image_path = PathBuf::from("");
+    let error = render_single_page(&config, &page, url, image, image_path)
+        .err()
+        .unwrap();
+    assert_eq!(
+        error,
+        "The nickname 'george' used in the file 'bad_author' is not in the config.yaml file."
+    );
 }
