@@ -25,7 +25,7 @@ code-maven new --root path-to-new-site
 
 This will create a folder to hold the site.
 
-* In the folder it will create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs) or based on [this config.yaml](https://github.com/szabgab/code-maven.rs/blob/main/site/config.yaml).
+* In the folder it will create a file called `config.yaml` based on the one in the `demo` folder of the [repository](https://github.com/szabgab/code-maven.rs) or based on [this config.yaml](https://github.com/szabgab/code-maven.rs/blob/main/site/config.yaml). Explanation about the fields will be included in the skeleton site and can be also seen [here](https://github.com/szabgab/code-maven.rs/blob/main/test_cases/skeleton/config.yaml).
 
 It will create a folder called `pages` with a number of pages:
 
