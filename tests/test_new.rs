@@ -1,4 +1,5 @@
 use std::{
+    fs,
     os::unix::process::ExitStatusExt,
     process::{Command, ExitStatus},
 };
@@ -15,15 +16,17 @@ fn new_site(root: &str) {
     assert_eq!(result.status, ExitStatus::from_raw(0));
 }
 
-fn generate_site(root: &str, outdir: &str) {
+fn generate_site(root: &str, outdir: &str) -> (ExitStatus, String, String) {
     let result = Command::new("cargo")
         .args(["run", "-q", "web", "--root", root, "--outdir", outdir])
         .output()
         .expect("command failed to start");
     //canonicalize()
-    assert_eq!(std::str::from_utf8(&result.stdout).unwrap(), "");
-    assert_eq!(std::str::from_utf8(&result.stderr).unwrap(), "");
-    assert_eq!(result.status, ExitStatus::from_raw(0));
+    (
+        result.status,
+        std::str::from_utf8(&result.stdout).unwrap().to_owned(),
+        std::str::from_utf8(&result.stderr).unwrap().to_owned(),
+    )
 }
 
 #[test]
@@ -99,10 +102,14 @@ fn test_new_generate() {
 
     let outdir = tmp_dir.path().join("out");
     assert!(!outdir.exists());
-    generate_site(
+    let (exit, out, err) = generate_site(
         tmp_dir.path().join("site").to_str().unwrap(),
         outdir.to_str().unwrap(),
     );
+    assert_eq!(out, "");
+    assert_eq!(err, "");
+    assert_eq!(exit, ExitStatus::from_raw(0));
+
     assert!(outdir.exists());
     assert!(outdir.join("index.html").exists());
     assert!(outdir.join("robots.txt").exists());
@@ -118,4 +125,25 @@ fn test_new_generate() {
     assert!(outdir.join("img").join("about.png").exists());
     assert!(outdir.join("img").join("archive.png").exists());
     assert!(outdir.join("img").join("index.png").exists());
+}
+
+#[test]
+fn test_page_author_not_in_config() {
+    let tmp_dir = TempDir::new("example").unwrap();
+    println!("tempdir: {:?}", tmp_dir);
+
+    let root = tmp_dir.path().join("site");
+
+    new_site(root.to_str().unwrap());
+    let source_path = "test_cases/author-not-in-config.md";
+    let destination_path = root.join("pages").join("author-not-in-config.md");
+    fs::copy(source_path, destination_path).unwrap();
+
+    let outdir = tmp_dir.path().join("out");
+
+    assert!(!outdir.exists());
+    let (exit, out, err) = generate_site(root.to_str().unwrap(), outdir.to_str().unwrap());
+    assert!(out.contains("The nickname 'george' used in the file 'author-not-in-config' is not in the config.yaml file."));
+    assert_eq!(err, "");
+    assert_eq!(exit, ExitStatus::from_raw(256));
 }
