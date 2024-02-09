@@ -4,6 +4,17 @@ use std::{
 };
 use tempdir::TempDir;
 
+fn new_site(root: &str) {
+    let result = Command::new("cargo")
+        .args(["run", "-q", "new", "--root", root])
+        .output()
+        .expect("command failed to start");
+    //canonicalize()
+    assert_eq!(std::str::from_utf8(&result.stdout).unwrap(), "");
+    assert_eq!(std::str::from_utf8(&result.stderr).unwrap(), "");
+    assert_eq!(result.status, ExitStatus::from_raw(0));
+}
+
 #[test]
 fn test_new_without_parameters() {
     // TODO create external test that will create a new blog using the "new" command
@@ -25,20 +36,7 @@ fn test_new_with_parameters() {
     let tmp_dir = TempDir::new("example").unwrap();
     println!("tempdir: {:?}", tmp_dir);
 
-    let result = Command::new("cargo")
-        .args([
-            "run",
-            "-q",
-            "new",
-            "--root",
-            tmp_dir.path().join("site").to_str().unwrap(),
-        ])
-        .output()
-        .expect("command failed to start");
-    //canonicalize()
-    assert_eq!(std::str::from_utf8(&result.stdout).unwrap(), "");
-    assert_eq!(std::str::from_utf8(&result.stderr).unwrap(), "");
-    assert_eq!(result.status, ExitStatus::from_raw(0));
+    new_site(tmp_dir.path().join("site").to_str().unwrap());
 
     let content = tmp_dir
         .path()
