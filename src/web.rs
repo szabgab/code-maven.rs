@@ -179,6 +179,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
 fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &str, url: &str) {
     log::info!("render_tag_pages");
 
+    #[allow(clippy::iter_over_hash_type)]
     for tag in tags.keys() {
         let mut pages_with_tag: Vec<Page> = vec![];
         for page in pages {
