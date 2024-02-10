@@ -16,7 +16,7 @@ pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySo
 type Tags = HashMap<String, i32>;
 const IMG: &str = "img";
 
-pub fn web(root: &str, path_to_pages: &str, outdir: &str) {
+pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> {
     log::info!("Generate pages for web site");
 
     if !Path::new(outdir).exists() {
@@ -32,7 +32,7 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) {
         fs::create_dir_all(images_dir).unwrap();
     }
 
-    let config = read_config(root);
+    let config = read_config(root)?;
     log::info!("config");
     let url = &config.url;
     log::info!("pages_path");
@@ -59,6 +59,8 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) {
     render_atom(&config, &pages, &format!("{outdir}/atom"), url);
     render_archive(&config, &pages, outdir, url);
     render_robots_txt(&format!("{outdir}/robots.txt"), url);
+
+    Ok(())
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
@@ -402,7 +404,7 @@ fn render_single_page(
 fn test_show_author_text() {
     use crate::read_md_file;
 
-    let config = read_config("test_cases/config_with_authors/");
+    let config = read_config("test_cases/config_with_authors/").unwrap();
     let (page, _includes) = read_md_file(
         &config,
         "test_cases/config_with_authors/",
@@ -422,7 +424,7 @@ fn test_show_author_text() {
 fn test_bad_author() {
     use crate::read_md_file;
 
-    let config = read_config("test_cases/config_with_authors/");
+    let config = read_config("test_cases/config_with_authors/").unwrap();
     let (page, _includes) = read_md_file(
         &config,
         "test_cases/config_with_authors/",

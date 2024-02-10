@@ -2,10 +2,10 @@ use chrono::{DateTime, Duration, Utc};
 
 use crate::{get_pages_path, read_config, read_pages, Config, Page, ToPath};
 
-pub fn get_recent(root: &str, path_to_pages: &str, days: &str) {
+pub fn get_recent(root: &str, path_to_pages: &str, days: &str) -> Result<(), String> {
     log::info!("get_recent");
 
-    let config = read_config(root);
+    let config = read_config(root)?;
     let url = &config.url;
 
     let pages_path = get_pages_path(root, path_to_pages);
@@ -13,6 +13,7 @@ pub fn get_recent(root: &str, path_to_pages: &str, days: &str) {
     let (pages, _paths) = read_pages(&config, &pages_path, root);
 
     list_recent(&config, pages, days, url);
+    Ok(())
 }
 
 #[allow(clippy::print_stdout)]

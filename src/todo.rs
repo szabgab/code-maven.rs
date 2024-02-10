@@ -1,9 +1,9 @@
 use crate::{get_pages_path, read_config, read_pages};
 
-pub fn list_todo(root: &str, path_to_pages: &str) {
+pub fn list_todo(root: &str, path_to_pages: &str) -> Result<(), String> {
     log::info!("Read all the pages and list all the todo items");
 
-    let config = read_config(root);
+    let config = read_config(root)?;
     log::info!("config");
 
     let pages_path = get_pages_path(root, path_to_pages);
@@ -23,4 +23,6 @@ pub fn list_todo(root: &str, path_to_pages: &str) {
             }
         }
     }
+
+    Ok(())
 }

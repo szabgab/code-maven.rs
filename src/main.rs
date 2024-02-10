@@ -83,7 +83,7 @@ fn main() {
     };
     simple_logger::init_with_level(log_level).unwrap();
 
-    match &args.command {
+    let result = match &args.command {
         Commands::Web {
             root,
             pages,
@@ -94,5 +94,13 @@ fn main() {
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),
         Commands::Todo { root, pages } => list_todo(root, pages),
         Commands::Drafts { root, pages } => list_drafts(root, pages),
-    }
+    };
+
+    match result {
+        Ok(()) => {}
+        Err(error) => {
+            log::error!("{}", error);
+            std::process::exit(1);
+        }
+    };
 }

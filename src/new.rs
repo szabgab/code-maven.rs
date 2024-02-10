@@ -1,12 +1,11 @@
 use std::fs::File;
 use std::io::Write;
 
-pub fn new_site(root: &str) {
+pub fn new_site(root: &str) -> Result<(), String> {
     log::info!("new_site {root}");
     let path = std::path::PathBuf::from(root);
     if path.exists() {
-        log::error!("path {root} exists");
-        std::process::exit(1);
+        return Err(format!("path {root} exists"));
     }
 
     // TODO set the time of the pages to the generation of the site
@@ -44,4 +43,6 @@ pub fn new_site(root: &str) {
         "{foobar_str}"
     )
     .unwrap();
+
+    Ok(())
 }

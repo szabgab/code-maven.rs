@@ -58,5 +58,6 @@ panic = "allow"
 default_numeric_fallback = "allow" # I don't want to write 1_i32 just to make this lint happy
 exhaustive_structs = "allow"
 pattern_type_mismatch = "allow"
+question_mark_used = "allow" # We started to use ? and so we would like to allow it
 
 blanket_clippy_restriction_lints = "allow"

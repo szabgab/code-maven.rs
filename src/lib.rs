@@ -468,7 +468,7 @@ fn read_languages() -> HashMap<String, String> {
     data
 }
 
-pub fn read_config(root: &str) -> Config {
+pub fn read_config(root: &str) -> Result<Config, String> {
     let filepath = std::path::Path::new(root).join("config.yaml");
     log::info!("read_config {:?}", filepath);
 
@@ -476,13 +476,11 @@ pub fn read_config(root: &str) -> Config {
         Ok(file) => match serde_yaml::from_reader(file) {
             Ok(data) => data,
             Err(err) => {
-                log::error!("Invalid YAML format in {:?}: {}", filepath, err);
-                std::process::exit(1);
+                return Err(format!("Invalid YAML format in {filepath:?}: {err}"));
             }
         },
         Err(error) => {
-            log::error!("Error opening file {:?}: {}", filepath, error);
-            std::process::exit(1);
+            return Err(format!("Error opening file {filepath:?}: {error}"));
         }
     };
 
@@ -499,7 +497,7 @@ pub fn read_config(root: &str) -> Config {
         })
         .collect::<Vec<Author>>();
 
-    config
+    Ok(config)
 }
 
 pub fn filter_words(words: &[String]) -> Vec<String> {
@@ -538,7 +536,7 @@ mod tests {
 
 #[test]
 fn test_read_index() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     let data = read_md_file(&config, "demo", "demo/pages/index.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
@@ -565,7 +563,7 @@ fn test_read_index() {
 
 #[test]
 fn test_read_todo() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     let data = read_md_file(&config, "demo", "demo/pages/with_todo.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
@@ -593,7 +591,7 @@ fn test_read_todo() {
 
 #[test]
 fn test_img_with_title() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
@@ -619,7 +617,7 @@ fn test_img_with_title() {
 
 #[test]
 fn test_links() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     let data = read_md_file(&config, "demo", "demo/pages/links.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
@@ -661,7 +659,7 @@ fn test_filter_words() {
 
 #[test]
 fn test_missing_md_file() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     match read_md_file(&config, "demo", "demo/pages/no_such_file.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
@@ -673,7 +671,7 @@ fn test_missing_md_file() {
 
 #[test]
 fn test_missing_title() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     match read_md_file(&config, "demo", "demo/bad/missing_front_matter.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
@@ -685,7 +683,7 @@ fn test_missing_title() {
 
 #[test]
 fn test_bad_timestamp() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     match read_md_file(&config, "demo", "demo/bad/incorrect_timestamp.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
@@ -700,7 +698,7 @@ macro_rules! s(($result:expr) => ($result.to_string()));
 
 #[test]
 fn test_config_of_demo() {
-    let config = read_config("demo");
+    let config = read_config("demo").unwrap();
     assert_eq!(config.url, "https://rust.code-maven.com");
     assert_eq!(
         config.repo,
@@ -719,7 +717,7 @@ fn test_config_of_demo() {
 
 #[test]
 fn test_config_with_author_files() {
-    let config = read_config("test_cases/config_with_authors/");
+    let config = read_config("test_cases/config_with_authors/").unwrap();
     assert_eq!(config.url, "https://rust.code-maven.com");
     assert_eq!(
         config.repo,

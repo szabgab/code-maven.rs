@@ -15,8 +15,8 @@ struct EmailAddress {
     email: String,
 }
 
-pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) {
-    let config = read_config(root);
+pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) -> Result<(), String> {
+    let config = read_config(root)?;
 
     let (page, _paths) = match read_md_file(&config, root, mail) {
         Ok(page) => page,
@@ -56,6 +56,8 @@ pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) {
             &page.content,
         );
     }
+
+    Ok(())
 }
 
 fn read_tofile(path: &str) -> Vec<EmailAddress> {
