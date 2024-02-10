@@ -76,3 +76,10 @@ rustatic --path _site/ --indexfile index.html --nice --port 3000
 ```
 cargo test
 ```
+
+or for more verbose output use:
+
+```
+cargo t
+```
+
