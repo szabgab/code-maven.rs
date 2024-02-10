@@ -484,6 +484,21 @@ pub fn read_config(root: &str) -> Result<Config, String> {
         }
     };
 
+    let nicknames = config
+        .authors
+        .iter()
+        .map(|author| author.nickname.clone())
+        .collect::<Vec<String>>();
+    let mut uniq = std::collections::HashSet::new();
+    for nickname in nicknames {
+        if uniq.contains(&nickname) {
+            return Err(format!(
+                "nickname '{nickname}' appears twice in config.yaml"
+            ));
+        }
+        uniq.insert(nickname);
+    }
+
     config.authors = config
         .authors
         .into_iter()
@@ -736,4 +751,12 @@ teaches Rust, Python, git, CI, and testing.</p>
             ),
         }]
     );
+}
+
+#[test]
+fn test_config_with_duplicate_author() {
+    let error = read_config("test_cases/same_nickname_twice/")
+        .err()
+        .unwrap();
+    assert_eq!(error, "nickname 'foobar' appears twice in config.yaml")
 }
