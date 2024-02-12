@@ -1,4 +1,7 @@
 use clap::{Parser, Subcommand};
+use shadow_rs::shadow;
+
+shadow!(build);
 
 use code_maven::drafts::list_drafts;
 use code_maven::new::new_site;
@@ -8,7 +11,7 @@ use code_maven::todo::list_todo;
 use code_maven::web::web;
 
 #[derive(Parser, Debug)]
-#[command(version)]
+#[command(version = build::CLAP_LONG_VERSION)]
 struct Cli {
     #[arg(long)]
     debug: bool,
