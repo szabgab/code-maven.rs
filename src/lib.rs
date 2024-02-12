@@ -317,7 +317,7 @@ pub fn read_md_file(
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
 
     let (content, paths) = pre_process(config, root, &content);
-    page.backlinks = find_links(&content);
+    //page.backlinks = find_links(&content);
 
     let content = markdown2html(&content)
         .replace("<h1>", "<h1 class=\"title\">")
@@ -359,22 +359,22 @@ fn markdown2html(content: &str) -> String {
     .unwrap()
 }
 
-fn find_links(text: &str) -> Vec<Link> {
-    let mut links: Vec<Link> = vec![];
+// fn find_links(text: &str) -> Vec<Link> {
+//     let mut links: Vec<Link> = vec![];
 
-    let re = Regex::new(r"[^!]\[([^\]]+)\]\(([^)]+)\)").unwrap();
-    for capture in re.captures_iter(text) {
-        if capture[2].starts_with("http://") || capture[2].starts_with("https://") {
-            continue;
-        }
-        links.push(Link {
-            title: capture[1].to_string(),
-            path: capture[2].to_string(),
-        });
-    }
+//     let re = Regex::new(r"[^!]\[([^\]]+)\]\(([^)]+)\)").unwrap();
+//     for capture in re.captures_iter(text) {
+//         if capture[2].starts_with("http://") || capture[2].starts_with("https://") {
+//             continue;
+//         }
+//         links.push(Link {
+//             title: capture[1].to_string(),
+//             path: capture[2].to_string(),
+//         });
+//     }
 
-    links
-}
+//     links
+// }
 
 fn pre_process(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("pre_process");
@@ -563,12 +563,12 @@ fn test_read_index() {
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
         todo: vec![],
         tags: vec![],
-        backlinks: vec![
-            Link {
-                title: "with TODO".to_string(),
-                path: "/with_todo".to_string()
-            }
-        ],
+        backlinks: vec![],
+        //     Link {
+        //         title: "with TODO".to_string(),
+        //         path: "/with_todo".to_string()
+        //     }
+        // ],
         published: true,
         author: "".to_string(),
     };
@@ -645,12 +645,12 @@ fn test_links() {
         todo: vec![
         ],
         tags: vec![],
-        backlinks: vec![
-            Link {
-                title: "internal link".to_string(),
-                path: "/with_todo".to_string(),
-            },
-        ],
+        backlinks: vec![],
+        //     Link {
+        //         title: "internal link".to_string(),
+        //         path: "/with_todo".to_string(),
+        //     },
+        // ],
         published: true,
         author: "".to_string(),
 
