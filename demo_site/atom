@@ -108,8 +108,8 @@
     <title>Index page</title>
     <summary type="html"><![CDATA[The text for the search engines]]></summary>
     <updated>2015-10-11T12:30:01</updated>
-    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/index" />
-    <id>https://rust.code-maven.com/index</id>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/" />
+    <id>https://rust.code-maven.com/</id>
     <content type="html"><![CDATA[<p>Some Text.</p>
 <p>Some more text after an empty row.</p>
 <h2 class="title is-4">A title with two hash-marks</h2>

@@ -139,7 +139,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     let filtered_pages: Vec<&Page> = pages
         .iter()
         .filter(|page| page.published)
-        .filter(|page| page.url_path != "index" && page.url_path != "archive")
+        .filter(|page| !page.url_path.is_empty() && page.url_path != "archive")
         .collect();
     let template = include_str!("../templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()

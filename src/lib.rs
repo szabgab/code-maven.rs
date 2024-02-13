@@ -321,6 +321,9 @@ pub fn read_md_file(
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
     page.url_path = p.file_name().unwrap().to_str().unwrap().to_string();
+    if page.url_path == "index" {
+        page.url_path = String::new();
+    }
 
     let (content, paths) = pre_process(config, root, &content);
     //page.backlinks = find_links(&content);
@@ -564,7 +567,7 @@ fn test_read_index() {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
-        url_path: "index".to_string(),
+        url_path: "".to_string(),
         filename: "index".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
