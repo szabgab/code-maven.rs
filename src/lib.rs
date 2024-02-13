@@ -6,8 +6,7 @@ use std::io::{BufRead, BufReader};
 use std::path::Path;
 use std::path::PathBuf;
 
-use regex::Captures;
-use regex::Regex;
+use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
 
 use liquid_core::{
@@ -229,6 +228,58 @@ fn get_empty_vector() -> Vec<String> {
 
 fn get_empty_string() -> String {
     String::new()
+}
+
+// fn get_list(pages: Vec<Page>, count: usize) -> String {
+//     let mut link: Vec<String> = vec![];
+
+//     for page in pages {
+//         link.push(String::new());
+//     }
+//     //let filtered = if pages.len() > count { pages[0..count] } else { pages[0..pages.len()] };
+//     return String::new();
+// }
+
+pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
+    let all_pages = pages.clone();
+    let total = pages.len();
+    pages
+        .into_iter()
+        .map(|mut page| {
+            let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
+            page.content = re
+                .replace_all(&page.content, |caps: &Captures| {
+                    let mut count = 0;
+                    let limit = caps[1].parse::<usize>().unwrap();
+                    let tag = caps.get(2);
+
+                    let mut html = String::new();
+                    #[allow(clippy::needless_range_loop)]
+                    for ix in 1..total {
+                        if tag.is_some() {
+                            let tag_text = &tag.unwrap().as_str().to_string();
+                            if !all_pages[ix].tags.contains(tag_text) {
+                                continue;
+                            }
+                        }
+                        html += format!(
+                            r#"<li><a href="{}">{}</a></li>"#,
+                            all_pages[ix].url_path, all_pages[ix].title
+                        )
+                        .as_str();
+                        html += "\n";
+                        count += 1;
+                        if 0 < limit && limit <= count {
+                            break;
+                        }
+                    }
+
+                    html
+                })
+                .to_string();
+            page
+        })
+        .collect()
 }
 
 pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
