@@ -41,6 +41,9 @@ from:
   name: Foo Bar
   email: foo@bar.com
 
+# On each page show the list of pages that link to the current page.
+show_related: true
+
 # Each page can have an `author` field in the front-matter containing the nickname of the author.
 # Here we list all the authors of the site.
 # The name will be displayed on the page
