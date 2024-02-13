@@ -42,6 +42,36 @@
   </url>
   
   <url>
+    <loc>https://rust.code-maven.com/recent</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/programming</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/sigils</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/var</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/function</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/sub</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rust.code-maven.com/fn</loc>
     <lastmod>2010-10-11</lastmod>
   </url>

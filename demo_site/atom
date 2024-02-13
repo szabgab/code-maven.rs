@@ -121,6 +121,86 @@
   </entry>
 
   <entry>
+    <title>Recent pages</title>
+    <summary type="html"><![CDATA[recently published pages]]></summary>
+    <updated>2010-10-11T12:30:25</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/recent" />
+    <id>https://rust.code-maven.com/recent</id>
+    <content type="html"><![CDATA[<h2 class="title is-4">The 5 most recently published pages</h2>
+<p>{%    latest   count=5  %}</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Programming</title>
+    <summary type="html"><![CDATA[sigils are used in Perl]]></summary>
+    <updated>2010-10-11T12:30:20</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/programming" />
+    <id>https://rust.code-maven.com/programming</id>
+    <content type="html"><![CDATA[<h2 class="title is-4">Recent pages about programming</h2>
+<p>{% latest count=3 tag=programming  %}</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>sigils $ @ %</title>
+    <summary type="html"><![CDATA[sigils are used in Perl]]></summary>
+    <updated>2010-10-11T12:30:06</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/sigils" />
+    <id>https://rust.code-maven.com/sigils</id>
+    <content type="html"><![CDATA[<p>Sigils in perl: $ @ %</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>var for variables</title>
+    <summary type="html"><![CDATA[var variables]]></summary>
+    <updated>2010-10-11T12:30:05</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/var" />
+    <id>https://rust.code-maven.com/var</id>
+    <content type="html"><![CDATA[<p>var is in JavaScript</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>function for function</title>
+    <summary type="html"><![CDATA[JavaScript functions]]></summary>
+    <updated>2010-10-11T12:30:03</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/function" />
+    <id>https://rust.code-maven.com/function</id>
+    <content type="html"><![CDATA[<p>function is for functions in JavaScript</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>sub for function</title>
+    <summary type="html"><![CDATA[Perl functions]]></summary>
+    <updated>2010-10-11T12:30:02</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/sub" />
+    <id>https://rust.code-maven.com/sub</id>
+    <content type="html"><![CDATA[<p>sub is for functions in  Perl</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
     <title>fn for function</title>
     <summary type="html"><![CDATA[Rust]]></summary>
     <updated>2010-10-11T12:30:01</updated>
