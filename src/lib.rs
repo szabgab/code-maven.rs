@@ -282,7 +282,6 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
     let archive = Page {
-        filename: String::from("archive"), // TODO remove as there is no real file
         url_path: String::from("archive"),
         published: true,
         timestamp: if pages.is_empty() {
