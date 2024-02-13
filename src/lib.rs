@@ -248,18 +248,18 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
-    let mut archive = Page {
+    let archive = Page {
+        filename: String::from("archive"), // TODO remove as there is no real file
+        url_path: String::from("archive"),
         published: true,
+        timestamp: if pages.is_empty() {
+            let now: DateTime<Utc> = Utc::now();
+            now.format("%Y-%m-%dT%H:%M:%S").to_string()
+        } else {
+            pages[0].timestamp.clone()
+        },
         ..Page::default()
     };
-    archive.filename = "archive".to_string(); // TODO remove as there is no real file
-    archive.url_path = "archive".to_string();
-    if pages.is_empty() {
-        let now: DateTime<Utc> = Utc::now();
-        archive.timestamp = now.format("%Y-%m-%dT%H:%M:%S").to_string();
-    } else {
-        archive.timestamp = pages[0].timestamp.clone();
-    }
 
     pages.insert(0, archive);
 
