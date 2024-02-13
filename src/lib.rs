@@ -353,9 +353,10 @@ pub fn read_md_file(
     }
 
     let mut p = PathBuf::from(path);
-    p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
+    p.set_extension("");
     page.url_path = p.file_name().unwrap().to_str().unwrap().to_string();
+
     if page.url_path == "index" {
         page.url_path = String::new();
     }
@@ -613,7 +614,7 @@ fn test_read_index() {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
-        filename: "index".to_string(),
+        filename: "index.md".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
         //     Link {
@@ -637,7 +638,7 @@ fn test_read_todo() {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
         url_path: "with_todo".to_string(),
-        filename: "with_todo".to_string(),
+        filename: "with_todo.md".to_string(),
         content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n".to_string(),
         // footer <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>
         todo: vec![
@@ -664,7 +665,7 @@ fn test_img_with_title() {
         title: "Image with title".to_string(),
         timestamp: "2023-10-03T13:30:01".to_string(),
         url_path: "img_with_title".to_string(),
-        filename: "img_with_title".to_string(),
+        filename: "img_with_title.md".to_string(),
         content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n"
             .to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>
@@ -688,7 +689,7 @@ fn test_links() {
         title: "Links".to_string(),
         timestamp: "2023-10-01T12:30:01".to_string(),
         url_path: "links".to_string(),
-        filename: "links".to_string(),
+        filename: "links.md".to_string(),
         content: "<ul>\n<li>An <a href=\"/with_todo\">internal link</a> and more text.</li>\n<li>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</li>\n</ul>\n".to_string(),
         //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),
         //     Link {

@@ -352,7 +352,7 @@ fn render_single_page(
 
     if config.link_to_source {
         footer = format!(
-            "{} [source]({}/blob/{}/pages/{}.md)",
+            "{} [source]({}/blob/{}/pages/{})",
             footer, config.repo, config.branch, &page.filename
         );
     }
@@ -439,6 +439,6 @@ fn test_bad_author() {
         .unwrap();
     assert_eq!(
         error,
-        "The nickname 'george' used in the file 'bad_author' is not in the config.yaml file."
+        "The nickname 'george' used in the file 'bad_author.md' is not in the config.yaml file."
     );
 }

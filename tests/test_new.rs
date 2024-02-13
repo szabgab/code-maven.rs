@@ -143,7 +143,7 @@ fn test_page_author_not_in_config() {
 
     assert!(!outdir.exists());
     let (exit, out, err) = generate_site(root.to_str().unwrap(), outdir.to_str().unwrap());
-    assert!(out.contains("The nickname 'george' used in the file 'author-not-in-config' is not in the config.yaml file."));
+    assert!(out.contains("The nickname 'george' used in the file 'author-not-in-config.md' is not in the config.yaml file."));
     assert_eq!(err, "");
     assert_eq!(exit, ExitStatus::from_raw(256));
 }
