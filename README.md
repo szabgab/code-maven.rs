@@ -49,13 +49,13 @@ Install [pre-commit](https://pre-commit.com/) and run `pre-commit install` to co
 Generate the demo pages:
 
 ```
-cargo run --bin code-maven -- web --root demo/ --outdir _site/
+cargo run --bin code-maven -- web --root test_cases/demo/ --outdir _site/
 ```
 
 We can also explicitly say where the pages are, but so far we did not need that.
 
 ```
-cargo run --bin code-maven -- web --root demo/ --pages demo/pages/ --outdir _site/
+cargo run --bin code-maven -- web --root test_cases/demo/ --pages test_cases/demo/pages/ --outdir _site/
 ```
 
 Assuming you have cloned https://github.com/szabgab/rust.code-maven.com/ next to this repository then you can also try:

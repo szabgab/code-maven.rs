@@ -607,8 +607,8 @@ mod tests {
 
 #[test]
 fn test_read_index() {
-    let config = read_config("demo").unwrap();
-    let data = read_md_file(&config, "demo", "demo/pages/index.md").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
+    let data = read_md_file(&config, "test_cases/demo", "test_cases/demo/pages/index.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Index page".to_string(),
@@ -631,8 +631,13 @@ fn test_read_index() {
 
 #[test]
 fn test_read_todo() {
-    let config = read_config("demo").unwrap();
-    let data = read_md_file(&config, "demo", "demo/pages/with_todo.md").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
+    let data = read_md_file(
+        &config,
+        "test_cases/demo",
+        "test_cases/demo/pages/with_todo.md",
+    )
+    .unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Page with todos".to_string(),
@@ -658,8 +663,13 @@ fn test_read_todo() {
 
 #[test]
 fn test_img_with_title() {
-    let config = read_config("demo").unwrap();
-    let data = read_md_file(&config, "demo", "demo/pages/img_with_title.md").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
+    let data = read_md_file(
+        &config,
+        "test_cases/demo",
+        "test_cases/demo/pages/img_with_title.md",
+    )
+    .unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Image with title".to_string(),
@@ -682,8 +692,8 @@ fn test_img_with_title() {
 
 #[test]
 fn test_links() {
-    let config = read_config("demo").unwrap();
-    let data = read_md_file(&config, "demo", "demo/pages/links.md").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
+    let data = read_md_file(&config, "test_cases/demo", "test_cases/demo/pages/links.md").unwrap();
     dbg!(&data);
     let expected_page = Page {
         title: "Links".to_string(),
@@ -719,22 +729,26 @@ fn test_filter_words() {
 
 #[test]
 fn test_missing_md_file() {
-    let config = read_config("demo").unwrap();
-    match read_md_file(&config, "demo", "demo/pages/no_such_file.md") {
+    let config = read_config("test_cases/demo").unwrap();
+    match read_md_file(
+        &config,
+        "test_cases/demo",
+        "test_cases/demo/pages/no_such_file.md",
+    ) {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
-            "File 'demo/pages/no_such_file.md' not found".to_string()
+            "File 'test_cases/demo/pages/no_such_file.md' not found".to_string()
         ),
     }
 }
 
 #[test]
 fn test_missing_title() {
-    let config = read_config("demo").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
     match read_md_file(
         &config,
-        "demo",
+        "test_cases/demo",
         "test_cases/bad_pages/missing_front_matter.md",
     ) {
         Ok(_) => assert!(false),
@@ -747,8 +761,8 @@ fn test_missing_title() {
 
 #[test]
 fn test_bad_timestamp() {
-    let config = read_config("demo").unwrap();
-    match read_md_file(&config, "demo", "test_cases/bad_pages/incorrect_timestamp.md") {
+    let config = read_config("test_cases/demo").unwrap();
+    match read_md_file(&config, "test_cases/demo", "test_cases/bad_pages/incorrect_timestamp.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
@@ -762,7 +776,7 @@ macro_rules! s(($result:expr) => ($result.to_string()));
 
 #[test]
 fn test_config_of_demo() {
-    let config = read_config("demo").unwrap();
+    let config = read_config("test_cases/demo").unwrap();
     assert_eq!(config.url, "https://rust.code-maven.com");
     assert_eq!(
         config.repo,
