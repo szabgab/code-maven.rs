@@ -7,6 +7,6 @@ tags:
     - programming
 ---
 
-## Recent pages about programming
+## 3 most recent pages about programming
 
-{% latest count=3 tag=programming  %}
+{% latest limit=3 tag=programming  %}

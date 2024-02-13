@@ -7,4 +7,4 @@ description: recently published pages
 
 ## The 5 most recently published pages
 
-{%    latest   count=5  %}
+{%    latest   limit=5  %}
