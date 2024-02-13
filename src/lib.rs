@@ -404,24 +404,6 @@ fn markdown2html(content: &str) -> String {
     .unwrap()
 }
 
-// fn get_backlinks(pages: &Vec<Page>) -> HashMap<String, Vec<Link>> {
-//     let mut backlinks: HashMap<String, Vec<Link>> = HashMap::new();
-//     for page in pages {
-//         for link in page.backlinks.iter() {
-//             if !backlinks.contains_key(&link.path) {
-//                 let back_link = Link {
-//                     path: page.filename.clone(),
-//                     title: page.title.clone(),
-//                 };
-
-//                 backlinks[link.path.clone().as_str()].push(back_link);
-//             }
-//         }
-//     }
-
-//     backlinks
-// }
-
 fn collect_all_the_internal_links(pages: &[Page]) -> Vec<Link> {
     pages
         .iter()
