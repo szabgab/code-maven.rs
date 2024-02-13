@@ -2,10 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
  {% for page in pages %}
   <url>
-    {% if page.filename == "index" -%}
+    {% if page.url_path == "index" -%}
       <loc>{{url}}/</loc>
     {%- else -%}
-      <loc>{{url}}/{{page.filename}}</loc>
+      <loc>{{url}}/{{page.url_path}}</loc>
     {%- endif %}
     <lastmod>{{page.timestamp | split:'T' | first}}</lastmod>
   </url>

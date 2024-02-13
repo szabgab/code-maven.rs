@@ -139,7 +139,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     let filtered_pages: Vec<&Page> = pages
         .iter()
         .filter(|page| page.published)
-        .filter(|page| page.filename != "index" && page.filename != "archive")
+        .filter(|page| page.url_path != "index" && page.url_path != "archive")
         .collect();
     let template = include_str!("../templates/archive.html");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -255,7 +255,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
 
 fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
     for page in pages {
-        if page.filename == "archive" {
+        if page.url_path == "archive" {
             continue;
         }
 
@@ -388,7 +388,7 @@ fn render_single_page(
         "keywords": filter_words(&page.tags),
         "content": page.content,
         "page": page,
-        "pagepath": page.filename,
+        "pagepath": page.url_path,
         "config": config,
         "footer": footer,
         "url": url,

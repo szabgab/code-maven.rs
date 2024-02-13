@@ -9,8 +9,8 @@
     <title>{{page.title}}</title>
     <summary type="html"><![CDATA[{{page.description}}]]></summary>
     <updated>{{page.timestamp}}</updated>
-    <link rel="alternate" type="text/html" href="{{url}}/{{page.filename}}" />
-    <id>{{url}}/{{page.filename}}</id>
+    <link rel="alternate" type="text/html" href="{{url}}/{{page.url_path}}" />
+    <id>{{url}}/{{page.url_path}}</id>
     <content type="html"><![CDATA[{{page.content}}]]></content>
     <author>
       <name>{{author_name}}</name>

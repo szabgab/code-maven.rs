@@ -160,6 +160,9 @@ pub struct Page {
     pub timestamp: String,
 
     #[serde(default = "get_empty_string")]
+    pub url_path: String,
+
+    #[serde(default = "get_empty_string")]
     pub filename: String,
 
     #[serde(default = "get_empty_string")]
@@ -189,6 +192,7 @@ impl Page {
             title: String::new(),
             timestamp: String::new(),
             description: String::new(),
+            url_path: String::new(),
             filename: String::new(),
             content: String::new(),
             todo: vec![],
@@ -245,7 +249,8 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
     let mut archive = Page::new();
-    archive.filename = "archive".to_string();
+    archive.filename = "archive".to_string(); // TODO remove as there is no real file
+    archive.url_path = "archive".to_string();
     if pages.is_empty() {
         let now: DateTime<Utc> = Utc::now();
         archive.timestamp = now.format("%Y-%m-%dT%H:%M:%S").to_string();
@@ -315,6 +320,7 @@ pub fn read_md_file(
     let mut p = PathBuf::from(path);
     p.set_extension("");
     page.filename = p.file_name().unwrap().to_str().unwrap().to_string();
+    page.url_path = p.file_name().unwrap().to_str().unwrap().to_string();
 
     let (content, paths) = pre_process(config, root, &content);
     //page.backlinks = find_links(&content);
@@ -558,6 +564,7 @@ fn test_read_index() {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
+        url_path: "index".to_string(),
         filename: "index".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
@@ -585,6 +592,7 @@ fn test_read_todo() {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
         description: "".to_string(),
+        url_path: "with_todo".to_string(),
         filename: "with_todo".to_string(),
         content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n".to_string(),
         // footer <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>
@@ -613,6 +621,7 @@ fn test_img_with_title() {
         title: "Image with title".to_string(),
         timestamp: "2023-10-03T13:30:01".to_string(),
         description: "".to_string(),
+        url_path: "img_with_title".to_string(),
         filename: "img_with_title".to_string(),
         content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n"
             .to_string(),
@@ -639,6 +648,7 @@ fn test_links() {
         title: "Links".to_string(),
         timestamp: "2023-10-01T12:30:01".to_string(),
         description: "".to_string(),
+        url_path: "links".to_string(),
         filename: "links".to_string(),
         content: "<ul>\n<li>An <a href=\"/with_todo\">internal link</a> and more text.</li>\n<li>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</li>\n</ul>\n".to_string(),
         //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),

@@ -31,7 +31,7 @@ fn list_recent(config: &Config, pages: Vec<Page>, recent: &str, url: &str) {
 
     let filtered_pages: Vec<&Page> = pages
         .iter()
-        .filter(|page| page.filename != "index" && page.filename != "archive")
+        .filter(|page| page.url_path != "index" && page.url_path != "archive")
         .filter(|page| page.timestamp > date)
         .collect();
 

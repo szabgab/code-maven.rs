@@ -8,7 +8,7 @@
           Total: {{pages | size}}
         <ul>
           {% for page in pages %}
-             <li>{{page.timestamp | split:'T' | first}} <a href="/{{page.filename}}">{{page.title}}</a></li>
+             <li>{{page.timestamp | split:'T' | first}} <a href="/{{page.url_path}}">{{page.title}}</a></li>
           {% endfor %}
         </ul>
       </div>
