@@ -198,7 +198,7 @@ impl Page {
             todo: vec![],
             tags: vec![],
             backlinks: vec![],
-            published: true,
+            published: false,
             author: String::new(),
         }
     }
@@ -248,7 +248,10 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
-    let mut archive = Page::new();
+    let mut archive = Page {
+        published: true,
+        ..Page::default()
+    };
     archive.filename = "archive".to_string(); // TODO remove as there is no real file
     archive.url_path = "archive".to_string();
     if pages.is_empty() {
