@@ -567,20 +567,16 @@ fn test_read_index() {
         title: "Index page".to_string(),
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
-        url_path: "".to_string(),
         filename: "index".to_string(),
         content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
-        todo: vec![],
-        tags: vec![],
-        backlinks: vec![],
         //     Link {
         //         title: "with TODO".to_string(),
         //         path: "/with_todo".to_string()
         //     }
         // ],
         published: true,
-        author: "".to_string(),
+        ..Page::default()
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
@@ -594,7 +590,6 @@ fn test_read_todo() {
     let expected_page = Page {
         title: "Page with todos".to_string(),
         timestamp: "2023-10-11T12:30:01".to_string(),
-        description: "".to_string(),
         url_path: "with_todo".to_string(),
         filename: "with_todo".to_string(),
         content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n".to_string(),
@@ -607,9 +602,8 @@ fn test_read_todo() {
             "println!".to_string(),
             "fn".to_string(),
         ],
-        backlinks: vec![],
         published: true,
-        author: "".to_string(),
+        ..Page::default()
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
@@ -623,17 +617,14 @@ fn test_img_with_title() {
     let expected_page = Page {
         title: "Image with title".to_string(),
         timestamp: "2023-10-03T13:30:01".to_string(),
-        description: "".to_string(),
         url_path: "img_with_title".to_string(),
         filename: "img_with_title".to_string(),
         content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n"
             .to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>
-        todo: vec![],
         tags: vec!["img".to_string()],
-        backlinks: vec![],
         published: true,
-        author: "".to_string(),
+        ..Page::default()
     };
     let expected = (
         expected_page,
@@ -650,23 +641,17 @@ fn test_links() {
     let expected_page = Page {
         title: "Links".to_string(),
         timestamp: "2023-10-01T12:30:01".to_string(),
-        description: "".to_string(),
         url_path: "links".to_string(),
         filename: "links".to_string(),
         content: "<ul>\n<li>An <a href=\"/with_todo\">internal link</a> and more text.</li>\n<li>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</li>\n</ul>\n".to_string(),
         //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),
-        todo: vec![
-        ],
-        tags: vec![],
-        backlinks: vec![],
         //     Link {
         //         title: "internal link".to_string(),
         //         path: "/with_todo".to_string(),
         //     },
         // ],
         published: true,
-        author: "".to_string(),
-
+        ..Page::default()
     };
     let expected = (expected_page, vec![]);
     assert_eq!(data, expected);
