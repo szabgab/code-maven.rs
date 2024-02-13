@@ -62,43 +62,19 @@ jobs:
     - name: Clippy stop at any warning
       run: cargo clippy -- --deny warnings
 
-    - name: Checkout repo of Rust Maven
-      uses: actions/checkout@v4
-      with:
-        repository: 'szabgab/rust.code-maven.com'
-        path: rust.code-maven.com
-
     - name: Checkout repo of https://israel.szabgab.com/
       uses: actions/checkout@v4
       with:
         repository: 'szabgab/israel.szabgab.com'
         token: ${{ secrets.MY_GITHUB_TOKEN }}
-        path: israel.szabgab.com
+        path: sites/israel.szabgab.com
 
     - name: Checkout repo of https://izrael.szabgab.com/
       uses: actions/checkout@v4
       with:
         repository: 'szabgab/izrael.szabgab.com'
         token: ${{ secrets.MY_GITHUB_TOKEN }}
-        path: izrael.szabgab.com
-
-    - name: Checkout repo of banner-builder.rs
-      uses: actions/checkout@v4
-      with:
-        repository: 'szabgab/banner-builder.rs'
-        path: banner-builder.rs
-
-    - name: Checkout repo of site-checker.rs
-      uses: actions/checkout@v4
-      with:
-        repository: 'szabgab/site-checker.rs'
-        path: site-checker.rs
-
-    - name: Checkout repo of rust.org.il
-      uses: actions/checkout@v4
-      with:
-        repository: 'szabgab/rust.org.il'
-        path: rust.org.il
+        path: sites/izrael.szabgab.com
 
     - name: Check all the sites
       run: |
