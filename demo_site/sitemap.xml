@@ -41,5 +41,15 @@
     <lastmod>2015-10-11</lastmod>
   </url>
   
+  <url>
+    <loc>https://rust.code-maven.com/fn</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rust.code-maven.com/def</loc>
+    <lastmod>2010-1-11</lastmod>
+  </url>
+  
 </urlset>
 

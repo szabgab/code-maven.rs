@@ -120,5 +120,31 @@
     </author>
   </entry>
 
+  <entry>
+    <title>fn for function</title>
+    <summary type="html"><![CDATA[Rust]]></summary>
+    <updated>2010-10-11T12:30:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/fn" />
+    <id>https://rust.code-maven.com/fn</id>
+    <content type="html"><![CDATA[<p>fn is for functions in Rust</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>def for function</title>
+    <summary type="html"><![CDATA[Python function]]></summary>
+    <updated>2010-1-11T12:30:02</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/def" />
+    <id>https://rust.code-maven.com/def</id>
+    <content type="html"><![CDATA[<p>def is for functions in Python</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
 </feed>
 
