@@ -146,12 +146,17 @@ pub struct Config {
 
     #[serde(default = "get_empty_string")]
     pub google_analytics: String,
+
+    #[serde(default = "get_false")]
+    pub show_related: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 pub struct Link {
-    title: String,
-    path: String,
+    from_title: String,
+    from_path: String,
+    to_title: String,
+    to_path: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
@@ -210,6 +215,10 @@ impl Default for Page {
     }
 }
 
+fn get_false() -> bool {
+    false
+}
+
 fn get_empty_links() -> Vec<Link> {
     vec![]
 }
@@ -245,6 +254,30 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
         paths_to_copy.extend(paths);
         pages.push(page);
     }
+    let links = collect_all_the_internal_links(&pages);
+    //dbg!(&links);
+    // for page in &pages {
+    //     //dbg!(&page.content);
+    //     let links = find_links(&page);
+    //     dbg!(links);
+    // }
+
+    //let page = &pages[0];
+    //let backlinks: Vec<Link> = links.into_iter().filter(|link| link.to_path == page.url_path).collect();
+    //let backlinks  = links.into_iter().filter(|link| link.to_path == page.url_path).collect::<Vec<Link>>();
+    pages = pages
+        .into_iter()
+        .map(|mut page| {
+            // TODO can we limit the clone to the already filtered values?
+            page.backlinks = links
+                .clone()
+                .into_iter()
+                .filter(|link| link.to_path == format!("/{}", page.url_path))
+                .collect::<Vec<Link>>();
+            //log::info!("{:?}", page.backlinks);
+            page
+        })
+        .collect();
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
@@ -371,22 +404,51 @@ fn markdown2html(content: &str) -> String {
     .unwrap()
 }
 
-// fn find_links(text: &str) -> Vec<Link> {
-//     let mut links: Vec<Link> = vec![];
+// fn get_backlinks(pages: &Vec<Page>) -> HashMap<String, Vec<Link>> {
+//     let mut backlinks: HashMap<String, Vec<Link>> = HashMap::new();
+//     for page in pages {
+//         for link in page.backlinks.iter() {
+//             if !backlinks.contains_key(&link.path) {
+//                 let back_link = Link {
+//                     path: page.filename.clone(),
+//                     title: page.title.clone(),
+//                 };
 
-//     let re = Regex::new(r"[^!]\[([^\]]+)\]\(([^)]+)\)").unwrap();
-//     for capture in re.captures_iter(text) {
-//         if capture[2].starts_with("http://") || capture[2].starts_with("https://") {
-//             continue;
+//                 backlinks[link.path.clone().as_str()].push(back_link);
+//             }
 //         }
-//         links.push(Link {
-//             title: capture[1].to_string(),
-//             path: capture[2].to_string(),
-//         });
 //     }
 
-//     links
+//     backlinks
 // }
+
+fn collect_all_the_internal_links(pages: &[Page]) -> Vec<Link> {
+    pages
+        .iter()
+        .map(find_links)
+        .collect::<Vec<Vec<Link>>>()
+        .concat()
+}
+
+fn find_links(page: &Page) -> Vec<Link> {
+    let mut links: Vec<Link> = vec![];
+
+    // TODO include the internal links that have the site URL as well.
+    let re = Regex::new(r#"<a href="([^"]+)">([^<]+)</a>"#).unwrap();
+    for capture in re.captures_iter(&page.content) {
+        if capture[1].starts_with("http://") || capture[1].starts_with("https://") {
+            continue;
+        }
+        links.push(Link {
+            from_title: page.title.clone(),
+            from_path: page.url_path.clone(),
+            to_title: capture[2].to_string(),
+            to_path: capture[1].to_string(),
+        });
+    }
+
+    links
+}
 
 fn pre_process(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("pre_process");

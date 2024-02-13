@@ -32,4 +32,4 @@ navbar:
       title: Archive
     - path: /about
       title: About
-
+show_related: true

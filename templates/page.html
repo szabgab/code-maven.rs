@@ -11,6 +11,13 @@
         {{content}}
       </div>
 
+      {%- if config.show_related and page.backlinks.size > 0 %}
+        <h3 class="title is-4">Related pages</h3>
+        {% for backlink in page.backlinks %}
+          <div><a href="/{{backlink.from_path}}">{{backlink.from_title}}</a></div>
+        {% endfor %}
+      {% endif -%}
+
       {% if page.author != "" %}
         <h3 class="title is-4">Author</h3>
         {{ author.name }} ({{ author.nickname }})
