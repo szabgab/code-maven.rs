@@ -732,11 +732,15 @@ fn test_missing_md_file() {
 #[test]
 fn test_missing_title() {
     let config = read_config("demo").unwrap();
-    match read_md_file(&config, "demo", "demo/bad/missing_front_matter.md") {
+    match read_md_file(
+        &config,
+        "demo",
+        "test_cases/bad_pages/missing_front_matter.md",
+    ) {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
-            "Missing title in 'demo/bad/missing_front_matter.md'".to_string()
+            "Missing title in 'test_cases/bad_pages/missing_front_matter.md'".to_string()
         ),
     }
 }
@@ -744,11 +748,11 @@ fn test_missing_title() {
 #[test]
 fn test_bad_timestamp() {
     let config = read_config("demo").unwrap();
-    match read_md_file(&config, "demo", "demo/bad/incorrect_timestamp.md") {
+    match read_md_file(&config, "demo", "test_cases/bad_pages/incorrect_timestamp.md") {
         Ok(_) => assert!(false),
         Err(err) => assert_eq!(
             err,
-            "Invalid date '2015-02-30T12:30:01' in demo/bad/incorrect_timestamp.md: input is out of range".to_string()
+            "Invalid date '2015-02-30T12:30:01' in test_cases/bad_pages/incorrect_timestamp.md: input is out of range".to_string()
         ),
     }
 }
