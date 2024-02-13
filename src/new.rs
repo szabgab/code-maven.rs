@@ -11,6 +11,7 @@ pub fn new_site(root: &str) -> Result<(), String> {
     // TODO set the time of the pages to the generation of the site
     // TODO maybe ask questions to fill the fields and/or accept command line parameters
 
+    let gitignore_str = include_str!("../test_cases/skeleton/.gitignore");
     let config_str = include_str!("../test_cases/skeleton/config.yaml");
     let index_str = include_str!("../test_cases/skeleton/pages/index.md");
     let about_str = include_str!("../test_cases/skeleton/pages/about.md");
@@ -19,6 +20,12 @@ pub fn new_site(root: &str) -> Result<(), String> {
     std::fs::create_dir_all(&path).unwrap();
     std::fs::create_dir_all(path.join("pages")).unwrap();
     std::fs::create_dir_all(path.join("authors")).unwrap();
+
+    writeln!(
+        File::create(path.join(".gitignore")).unwrap(),
+        "{gitignore_str}"
+    )
+    .unwrap();
 
     writeln!(
         File::create(path.join("config.yaml")).unwrap(),

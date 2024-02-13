@@ -68,7 +68,7 @@ fn test_new_with_parameters() {
         .map(|de| de.unwrap().file_name().to_str().unwrap().to_owned())
         .collect::<Vec<String>>();
     content.sort();
-    assert_eq!(content, ["authors", "config.yaml", "pages"]);
+    assert_eq!(content, [".gitignore", "authors", "config.yaml", "pages"]);
 
     let mut content = tmp_dir
         .path()
