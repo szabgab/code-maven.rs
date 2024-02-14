@@ -10,7 +10,7 @@ pub fn get_recent(root: &str, path_to_pages: &str, days: &str) -> Result<(), Str
 
     let pages_path = get_pages_path(root, path_to_pages);
 
-    let (pages, _paths) = read_pages(&config, &pages_path, root);
+    let pages = read_pages(&config, &pages_path, root);
 
     list_recent(&config, pages, days, url);
     Ok(())

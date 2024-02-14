@@ -323,7 +323,7 @@ fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
         .collect()
 }
 
-pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
+pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
 
@@ -345,10 +345,6 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
 
         pages.push(page);
     }
-
-    let (pages, paths_to_copy) = process_file_includes(config, root, pages);
-
-    let mut pages = collect_backlinks(pages);
 
     match check_unique_dates(&pages) {
         Ok(()) => {}
@@ -373,7 +369,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
 
     pages.insert(0, archive);
 
-    (pages, paths_to_copy)
+    pages
 }
 
 fn check_unique_dates(pages: &Vec<Page>) -> Result<(), String> {

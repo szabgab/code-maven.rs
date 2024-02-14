@@ -8,7 +8,7 @@ pub fn list_todo(root: &str, path_to_pages: &str) -> Result<(), String> {
 
     let pages_path = get_pages_path(root, path_to_pages);
 
-    let (pages, _paths) = read_pages(&config, &pages_path, root);
+    let pages = read_pages(&config, &pages_path, root);
     for page in pages {
         #[allow(clippy::print_stdout)]
         if !page.todo.is_empty() {
