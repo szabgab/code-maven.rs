@@ -263,40 +263,42 @@ pub fn process_file_includes(
     (pages, paths_to_copy)
 }
 
+fn process_liquid_tags_for_text(text: &str, total: usize, all_pages: &[Page]) -> String {
+    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
+    re.replace_all(text, |caps: &Captures| {
+        let mut count = 0;
+        let limit = caps[1].parse::<usize>().unwrap();
+        let tag = caps.get(2);
+
+        let mut html = String::new();
+        #[allow(clippy::needless_range_loop)]
+        for ix in 1..total {
+            if tag.is_some() {
+                let tag_text = &tag.unwrap().as_str().to_string();
+                if !all_pages[ix].tags.contains(tag_text) {
+                    continue;
+                }
+            }
+            html += format!("* [{}](/{})", all_pages[ix].title, all_pages[ix].url_path).as_str();
+            html += "\n";
+            count += 1;
+            if 0 < limit && limit <= count {
+                break;
+            }
+        }
+
+        html
+    })
+    .to_string()
+}
+
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
     let total = pages.len();
-    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
     pages
         .into_iter()
         .map(|mut page| {
-            page.content = re
-                .replace_all(&page.content, |caps: &Captures| {
-                    let mut count = 0;
-                    let limit = caps[1].parse::<usize>().unwrap();
-                    let tag = caps.get(2);
-
-                    let mut html = String::new();
-                    #[allow(clippy::needless_range_loop)]
-                    for ix in 1..total {
-                        if tag.is_some() {
-                            let tag_text = &tag.unwrap().as_str().to_string();
-                            if !all_pages[ix].tags.contains(tag_text) {
-                                continue;
-                            }
-                        }
-                        html += format!("* [{}](/{})", all_pages[ix].title, all_pages[ix].url_path)
-                            .as_str();
-                        html += "\n";
-                        count += 1;
-                        if 0 < limit && limit <= count {
-                            break;
-                        }
-                    }
-
-                    html
-                })
-                .to_string();
+            page.content = process_liquid_tags_for_text(&page.content, total, &all_pages);
             page
         })
         .collect()
