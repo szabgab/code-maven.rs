@@ -4,7 +4,7 @@ function run_tests() {
     cargo test
 }
 
-function generate() {
+function generate_site() {
     rm -rf temp/
     cargo build --release
     ./target/release/code-maven web --root $source --outdir temp/
@@ -21,7 +21,7 @@ function generate() {
 
 if [ "$*" == "" ]
 then
-    params="test demo"
+    params="test site demo"
 else
     params=$@
 fi
@@ -38,8 +38,14 @@ do
         continue
     fi
 
-    source=test_cases/$param/
-    generate
+    if [ $param == "site" ]
+    then
+        source=$param/
+    else
+        source=test_cases/$param/
+    fi
+    generate_site
+
 done
 
 

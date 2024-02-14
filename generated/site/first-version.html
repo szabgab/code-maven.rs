@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Static Site Generator">
+    <meta name="keywords" content="">
+    <title>First version of the Code Maven Static Site Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <!--
+      https://highlightjs.org/
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/first-version" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="First version of the Code Maven Static Site Generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="Static Site Generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Code Maven site generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://ssg.rust.code-maven.com/img/first-version.png" />
+
+    <meta name="twitter:creator" content="@szabgab">
+    <meta name="twitter:title" content="First version of the Code Maven Static Site Generator">
+    <meta name="twitter:description" content="Static Site Generator">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:widgets:new-embed-design" content="on">
+    <meta name="twitter:image:src" content="https://ssg.rust.code-maven.com/img/first-version.png">
+
+  </head>
+  <body>
+
+    <section class="section">
+      <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-home">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbar-home" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="/" class="navbar-item">Home</a>
+          
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a href="/about" class="navbar-item">About</a>
+              
+          </div>
+        </div>
+      </div>
+    </nav>
+
+      </div>
+    </section>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        First version of the Code Maven Static Site Generator
+      </h1>
+      
+      <div class="content">
+        <p>The first public version of the Code Maven Static Site Generator.</p>
+<p>I started this project as a replacement of the code behind the <a href="https://code-maven.com/">Code Maven</a> and <a href="https://perlmaven.com/">Perl Maven</a> sites
+and to learn Rust while doing so.</p>
+<p>The code behind those two site was started in May 2012 using the <a href="https://perldancer.org/">Perl Dancer</a> framework.
+It went through a lot of unplanned changes and it had a registration system and allowed the site maintainer (that was be me)
+to offer paid content as well. It worked quite well, but it felt a bit too complex for what I wanted to create for the
+<a href="https://rust.code-maven.com/">Rust Maven</a> site.</p>
+<p>That was another excellent excuse to build a new system.</p>
+<p>At first I even tried one of the existing Rust-based Static Code Generators, but somehow I could not get it working easily.</p>
+<p>So here I am, using this system for already 3 of my web sites and also to generate the web pages of this project.</p>
+<p>There is plenty of work to do to be able to convert the other two sites to use this system, but I am making progress
+and I think I arrived to the point where others might also give it a try.</p>
+<p>I'd love to see some people experimenting with it and opening issues when they encounter problems.
+That would encourage me to make the system more generic.</p>
+
+      </div>
+    </div>   
+  </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>The <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a>. <a href="https://github.com/szabgab/code-maven.rs/blob/main/pages/first-version.md">source</a></p>
+    </div>
+  </footer>  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Add a click event on each of them
+$navbarBurgers.forEach( el => {
+  el.addEventListener('click', () => {
+
+    // Get the target from the "data-target" attribute
+    const target = el.dataset.target;
+    const $target = document.getElementById(target);
+
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    el.classList.toggle('is-active');
+    $target.classList.toggle('is-active');
+
+  });
+});
+
+});
+</script>
+
+  </body>
+</html>
+
+
+

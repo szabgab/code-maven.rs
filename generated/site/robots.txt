@@ -1,0 +1,5 @@
+Sitemap: https://ssg.rust.code-maven.com/sitemap.xml
+Sitemap: https://ssg.rust.code-maven.com/slides/sitemap.xml
+
+User-agent: *
+

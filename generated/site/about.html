@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Static Site Generator">
+    <meta name="keywords" content="">
+    <title>About the Code Maven Static Site Generator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <!--
+      https://highlightjs.org/
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/about" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="About the Code Maven Static Site Generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="Static Site Generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Code Maven site generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://ssg.rust.code-maven.com/img/about.png" />
+
+    <meta name="twitter:creator" content="@szabgab">
+    <meta name="twitter:title" content="About the Code Maven Static Site Generator">
+    <meta name="twitter:description" content="Static Site Generator">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:widgets:new-embed-design" content="on">
+    <meta name="twitter:image:src" content="https://ssg.rust.code-maven.com/img/about.png">
+
+  </head>
+  <body>
+
+    <section class="section">
+      <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-home">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbar-home" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="/" class="navbar-item">Home</a>
+          
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a href="/about" class="navbar-item">About</a>
+              
+          </div>
+        </div>
+      </div>
+    </nav>
+
+      </div>
+    </section>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        About the Code Maven Static Site Generator
+      </h1>
+      
+      <div class="content">
+        <p>Sites using this project:</p>
+<ul>
+<li>
+<p><a href="https://rust.code-maven.com/">Rust Maven</a>.</p>
+</li>
+<li>
+<p><a href="https://israel.szabgab.com/">From Israel</a></p>
+</li>
+<li>
+<p><a href="https://izrael.szabgab.com/">Magyarul Izraelből</a></p>
+</li>
+<li>
+<p><a href="https://ssg.code-maven.com/">Code Maven Static Site Generator</a></p>
+</li>
+</ul>
+
+      </div>
+    </div>   
+  </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>The <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a>. <a href="https://github.com/szabgab/code-maven.rs/blob/main/pages/about.md">source</a></p>
+    </div>
+  </footer>  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Add a click event on each of them
+$navbarBurgers.forEach( el => {
+  el.addEventListener('click', () => {
+
+    // Get the target from the "data-target" attribute
+    const target = el.dataset.target;
+    const $target = document.getElementById(target);
+
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    el.classList.toggle('is-active');
+    $target.classList.toggle('is-active');
+
+  });
+});
+
+});
+</script>
+
+  </body>
+</html>
+
+
+

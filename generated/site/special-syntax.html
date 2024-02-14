@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Special syntax beyond the regular Markdown">
+    <meta name="keywords" content="">
+    <title>Special syntax</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <!--
+      https://highlightjs.org/
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/special-syntax" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Special syntax" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="Special syntax beyond the regular Markdown" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Code Maven site generator" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://ssg.rust.code-maven.com/img/special-syntax.png" />
+
+    <meta name="twitter:creator" content="@szabgab">
+    <meta name="twitter:title" content="Special syntax">
+    <meta name="twitter:description" content="Special syntax beyond the regular Markdown">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:widgets:new-embed-design" content="on">
+    <meta name="twitter:image:src" content="https://ssg.rust.code-maven.com/img/special-syntax.png">
+
+  </head>
+  <body>
+
+    <section class="section">
+      <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-home">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbar-home" class="navbar-menu">
+        <div class="navbar-start">
+          <a href="/" class="navbar-item">Home</a>
+          
+        </div>
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <a href="/about" class="navbar-item">About</a>
+              
+          </div>
+        </div>
+      </div>
+    </nav>
+
+      </div>
+    </section>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        Special syntax
+      </h1>
+      
+      <div class="content">
+        <h2 class="title is-4">Show the N most recently published articles</h2>
+<pre><code><li><a href="special-syntax">Special syntax</a></li>
+<li><a href="where-is-it-used">Where is it used?</a></li>
+<li><a href="first-version">First version of the Code Maven Static Site Generator</a></li>
+<li><a href="about">About the Code Maven Static Site Generator</a></li>
+<li><a href="">Code Maven Static Site Generator</a></li>
+
+</code></pre>
+<p>Some people might want to put this in the main <code>index.md</code> file, others might create a separate page called <code>recent.md</code>
+and then link to it from the menu.</p>
+<h2 class="title is-4">Show the N most recently published article with the given tag</h2>
+<pre><code>
+</code></pre>
+
+      </div>
+    </div>   
+  </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>The <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a>. <a href="https://github.com/szabgab/code-maven.rs/blob/main/pages/special-syntax.md">source</a></p>
+    </div>
+  </footer>  
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+// Get all "navbar-burger" elements
+const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+// Add a click event on each of them
+$navbarBurgers.forEach( el => {
+  el.addEventListener('click', () => {
+
+    // Get the target from the "data-target" attribute
+    const target = el.dataset.target;
+    const $target = document.getElementById(target);
+
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    el.classList.toggle('is-active');
+    $target.classList.toggle('is-active');
+
+  });
+});
+
+});
+</script>
+
+  </body>
+</html>
+
+
+

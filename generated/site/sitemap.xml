@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+ 
+  <url>
+    <loc>https://ssg.rust.code-maven.com/archive</loc>
+    <lastmod>2024-02-14</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/special-syntax</loc>
+    <lastmod>2024-02-14</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/where-is-it-used</loc>
+    <lastmod>2024-02-06</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/first-version</loc>
+    <lastmod>2023-11-20</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/about</loc>
+    <lastmod>2023-11-08</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/</loc>
+    <lastmod>2023-11-08</lastmod>
+  </url>
+  
+</urlset>
+
