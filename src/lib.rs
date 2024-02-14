@@ -230,16 +230,6 @@ fn get_empty_string() -> String {
     String::new()
 }
 
-// fn get_list(pages: Vec<Page>, count: usize) -> String {
-//     let mut link: Vec<String> = vec![];
-
-//     for page in pages {
-//         link.push(String::new());
-//     }
-//     //let filtered = if pages.len() > count { pages[0..count] } else { pages[0..pages.len()] };
-//     return String::new();
-// }
-
 pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
     pages
         .into_iter()
