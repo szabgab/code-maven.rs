@@ -81,36 +81,42 @@ pub fn topath(text: &str) -> String {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigNavbarLink {
     pub path: String,
     pub title: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigNavbar {
     pub start: Vec<ConfigNavbarLink>,
     pub end: Vec<ConfigNavbarLink>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigFrom {
     pub name: String,
     pub email: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigArchive {
     pub title: String,
     pub description: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigTag {
     pub description: String,
     pub title: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct Author {
     pub name: String,
     pub nickname: String,
@@ -121,6 +127,7 @@ pub struct Author {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct Config {
     pub url: String,
     pub repo: String,
@@ -913,4 +920,12 @@ fn test_config_with_duplicate_author() {
         .err()
         .unwrap();
     assert_eq!(error, "nickname 'foobar' appears twice in config.yaml")
+}
+
+#[test]
+fn test_config_with_invalid_field() {
+    let error = read_config("test_cases/invalid_field_in_config/")
+        .err()
+        .unwrap();
+    assert!(error.contains(r#"Invalid YAML format in "test_cases/invalid_field_in_config/config.yaml": unknown field `password`,"#))
 }
