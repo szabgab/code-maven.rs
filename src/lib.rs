@@ -312,11 +312,13 @@ fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
         .into_iter()
         .map(|mut page| {
             // TODO can we limit the clone to the already filtered values?
-            page.backlinks = links
+            let mut backlinks = links
                 .clone()
                 .into_iter()
                 .filter(|link| link.to_path == format!("/{}", page.url_path))
                 .collect::<Vec<Link>>();
+            backlinks.sort_by(|a, b| b.from_title.cmp(&a.from_title));
+            page.backlinks = backlinks;
             //log::info!("{:?}", page.backlinks);
             page
         })
