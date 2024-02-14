@@ -324,17 +324,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
         pages.push(page);
     }
 
-    //dbg!(&links);
-    // for page in &pages {
-    //     //dbg!(&page.content);
-    //     let links = find_links(&page);
-    //     dbg!(links);
-    // }
-
     pages = collect_backlinks(pages);
-    //let page = &pages[0];
-    //let backlinks: Vec<Link> = links.into_iter().filter(|link| link.to_path == page.url_path).collect();
-    //let backlinks  = links.into_iter().filter(|link| link.to_path == page.url_path).collect::<Vec<Link>>();
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
