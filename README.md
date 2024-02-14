@@ -72,3 +72,14 @@ or for more verbose output use:
 cargo t
 ```
 
+Run the cargo test and also generate the demo site and the web site of SSG and compare then to saved version of the output.
+
+```
+./test.sh
+```
+
+Clones several public repositories of site and check if they can be generated? This is used in the GtHub Actions CI.
+
+```
+./check_sites.sh
+```
