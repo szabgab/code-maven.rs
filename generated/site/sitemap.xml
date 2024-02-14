@@ -7,6 +7,11 @@
   </url>
   
   <url>
+    <loc>https://ssg.rust.code-maven.com/front-matter</loc>
+    <lastmod>2024-02-14</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ssg.rust.code-maven.com/special-syntax</loc>
     <lastmod>2024-02-14</lastmod>
   </url>
