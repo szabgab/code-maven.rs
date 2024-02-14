@@ -72,6 +72,9 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
     let mut tags: Tags = HashMap::new();
     for page in pages {
+        if page.redirect.is_some() {
+            continue;
+        }
         for tag in &page.tags {
             tags.insert(tag.to_lowercase(), 1);
         }
@@ -97,7 +100,11 @@ fn render_sitemap(pages: &[Page], path: &str, url: &str) {
         .parse(template)
         .unwrap();
 
-    let pages: Vec<&Page> = pages.iter().filter(|page| page.published).collect();
+    let pages: Vec<&Page> = pages
+        .iter()
+        .filter(|page| page.published)
+        .filter(|page| page.redirect.is_none())
+        .collect();
 
     let globals = liquid::object!({
         "pages": &pages,
@@ -111,7 +118,11 @@ fn render_sitemap(pages: &[Page], path: &str, url: &str) {
 
 fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
     log::info!("render atom feed");
-    let pages: Vec<&Page> = pages.iter().filter(|page| page.published).collect();
+    let pages: Vec<&Page> = pages
+        .iter()
+        .filter(|page| page.published)
+        .filter(|page| page.redirect.is_none())
+        .collect();
 
     let template = include_str!("../templates/atom.xml");
     let template = liquid::ParserBuilder::with_stdlib()
@@ -145,6 +156,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     let filtered_pages: Vec<&Page> = pages
         .iter()
         .filter(|page| page.published)
+        .filter(|page| page.redirect.is_none())
         .filter(|page| !page.url_path.is_empty() && page.url_path != "archive")
         .collect();
     let template = include_str!("../templates/archive.html");
@@ -267,7 +279,11 @@ fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
 
         let mut outfile = PathBuf::from(&page.filename);
         outfile.set_extension("html");
-        render_and_save_single_page(config, page, outfile, outdir, url);
+        if page.redirect.is_none() {
+            render_and_save_single_page(config, page, outfile, outdir, url);
+        } else {
+            render_and_save_redirect_page(page, outfile, outdir);
+        }
     }
 }
 
@@ -331,6 +347,17 @@ pub fn render_and_save_single_page(
             std::process::exit(1);
         }
     };
+}
+
+fn render_and_save_redirect_page(page: &Page, outfile: PathBuf, outdir: &str) {
+    let path = Path::new(outdir).join(outfile);
+    log::info!("render redirect page path {:?}", path);
+    let output = format!(
+        r#"<meta http-equiv="refresh" content="0; url={}" />"#,
+        page.redirect.as_ref().unwrap()
+    );
+
+    writeln!(File::create(path).unwrap(), "{output}").unwrap();
 }
 
 fn render_single_page(

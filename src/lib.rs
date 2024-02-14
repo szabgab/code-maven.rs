@@ -187,6 +187,8 @@ pub struct Page {
     #[serde(default = "get_empty_string")]
     pub author: String,
 
+    pub redirect: Option<String>,
+
     pub published: bool,
 }
 
@@ -203,6 +205,7 @@ impl Page {
             tags: vec![],
             backlinks: vec![],
             published: false,
+            redirect: None,
             author: String::new(),
         }
     }

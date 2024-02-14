@@ -10,6 +10,9 @@ pub fn list_todo(root: &str, path_to_pages: &str) -> Result<(), String> {
 
     let pages = read_pages(&config, &pages_path, root);
     for page in pages {
+        if page.redirect.is_some() {
+            continue;
+        }
         #[allow(clippy::print_stdout)]
         if !page.todo.is_empty() {
             println!(
