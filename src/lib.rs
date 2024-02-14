@@ -671,12 +671,6 @@ fn test_read_index() {
         description: "The text for the search engines".to_string(),
         filename: "index.md".to_string(),
         content: "\nSome Text.\n\nSome more text after an empty row.\n\n## A title with two hash-marks\n\nMore text [with TODO](/with_todo).\n".to_string(),
-        // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
-        //     Link {
-        //         title: "with TODO".to_string(),
-        //         path: "/with_todo".to_string()
-        //     }
-        // ],
         published: true,
         ..Page::default()
     };
@@ -700,7 +694,6 @@ fn test_read_todo() {
         url_path: "with_todo".to_string(),
         filename: "with_todo.md".to_string(),
         content: "\nSome Content.\n\n**[examples/hello_world.rs](https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs)**\n```rust\nfn main() {\n    println!(\"Hello World!\");\n}\n\n```\n\n".to_string(),
-        // footer <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
@@ -732,7 +725,6 @@ fn test_img_with_title() {
         url_path: "img_with_title".to_string(),
         filename: "img_with_title.md".to_string(),
         content: "\n\n![a title](examples/files/code_maven_490_490.jpg)\n\n".to_string(),
-        // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>
         tags: vec!["img".to_string()],
         published: true,
         ..Page::default()
@@ -755,12 +747,6 @@ fn test_links() {
         url_path: "links".to_string(),
         filename: "links.md".to_string(),
         content: "\n* An [internal link](/with_todo) and more text.\n* An [external link](https://rust-digger.code-maven.com/) and more text.\n\n".to_string(),
-        //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),
-        //     Link {
-        //         title: "internal link".to_string(),
-        //         path: "/with_todo".to_string(),
-        //     },
-        // ],
         published: true,
         ..Page::default()
     };
