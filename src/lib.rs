@@ -240,6 +240,19 @@ fn get_empty_string() -> String {
 //     return String::new();
 // }
 
+pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
+    pages
+        .into_iter()
+        .map(|mut page| {
+            page.content = markdown2html(&page.content)
+                .replace("<h1>", "<h1 class=\"title\">")
+                .replace("<h2>", "<h2 class=\"title is-4\">")
+                .replace("<h3>", "<h3 class=\"title is-5\">");
+            page
+        })
+        .collect()
+}
+
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
     let total = pages.len();
@@ -411,11 +424,6 @@ pub fn read_md_file(
     let (content, paths) = pre_process(config, root, &content);
     //page.backlinks = find_links(&content);
 
-    let content = markdown2html(&content)
-        .replace("<h1>", "<h1 class=\"title\">")
-        .replace("<h2>", "<h2 class=\"title is-4\">")
-        .replace("<h3>", "<h3 class=\"title is-5\">");
-
     page.content = content;
 
     if page.title.is_empty() {
@@ -463,16 +471,16 @@ fn find_links(page: &Page) -> Vec<Link> {
     let mut links: Vec<Link> = vec![];
 
     // TODO include the internal links that have the site URL as well.
-    let re = Regex::new(r#"<a href="([^"]+)">([^<]+)</a>"#).unwrap();
+    let re = Regex::new(r#"\[([^]]+)\]\(([^)]+)\)"#).unwrap();
     for capture in re.captures_iter(&page.content) {
-        if capture[1].starts_with("http://") || capture[1].starts_with("https://") {
+        if capture[2].starts_with("http://") || capture[2].starts_with("https://") {
             continue;
         }
         links.push(Link {
             from_title: page.title.clone(),
             from_path: page.url_path.clone(),
-            to_title: capture[2].to_string(),
-            to_path: capture[1].to_string(),
+            to_title: capture[1].to_string(),
+            to_path: capture[2].to_string(),
         });
     }
 
@@ -662,7 +670,7 @@ fn test_read_index() {
         timestamp: "2015-10-11T12:30:01".to_string(),
         description: "The text for the search engines".to_string(),
         filename: "index.md".to_string(),
-        content: "<p>Some Text.</p>\n<p>Some more text after an empty row.</p>\n<h2 class=\"title is-4\">A title with two hash-marks</h2>\n<p>More text <a href=\"/with_todo\">with TODO</a>.</p>\n".to_string(),
+        content: "\nSome Text.\n\nSome more text after an empty row.\n\n## A title with two hash-marks\n\nMore text [with TODO](/with_todo).\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/index.md\">source</a></p>
         //     Link {
         //         title: "with TODO".to_string(),
@@ -691,7 +699,7 @@ fn test_read_todo() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         url_path: "with_todo".to_string(),
         filename: "with_todo.md".to_string(),
-        content: "<p>Some Content.</p>\n<p><strong><a href=\"https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs\">examples/hello_world.rs</a></strong></p>\n<pre><code class=\"language-rust\">fn main() {\n    println!(&quot;Hello World!&quot;);\n}\n\n</code></pre>\n".to_string(),
+        content: "\nSome Content.\n\n**[examples/hello_world.rs](https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs)**\n```rust\nfn main() {\n    println!(\"Hello World!\");\n}\n\n```\n\n".to_string(),
         // footer <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/with_todo.md\">source</a></p>
         todo: vec![
             "Add another article extending on the topic".to_string(),
@@ -723,8 +731,7 @@ fn test_img_with_title() {
         timestamp: "2023-10-03T13:30:01".to_string(),
         url_path: "img_with_title".to_string(),
         filename: "img_with_title.md".to_string(),
-        content: "<p><img src=\"examples/files/code_maven_490_490.jpg\" alt=\"a title\" /></p>\n"
-            .to_string(),
+        content: "\n\n![a title](examples/files/code_maven_490_490.jpg)\n\n".to_string(),
         // footer: <p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/img_with_title.md\">source</a></p>
         tags: vec!["img".to_string()],
         published: true,
@@ -747,7 +754,7 @@ fn test_links() {
         timestamp: "2023-10-01T12:30:01".to_string(),
         url_path: "links".to_string(),
         filename: "links.md".to_string(),
-        content: "<ul>\n<li>An <a href=\"/with_todo\">internal link</a> and more text.</li>\n<li>An <a href=\"https://rust-digger.code-maven.com/\">external link</a> and more text.</li>\n</ul>\n".to_string(),
+        content: "\n* An [internal link](/with_todo) and more text.\n* An [external link](https://rust-digger.code-maven.com/) and more text.\n\n".to_string(),
         //footer: "\n<p><a href=\"https://github.com/szabgab/rust.code-maven.com/blob/main/pages/links.md\">source</a></p>".to_strin(),
         //     Link {
         //         title: "internal link".to_string(),
