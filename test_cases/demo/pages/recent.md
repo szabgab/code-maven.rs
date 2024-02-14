@@ -8,3 +8,10 @@ description: recently published pages
 ## The 5 most recently published pages
 
 {%    latest   limit=5  %}
+
+
+## Here we show the syntax used to display the 5 most recent pages:
+
+```
+{%    latest   limit=5  %}
+```
