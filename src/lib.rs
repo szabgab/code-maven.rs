@@ -285,11 +285,8 @@ pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
                                 continue;
                             }
                         }
-                        html += format!(
-                            r#"<li><a href="{}">{}</a></li>"#,
-                            all_pages[ix].url_path, all_pages[ix].title
-                        )
-                        .as_str();
+                        html += format!("* [{}](/{})", all_pages[ix].title, all_pages[ix].url_path)
+                            .as_str();
                         html += "\n";
                         count += 1;
                         if 0 < limit && limit <= count {

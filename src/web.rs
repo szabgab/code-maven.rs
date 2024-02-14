@@ -43,8 +43,8 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
     let pages = read_pages(&config, &pages_path, root);
     let (pages, paths) = process_file_includes(&config, root, pages);
     let pages = collect_backlinks(pages);
-    let pages = markdown_pages(pages);
     let pages = process_liquid_tags(pages);
+    let pages = markdown_pages(pages);
 
     let tags: Tags = collect_tags(&pages);
     copy_files(root, outdir, &paths);
