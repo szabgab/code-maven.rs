@@ -23,6 +23,10 @@ navbar:
   start:
     - path: /
       title: Home
+    - path: /front-matter
+      title: Front Matter
+    - path: /special-syntax
+      title: Special Syntax
   end:
     - path: /about
       title: About
