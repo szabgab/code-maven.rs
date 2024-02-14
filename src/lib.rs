@@ -412,7 +412,6 @@ pub fn read_md_file(
     }
 
     let (content, paths) = pre_process(config, root, &content);
-    //page.backlinks = find_links(&content);
 
     page.content = content;
 
