@@ -266,10 +266,10 @@ pub fn process_file_includes(
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
     let total = pages.len();
+    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
     pages
         .into_iter()
         .map(|mut page| {
-            let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
             page.content = re
                 .replace_all(&page.content, |caps: &Captures| {
                     let mut count = 0;
