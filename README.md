@@ -23,17 +23,6 @@ See [the web site](https://ssg.code-maven.com/)
 
 See [the web site](https://ssg.code-maven.com/)
 
-Not yet implemented fields
-
-```
-indexes: open, File, read, readline, gets, while, each
-status: show
-books: ruby
-archive: 1
-comments_disqus_enable: 0
-```
-
-
 ## Local development
 
 * Install Rust
