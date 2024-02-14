@@ -9,7 +9,7 @@ fn test_drafts_demo() {
         .args(["run", "-q", "drafts", "--root", "test_cases/demo"])
         .output()
         .expect("command failed to start");
-    //canonicalize()
+
     assert_eq!(
         std::str::from_utf8(&result.stdout).unwrap(),
         "\n---- Drafts ----\ndraft.md                       Draft page\n"
@@ -24,7 +24,7 @@ fn test_drafts_site() {
         .args(["run", "-q", "drafts", "--root", "site"])
         .output()
         .expect("command failed to start");
-    //canonicalize()
+
     assert_eq!(
         std::str::from_utf8(&result.stdout).unwrap(),
         "\n---- Drafts ----\n"
