@@ -294,13 +294,23 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
 
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
+    let mut in_code = false;
     pages
         .into_iter()
         .map(|mut page| {
             page.content = page
                 .content
                 .split('\n')
-                .map(|row| process_liquid_tags_for_text(row, &all_pages))
+                .map(|row| {
+                    if row.starts_with("```") {
+                        in_code = !in_code;
+                    }
+                    if in_code {
+                        row.to_owned()
+                    } else {
+                        process_liquid_tags_for_text(row, &all_pages)
+                    }
+                })
                 .collect::<Vec<String>>()
                 .join("\n");
             page
