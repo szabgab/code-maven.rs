@@ -263,7 +263,7 @@ pub fn process_file_includes(
     (pages, paths_to_copy)
 }
 
-fn process_liquid_tags_for_text(text: &str, total: usize, all_pages: &[Page]) -> String {
+fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
     re.replace_all(text, |caps: &Captures| {
         let mut count = 0;
@@ -272,7 +272,7 @@ fn process_liquid_tags_for_text(text: &str, total: usize, all_pages: &[Page]) ->
 
         let mut html = String::new();
         #[allow(clippy::needless_range_loop)]
-        for ix in 1..total {
+        for ix in 1..all_pages.len() {
             if tag.is_some() {
                 let tag_text = &tag.unwrap().as_str().to_string();
                 if !all_pages[ix].tags.contains(tag_text) {
@@ -294,11 +294,10 @@ fn process_liquid_tags_for_text(text: &str, total: usize, all_pages: &[Page]) ->
 
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
-    let total = pages.len();
     pages
         .into_iter()
         .map(|mut page| {
-            page.content = process_liquid_tags_for_text(&page.content, total, &all_pages);
+            page.content = process_liquid_tags_for_text(&page.content, &all_pages);
             page
         })
         .collect()
