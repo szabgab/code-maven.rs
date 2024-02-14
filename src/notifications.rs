@@ -18,7 +18,7 @@ struct EmailAddress {
 pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) -> Result<(), String> {
     let config = read_config(root)?;
 
-    let (page, _paths) = match read_md_file(&config, root, mail) {
+    let page = match read_md_file(&config, root, mail) {
         Ok(page) => page,
         Err(err) => {
             log::error!("{}", err);

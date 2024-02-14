@@ -408,7 +408,7 @@ fn test_show_author_text() {
     use crate::read_md_file;
 
     let config = read_config("test_cases/config_with_authors/").unwrap();
-    let (page, _includes) = read_md_file(
+    let page = read_md_file(
         &config,
         "test_cases/config_with_authors/",
         "test_cases/config_with_authors/pages/index.md",
@@ -428,7 +428,7 @@ fn test_bad_author() {
     use crate::read_md_file;
 
     let config = read_config("test_cases/config_with_authors/").unwrap();
-    let (page, _includes) = read_md_file(
+    let page = read_md_file(
         &config,
         "test_cases/config_with_authors/",
         "test_cases/config_with_authors/pages/bad_author.md",

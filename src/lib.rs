@@ -243,6 +243,26 @@ pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
         .collect()
 }
 
+pub fn process_file_includes(
+    config: &Config,
+    root: &str,
+    pages: Vec<Page>,
+) -> (Vec<Page>, Vec<PathBuf>) {
+    let mut paths_to_copy: Vec<PathBuf> = vec![];
+
+    let pages = pages
+        .into_iter()
+        .map(|mut page| {
+            let (content, paths) = pre_process(config, root, &page.content);
+            page.content = content;
+            paths_to_copy.extend(paths);
+            page
+        })
+        .collect();
+
+    (pages, paths_to_copy)
+}
+
 pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
     let total = pages.len();
@@ -306,7 +326,6 @@ fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
 pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
-    let mut paths_to_copy: Vec<PathBuf> = vec![];
 
     for entry in path.read_dir().expect("read_dir call failed").flatten() {
         log::info!("path: {:?}", entry.path());
@@ -315,7 +334,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
             continue;
         }
         // println!("{:?}", entry.file_name());
-        let (page, paths) = match read_md_file(config, root, entry.path().to_str().unwrap()) {
+        let page = match read_md_file(config, root, entry.path().to_str().unwrap()) {
             Ok(res) => res,
             Err(err) => {
                 log::error!("{}", err);
@@ -323,11 +342,13 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
             }
         };
         log::debug!("page: {:?}", &page);
-        paths_to_copy.extend(paths);
+
         pages.push(page);
     }
 
-    pages = collect_backlinks(pages);
+    let (pages, paths_to_copy) = process_file_includes(config, root, pages);
+
+    let mut pages = collect_backlinks(pages);
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
@@ -348,11 +369,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
     (pages, paths_to_copy)
 }
 
-pub fn read_md_file(
-    config: &Config,
-    root: &str,
-    path: &str,
-) -> Result<(Page, Vec<PathBuf>), String> {
+pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, String> {
     let mut page = Page::new();
 
     let mut content = String::new();
@@ -411,8 +428,6 @@ pub fn read_md_file(
         page.url_path = String::new();
     }
 
-    let (content, paths) = pre_process(config, root, &content);
-
     page.content = content;
 
     if page.title.is_empty() {
@@ -430,7 +445,7 @@ pub fn read_md_file(
         }
     }
 
-    Ok((page, paths))
+    Ok(page)
 }
 
 fn markdown2html(content: &str) -> String {
@@ -663,8 +678,8 @@ fn test_read_index() {
         published: true,
         ..Page::default()
     };
-    let expected = (expected_page, vec![]);
-    assert_eq!(data, expected);
+    //let expected = (expected_page, vec![]);
+    assert_eq!(data, expected_page);
 }
 
 #[test]
@@ -682,20 +697,17 @@ fn test_read_todo() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         url_path: "with_todo".to_string(),
         filename: "with_todo.md".to_string(),
-        content: "\nSome Content.\n\n**[examples/hello_world.rs](https://github.com/szabgab/rust.code-maven.com/tree/main/examples/hello_world.rs)**\n```rust\nfn main() {\n    println!(\"Hello World!\");\n}\n\n```\n\n".to_string(),
+        content: "\nSome Content.\n\n![](examples/hello_world.rs)\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
         ],
-        tags: vec![
-            "println!".to_string(),
-            "fn".to_string(),
-        ],
+        tags: vec!["println!".to_string(), "fn".to_string()],
         published: true,
         ..Page::default()
     };
-    let expected = (expected_page, vec![]);
-    assert_eq!(data, expected);
+    //let expected = (expected_page, vec![]);
+    assert_eq!(data, expected_page);
 }
 
 #[test]
@@ -718,11 +730,11 @@ fn test_img_with_title() {
         published: true,
         ..Page::default()
     };
-    let expected = (
-        expected_page,
-        vec![PathBuf::from("examples/files/code_maven_490_490.jpg")],
-    );
-    assert_eq!(data, expected);
+    // let expected = (
+    //     expected_page,
+    //     vec![PathBuf::from("examples/files/code_maven_490_490.jpg")],
+    // );
+    assert_eq!(data, expected_page);
 }
 
 #[test]
@@ -739,8 +751,8 @@ fn test_links() {
         published: true,
         ..Page::default()
     };
-    let expected = (expected_page, vec![]);
-    assert_eq!(data, expected);
+    //let expected = (expected_page, vec![]);
+    assert_eq!(data, expected_page);
 }
 
 #[test]
