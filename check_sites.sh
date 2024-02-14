@@ -9,13 +9,22 @@ function check_project
     cargo run --bin code-maven -- web --root $site  --outdir _site/
 
     echo "---------------------------"
-    for page in _site/*.html
+    for full_path in _site/*.html
     do
-        page=$(basename $page)
-        echo $page in $project in $project
-        page=$(sed "s/html$/png/" <<< "$page")
-        echo _site/img/$page
-        test -f _site/img/$page
+        echo $full_path
+        page=$(basename $full_path)
+        echo $page
+
+        # don't expect to have a png file for pages that redirect
+        set +e
+        redirect=$(grep 'http-equiv="refresh"' $full_path)
+        set -e
+        if [ "$redirect" == "" ]
+        then
+            page=$(sed "s/html$/png/" <<< "$page")
+            echo _site/img/$page
+            test -f _site/img/$page
+        fi
     done
 }
 
