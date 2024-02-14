@@ -282,6 +282,24 @@ pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
         .collect()
 }
 
+fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
+    let links = collect_all_the_internal_links(&pages);
+
+    pages
+        .into_iter()
+        .map(|mut page| {
+            // TODO can we limit the clone to the already filtered values?
+            page.backlinks = links
+                .clone()
+                .into_iter()
+                .filter(|link| link.to_path == format!("/{}", page.url_path))
+                .collect::<Vec<Link>>();
+            //log::info!("{:?}", page.backlinks);
+            page
+        })
+        .collect()
+}
+
 pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<PathBuf>) {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
@@ -305,7 +323,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
         paths_to_copy.extend(paths);
         pages.push(page);
     }
-    let links = collect_all_the_internal_links(&pages);
+
     //dbg!(&links);
     // for page in &pages {
     //     //dbg!(&page.content);
@@ -313,22 +331,10 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
     //     dbg!(links);
     // }
 
+    pages = collect_backlinks(pages);
     //let page = &pages[0];
     //let backlinks: Vec<Link> = links.into_iter().filter(|link| link.to_path == page.url_path).collect();
     //let backlinks  = links.into_iter().filter(|link| link.to_path == page.url_path).collect::<Vec<Link>>();
-    pages = pages
-        .into_iter()
-        .map(|mut page| {
-            // TODO can we limit the clone to the already filtered values?
-            page.backlinks = links
-                .clone()
-                .into_iter()
-                .filter(|link| link.to_path == format!("/{}", page.url_path))
-                .collect::<Vec<Link>>();
-            //log::info!("{:?}", page.backlinks);
-            page
-        })
-        .collect();
 
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
