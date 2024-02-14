@@ -350,6 +350,13 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
 
     let mut pages = collect_backlinks(pages);
 
+    match check_unique_dates(&pages) {
+        Ok(()) => {}
+        Err(err) => {
+            log::error!("{}", err);
+            std::process::exit(1);
+        }
+    };
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
     let archive = Page {
@@ -367,6 +374,18 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> (Vec<Page>, Vec<P
     pages.insert(0, archive);
 
     (pages, paths_to_copy)
+}
+
+fn check_unique_dates(pages: &Vec<Page>) -> Result<(), String> {
+    let mut uniq = std::collections::HashSet::new();
+    for page in pages {
+        if uniq.contains(&page.timestamp) {
+            return Err(format!("duplicate timestamp '{}'", page.timestamp));
+        }
+        uniq.insert(page.timestamp.clone());
+    }
+
+    Ok(())
 }
 
 pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, String> {
