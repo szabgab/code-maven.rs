@@ -12,7 +12,7 @@ fn test_todo_demo() {
 
     assert_eq!(
         std::str::from_utf8(&result.stdout).unwrap(),
-        "test_cases/demo/pages/with_todo.md Page with todos\n   Add another article extending on the topic\n   Add an article describing a prerequisite\n"
+        "test_cases/demo/pages/with_todo.md Page with todos\n   Add another article extending on the topic\n   Add an article describing a prerequisite\ntest_cases/demo/pages/draft.md Draft page\n   unpublished\n"
     );
     assert_eq!(std::str::from_utf8(&result.stderr).unwrap(), "");
     assert_eq!(result.status, ExitStatus::from_raw(0));

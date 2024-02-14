@@ -75,6 +75,9 @@ fn collect_tags(pages: &Vec<Page>) -> Tags {
         if page.redirect.is_some() {
             continue;
         }
+        if !page.published {
+            continue;
+        }
         for tag in &page.tags {
             tags.insert(tag.to_lowercase(), 1);
         }
