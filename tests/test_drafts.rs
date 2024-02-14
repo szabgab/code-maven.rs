@@ -20,6 +20,7 @@ fn test_drafts_demo() {
 
 #[test]
 fn test_drafts_site() {
+    //simple_logger::init_with_level(log::Level::Debug).unwrap();
     let result = Command::new("cargo")
         .args(["run", "-q", "drafts", "--root", "site"])
         .output()

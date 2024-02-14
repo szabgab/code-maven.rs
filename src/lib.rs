@@ -151,6 +151,7 @@ pub struct Config {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct Link {
     from_title: String,
     from_path: String,
@@ -159,6 +160,7 @@ pub struct Link {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct Page {
     pub title: String,
     pub timestamp: String,
@@ -404,6 +406,7 @@ fn check_unique_dates(pages: &Vec<Page>) -> Result<(), String> {
 
 pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, String> {
     let mut page = Page::new();
+    log::info!("read_md_file '{path}'");
 
     let mut content = String::new();
 
@@ -423,10 +426,12 @@ pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, S
                     if line == "---" {
                         in_front_matter = false;
                         log::info!("front_matter: '{}'", &front_matter);
-                        page = serde_yaml::from_str(&front_matter).unwrap_or_else(|err| {
-                            log::error!("YAML parsing error in '{}' {}", path, err);
-                            std::process::exit(1);
-                        });
+                        match serde_yaml::from_str(&front_matter) {
+                            Ok(val) => page = val,
+                            Err(err) => {
+                                return Err(format!("YAML parsing error in '{path}' {err}"))
+                            }
+                        };
                         continue;
                     }
                     //dbg!(&line);
@@ -841,6 +846,18 @@ fn test_bad_timestamp() {
         Err(err) => assert_eq!(
             err,
             "Invalid date '2015-02-30T12:30:01' in test_cases/bad_pages/incorrect_timestamp.md: input is out of range".to_string()
+        ),
+    }
+}
+
+#[test]
+fn test_invalid_key() {
+    //simple_logger::init_with_level(log::Level::Debug).unwrap();
+    let config = read_config("test_cases/demo").unwrap();
+    match read_md_file(&config, "test_cases/demo", "test_cases/bad_pages/invalid_key_in_front_matter.md") {
+        Ok(_) => assert!(false),
+        Err(err) => assert!(
+            err.contains("YAML parsing error in 'test_cases/bad_pages/invalid_key_in_front_matter.md' unknown field `password`")
         ),
     }
 }
