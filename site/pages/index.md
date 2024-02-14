@@ -31,6 +31,7 @@ $ tree
 ├── authors
 │   └── foobar.md
 ├── config.yaml
+├── .gitignore
 └── pages
     ├── about.md
     └── index.md
@@ -85,6 +86,9 @@ todo:                                # As I write articles I often have ideas fo
 
 After this front-matter feel free to write any Markdown.
 
+## Special syntax
+
+There is some [Special Syntax](/special-syntax) - tags you can embed in the Markdown files.
 
 ## View the site locally
 
