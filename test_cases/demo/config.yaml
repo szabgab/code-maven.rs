@@ -33,4 +33,4 @@ navbar:
     - path: /about
       title: About
 show_related: true
-related_pages_title: "Related pages"
+related_pages_title: Related pages
