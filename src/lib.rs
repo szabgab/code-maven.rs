@@ -202,6 +202,9 @@ pub struct Page {
     pub redirect: Option<String>,
 
     pub published: bool,
+
+    #[serde(default = "get_true")]
+    pub show_related: bool,
 }
 
 impl Page {
@@ -218,6 +221,7 @@ impl Page {
             backlinks: vec![],
             published: false,
             redirect: None,
+            show_related: true,
             author: String::new(),
         }
     }
@@ -227,6 +231,10 @@ impl Default for Page {
     fn default() -> Self {
         Self::new()
     }
+}
+
+fn get_true() -> bool {
+    true
 }
 
 fn get_false() -> bool {
