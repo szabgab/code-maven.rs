@@ -795,7 +795,7 @@ fn test_links() {
         timestamp: "2023-10-01T12:30:01".to_string(),
         url_path: "links".to_string(),
         filename: "links.md".to_string(),
-        content: "\n* An [internal link](/with_todo) and more text.\n* An [external link](https://rust-digger.code-maven.com/) and more text.\n\n".to_string(),
+        content: "\n* An [internal link](/with_todo) and more text.\n* An [external link](https://rust-digger.code-maven.com/) and more text.\n\n[sigils](/sigils) - another internal link to test the `show_related: false` in the front-matter of the sigils page\n".to_string(),
         published: true,
         ..Page::default()
     };
