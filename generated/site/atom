@@ -45,6 +45,9 @@ todo:                                # As I write articles I often have ideas fo
   - Add an article describing a prerequisite
 
 redirect: /some-other-page           # If included (and if the page is published) we will generate a HTML-base redirection.
+
+show_related: true                   # If the `show_related` field in the config.yaml is `false` then this optional field has no impact
+                                     # If the `show_related` field in the config.yaml is `true` then this defaults to `true`, but you can set it to fals to not sow the related fields of a specific page.
 ---
 </code></pre>
 <ul>
