@@ -39,8 +39,7 @@ show_related: true                   # If the `show_related` field in the config
 ```
 
 
-* Moving a page to a new location? No problem. You can add a `redirect` field to the front-matter of the old file and generate and HTML-based redirection pages.
-
-
+* Moving a page to a new location? No problem. You can add a `redirect` field to the front-matter of the old file and generate and HTML-based redirection pages. For example the [internal-redirect](/internal-redirect) page will bring you to the page about front-matter. See the [source of the internal-redirect](https://github.com/szabgab/code-maven.rs/blob/main/site/pages/internal-redirect.md) page.
+* Redirecting to an external page. You can use the `redirect` field of the front-matter to redirect to any URL. For example [external-redirect](/external-redirect) page will bring you to the [Rust Maven](https://rust.code-maven.com/) site. See the [source of the externale-redirect](https://github.com/szabgab/code-maven.rs/blob/main/site/pages/external-redirect.md) page.
 
 
