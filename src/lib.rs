@@ -155,6 +155,9 @@ pub struct Config {
 
     #[serde(default = "get_false")]
     pub show_related: bool,
+
+    #[serde(default = "get_empty_string")]
+    pub related_pages_title: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]

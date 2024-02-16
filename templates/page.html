@@ -12,7 +12,7 @@
       </div>
 
       {%- if config.show_related and page.backlinks.size > 0 %}
-        <h3 class="title is-4">Related pages</h3>
+        <h3 class="title is-4">{{ config.related_pages_title }}</h3>
         {% for backlink in page.backlinks %}
           <div><a href="/{{backlink.from_path}}">{{backlink.from_title}}</a></div>
         {% endfor %}
