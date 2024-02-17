@@ -28,10 +28,10 @@ function check_project
     done
 }
 
-        # https://github.com/moshe742/my_blog \
 function check_public_projects
 {
     for url in \
+        https://github.com/moshe742/my_blog \
         https://github.com/szabgab/rust.code-maven.com \
         https://github.com/szabgab/rust.org.il \
         https://github.com/szabgab/banner-builder.rs \
