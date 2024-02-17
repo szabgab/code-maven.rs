@@ -52,6 +52,11 @@
   </url>
   
   <url>
+    <loc>https://rust.code-maven.com/youtube</loc>
+    <lastmod>2010-10-11</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rust.code-maven.com/sigils</loc>
     <lastmod>2010-10-11</lastmod>
   </url>

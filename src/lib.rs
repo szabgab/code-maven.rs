@@ -286,6 +286,11 @@ pub fn process_file_includes(
     (pages, paths_to_copy)
 }
 
+fn process_liquid_tags_youtube(text: &str) -> String {
+    let re = Regex::new(r#"\{%\s+youtube=([^ ]+)\s+%\}"#).unwrap();
+    re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
+}
+
 fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
     re.replace_all(text, |caps: &Captures| {
@@ -331,7 +336,8 @@ pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
                     if in_code {
                         row.to_owned()
                     } else {
-                        process_liquid_tags_for_text(row, &all_pages)
+                        let row = process_liquid_tags_for_text(row, &all_pages);
+                        process_liquid_tags_youtube(&row)
                     }
                 })
                 .collect::<Vec<String>>()
