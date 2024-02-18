@@ -41,19 +41,19 @@ function check_public_projects
         cd $root
         folder=${url##*/}
         echo "folder: $folder"
-        if [ -e sites/$folder ]
+        if [ -e .sites/$folder ]
         then
             echo "exists. git pull"
-            cd sites/$folder
+            cd .sites/$folder
             git pull
         else
             echo "git clone"
-            cd sites
+            cd .sites
             git clone $url
             cd $folder
         fi
         cd $root
-        site=sites/$folder
+        site=.sites/$folder
 
         if [ "$folder" == "banner-builder.rs" ] || [ "$folder" == "site-checker.rs" ]
         then
@@ -76,9 +76,9 @@ function check_private_projects
         then
             site=../$project
         else
-            if [ -e sites/$project ];
+            if [ -e .sites/$project ];
             then
-                site=sites/$project
+                site=.sites/$project
             else
                 echo skipping private site
                 continue
@@ -92,7 +92,7 @@ function check_private_projects
 
 root=$(pwd)
 echo "root=$root"
-mkdir -p sites
+mkdir -p .sites
 
 site=site
 check_project
