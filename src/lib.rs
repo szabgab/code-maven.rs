@@ -323,7 +323,7 @@ pub fn process_liquid_tags(
                     } else {
                         let row = process_liquid_tags_for_text(row, &all_pages);
                         let row = process_liquid_tags_youtube(&row);
-                        let (row, paths) = pre_process(config, root, &row);
+                        let (row, paths) = process_liquid_include(config, root, &row);
                         paths_to_copy.extend(paths);
                         row
                     }
@@ -543,8 +543,8 @@ fn find_links(page: &Page) -> Vec<Link> {
     links
 }
 
-fn pre_process(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
-    log::info!("pre_process");
+fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
+    log::info!("process_liquid_include");
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
     let mut paths: Vec<PathBuf> = vec![];
