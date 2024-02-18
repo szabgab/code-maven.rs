@@ -3,15 +3,65 @@
 <link href="https://ssg.rust.code-maven.com/atom" rel="self" />
 <title>Code Maven site generator</title>
 <id>https://ssg.rust.code-maven.com</id>
-<updated>2024-02-16T09:40:00</updated>
+<updated>2024-02-18T16:30:16</updated>
 
   <entry>
     <title></title>
     <summary type="html"><![CDATA[]]></summary>
-    <updated>2024-02-16T09:40:00</updated>
+    <updated>2024-02-18T16:30:16</updated>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/archive" />
     <id>https://ssg.rust.code-maven.com/archive</id>
     <content type="html"><![CDATA[]]></content>
+    <author>
+      <name></name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Embed youtube video</title>
+    <summary type="html"><![CDATA[video]]></summary>
+    <updated>2024-02-18T16:30:16</updated>
+    <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/youtube" />
+    <id>https://ssg.rust.code-maven.com/youtube</id>
+    <content type="html"><![CDATA[<p>In order to embed a YouTube video use the following <a href="/special-syntax">special syntax</a></p>
+<pre><code>{% youtube=K6EvVvYnjrY %}
+</code></pre>
+<p>This is the result:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/K6EvVvYnjrY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+]]></content>
+    <author>
+      <name></name>
+    </author>
+  </entry>
+
+  <entry>
+    <title>Most recent articles</title>
+    <summary type="html"><![CDATA[List the most recent articles]]></summary>
+    <updated>2024-02-18T16:00:01</updated>
+    <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/recent" />
+    <id>https://ssg.rust.code-maven.com/recent</id>
+    <content type="html"><![CDATA[<p>Use this <a href="/special-syntax">special syntax</a></p>
+<pre><code>{% latest limit=5 %}
+</code></pre>
+<p>The result:</p>
+<ul>
+<li>
+<p><a href="/youtube">Embed youtube video</a></p>
+</li>
+<li>
+<p><a href="/recent">Most recent articles</a></p>
+</li>
+<li>
+<p><a href="/external-redirect">External redirection</a></p>
+</li>
+<li>
+<p><a href="/internal-redirect">Internal redirection</a></p>
+</li>
+<li>
+<p><a href="/front-matter">Front matter (per page meta data)</a></p>
+</li>
+</ul>
+]]></content>
     <author>
       <name></name>
     </author>
@@ -70,13 +120,16 @@ show_related: true                   # If the `show_related` field in the config
     <updated>2024-02-14T08:00:01</updated>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/special-syntax" />
     <id>https://ssg.rust.code-maven.com/special-syntax</id>
-    <content type="html"><![CDATA[<h2 class="title is-4">Show the N most recently published articles</h2>
+    <content type="html"><![CDATA[<h2 class="title is-4">Show the N <a href="/recent">most recently published articles</a></h2>
 <pre><code>{% latest limit=5 %}
 </code></pre>
 <p>Some people might want to put this in the main <code>index.md</code> file, others might create a separate page called <code>recent.md</code>
 and then link to it from the menu.</p>
 <h2 class="title is-4">Show the N most recently published article with the given tag</h2>
 <pre><code>{% latest limit=3 tag=programming  %}
+</code></pre>
+<h2 class="title is-4"><a href="/youtube">Embed YouTube videos</a></h2>
+<pre><code>{% youtube=K6EvVvYnjrY %}
 </code></pre>
 ]]></content>
     <author>

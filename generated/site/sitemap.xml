@@ -3,7 +3,17 @@
  
   <url>
     <loc>https://ssg.rust.code-maven.com/archive</loc>
-    <lastmod>2024-02-16</lastmod>
+    <lastmod>2024-02-18</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/youtube</loc>
+    <lastmod>2024-02-18</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ssg.rust.code-maven.com/recent</loc>
+    <lastmod>2024-02-18</lastmod>
   </url>
   
   <url>

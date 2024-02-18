@@ -70,13 +70,16 @@
       </h1>
       
       <div class="content">
-        <h2 class="title is-4">Show the N most recently published articles</h2>
+        <h2 class="title is-4">Show the N <a href="/recent">most recently published articles</a></h2>
 <pre><code>{% latest limit=5 %}
 </code></pre>
 <p>Some people might want to put this in the main <code>index.md</code> file, others might create a separate page called <code>recent.md</code>
 and then link to it from the menu.</p>
 <h2 class="title is-4">Show the N most recently published article with the given tag</h2>
 <pre><code>{% latest limit=3 tag=programming  %}
+</code></pre>
+<h2 class="title is-4"><a href="/youtube">Embed YouTube videos</a></h2>
+<pre><code>{% youtube=K6EvVvYnjrY %}
 </code></pre>
 
       </div>

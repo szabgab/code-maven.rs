@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="List of all the articles about the Rust programming language">
-    <meta name="keywords" content="archive">
-    <title>Archive</title>
+    <meta name="description" content="List the most recent articles">
+    <meta name="keywords" content="">
+    <title>Most recent articles</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
     <!--
@@ -16,18 +16,18 @@
     <script>hljs.highlightAll();</script>
 
     <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/archive" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Archive" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="List of all the articles about the Rust programming language" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/recent" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Most recent articles" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="List the most recent articles" />
     <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Code Maven site generator" />
-    
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://ssg.rust.code-maven.com/img/recent.png" />
 
     <meta name="twitter:creator" content="@szabgab">
-    <meta name="twitter:title" content="Archive">
-    <meta name="twitter:description" content="List of all the articles about the Rust programming language">
+    <meta name="twitter:title" content="Most recent articles">
+    <meta name="twitter:description" content="List the most recent articles">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:widgets:new-embed-design" content="on">
-    
+    <meta name="twitter:image:src" content="https://ssg.rust.code-maven.com/img/recent.png">
 
   </head>
   <body>
@@ -66,30 +66,40 @@
   <section class="section">
     <div class="container">
       <h1 class="title">
-        Archive
+        Most recent articles
       </h1>
+      
       <div class="content">
-          Total: 7
-        <ul>
-          
-             <li>2024-02-18 <a href="/youtube">Embed youtube video</a></li>
-          
-             <li>2024-02-18 <a href="/recent">Most recent articles</a></li>
-          
-             <li>2024-02-14 <a href="/front-matter">Front matter (per page meta data)</a></li>
-          
-             <li>2024-02-14 <a href="/special-syntax">Special syntax</a></li>
-          
-             <li>2024-02-06 <a href="/where-is-it-used">Where is it used?</a></li>
-          
-             <li>2023-11-20 <a href="/first-version">First version of the Code Maven Static Site Generator</a></li>
-          
-             <li>2023-11-08 <a href="/about">About the Code Maven Static Site Generator</a></li>
-          
-        </ul>
+        <p>Use this <a href="/special-syntax">special syntax</a></p>
+<pre><code>{% latest limit=5 %}
+</code></pre>
+<p>The result:</p>
+<ul>
+<li>
+<p><a href="/youtube">Embed youtube video</a></p>
+</li>
+<li>
+<p><a href="/recent">Most recent articles</a></p>
+</li>
+<li>
+<p><a href="/external-redirect">External redirection</a></p>
+</li>
+<li>
+<p><a href="/internal-redirect">Internal redirection</a></p>
+</li>
+<li>
+<p><a href="/front-matter">Front matter (per page meta data)</a></p>
+</li>
+</ul>
+
       </div>
-    </div>
+    </div>   
   </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>The <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a>. <a href="https://github.com/szabgab/code-maven.rs/blob/main/pages/recent.md">source</a></p>
+    </div>
+  </footer>  
 
 
 <script>
