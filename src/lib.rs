@@ -546,6 +546,7 @@ fn find_links(page: &Page) -> Vec<Link> {
 fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("process_liquid_include");
     let ext_to_language: HashMap<String, String> = read_languages();
+    let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif"];
     let mut paths: Vec<PathBuf> = vec![];
 
     let re_old = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
@@ -560,10 +561,16 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, V
         } else if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             include_file(config, include_path, path, language)
-        } else {
+        } else if ext_images.contains(&path.extension().unwrap().to_str().unwrap()) {
             // TODO: we don't need to copy external images
             paths.push(path.to_path_buf());
             caps[0].to_string() // .copy() // don't replace anything
+        } else {
+            log::error!(
+                "Unhandled extension for file {:?}",
+                path.file_name().unwrap()
+            );
+            std::process::exit(1);
         }
     });
 
