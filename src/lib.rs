@@ -266,26 +266,6 @@ pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
         .collect()
 }
 
-pub fn process_file_includes(
-    config: &Config,
-    root: &str,
-    pages: Vec<Page>,
-) -> (Vec<Page>, Vec<PathBuf>) {
-    let mut paths_to_copy: Vec<PathBuf> = vec![];
-
-    let pages = pages
-        .into_iter()
-        .map(|mut page| {
-            let (content, paths) = pre_process(config, root, &page.content);
-            page.content = content;
-            paths_to_copy.extend(paths);
-            page
-        })
-        .collect();
-
-    (pages, paths_to_copy)
-}
-
 fn process_liquid_tags_youtube(text: &str) -> String {
     let re = Regex::new(r#"\{%\s+youtube=([^ ]+)\s+%\}"#).unwrap();
     re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
@@ -320,10 +300,15 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     .to_string()
 }
 
-pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
+pub fn process_liquid_tags(
+    config: &Config,
+    root: &str,
+    pages: Vec<Page>,
+) -> (Vec<Page>, Vec<PathBuf>) {
+    let mut paths_to_copy: Vec<PathBuf> = vec![];
     let all_pages = pages.clone();
     let mut in_code = false;
-    pages
+    let pages = pages
         .into_iter()
         .map(|mut page| {
             page.content = page
@@ -337,14 +322,19 @@ pub fn process_liquid_tags(pages: Vec<Page>) -> Vec<Page> {
                         row.to_owned()
                     } else {
                         let row = process_liquid_tags_for_text(row, &all_pages);
-                        process_liquid_tags_youtube(&row)
+                        let row = process_liquid_tags_youtube(&row);
+                        let (row, paths) = pre_process(config, root, &row);
+                        paths_to_copy.extend(paths);
+                        row
                     }
                 })
                 .collect::<Vec<String>>()
                 .join("\n");
             page
         })
-        .collect()
+        .collect();
+
+    (pages, paths_to_copy)
 }
 
 fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {

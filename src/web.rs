@@ -8,8 +8,7 @@ use std::path::PathBuf;
 
 use crate::{
     collect_backlinks, copy_files, filter_words, get_pages_path, markdown_pages,
-    process_file_includes, process_liquid_tags, read_config, read_pages, topath, Author, Config,
-    Page, ToPath,
+    process_liquid_tags, read_config, read_pages, topath, Author, Config, Page, ToPath,
 };
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
@@ -41,9 +40,8 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
     let pages_path = get_pages_path(root, path_to_pages);
 
     let pages = read_pages(&config, &pages_path, root);
-    let (pages, paths) = process_file_includes(&config, root, pages);
     let pages = collect_backlinks(pages);
-    let pages = process_liquid_tags(pages);
+    let (pages, paths) = process_liquid_tags(&config, root, pages);
     let pages = markdown_pages(pages);
 
     let tags: Tags = collect_tags(&pages);
