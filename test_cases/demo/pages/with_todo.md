@@ -12,4 +12,4 @@ tags:
 
 Some Content.
 
-![](examples/hello_world.rs)
+{% include file="examples/hello_world.rs" %}

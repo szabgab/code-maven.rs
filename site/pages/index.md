@@ -102,7 +102,7 @@ In order to setup a site on GitHub pages crate a file called `/.github/workflows
 
 The content of the file:
 
-![](include/gh-pages.yml)
+{% include file="include/gh-pages.yml" %}
 
 
 ## Questions and Support

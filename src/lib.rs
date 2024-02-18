@@ -545,11 +545,32 @@ fn find_links(page: &Page) -> Vec<Link> {
 
 fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
     log::info!("process_liquid_include");
-    let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_to_language: HashMap<String, String> = read_languages();
     let mut paths: Vec<PathBuf> = vec![];
 
-    let result = re.replace_all(text, |caps: &Captures| {
+    let re_old = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
+    let result_old = re_old.replace_all(text, |caps: &Captures| {
+        let path = Path::new(&caps[1]);
+        let include_path = Path::new(root).join(path);
+        log::debug!("path '{:?}'", path);
+        // TODO remove the hard coded mapping of .gitignore
+        // TODO properly handle files that do not have an extension
+        if path.file_name().unwrap().to_str().unwrap() == ".gitignore" {
+            include_file(config, include_path, path, "gitignore")
+        } else if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
+            let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
+            include_file(config, include_path, path, language)
+        } else {
+            // TODO: we don't need to copy external images
+            paths.push(path.to_path_buf());
+            caps[0].to_string() // .copy() // don't replace anything
+        }
+    });
+
+    let text_new = result_old.to_string();
+    // new syntax
+    let re = Regex::new(r#"\{%\s+include\s+file="([^"]+)"\s+%\}"#).unwrap();
+    let result = re.replace_all(&text_new, |caps: &Captures| {
         let path = Path::new(&caps[1]);
         let include_path = Path::new(root).join(path);
         log::debug!("path '{:?}'", path);
@@ -749,7 +770,7 @@ fn test_read_todo() {
         timestamp: "2023-10-11T12:30:01".to_string(),
         url_path: "with_todo".to_string(),
         filename: "with_todo.md".to_string(),
-        content: "\nSome Content.\n\n![](examples/hello_world.rs)\n".to_string(),
+        content: "\nSome Content.\n\n{% include file=\"examples/hello_world.rs\" %}\n".to_string(),
         todo: vec![
             "Add another article extending on the topic".to_string(),
             "Add an article describing a prerequisite".to_string(),
