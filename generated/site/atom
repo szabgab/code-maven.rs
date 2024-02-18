@@ -131,6 +131,9 @@ and then link to it from the menu.</p>
 <h2 class="title is-4"><a href="/youtube">Embed YouTube videos</a></h2>
 <pre><code>{% youtube=K6EvVvYnjrY %}
 </code></pre>
+<h2 class="title is-4">Embed text file (code)</h2>
+<pre><code>{% include file=&quot;&quot; %}
+</code></pre>
 ]]></content>
     <author>
       <name></name>

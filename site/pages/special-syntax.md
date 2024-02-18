@@ -29,5 +29,9 @@ and then link to it from the menu.
 {% youtube=K6EvVvYnjrY %}
 ```
 
+## Embed text file (code)
 
+```
+{% include file="" %}
+```
 
