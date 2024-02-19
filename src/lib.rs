@@ -300,12 +300,40 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     .to_string()
 }
 
-pub fn process_liquid_tags(
-    config: &Config,
-    root: &str,
-    pages: Vec<Page>,
-) -> (Vec<Page>, Vec<PathBuf>) {
+pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
     let mut paths_to_copy: Vec<PathBuf> = vec![];
+    let mut in_code = false;
+    let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
+    let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif"];
+
+    for page in pages {
+        for row in page.content.split('\n') {
+            if row.starts_with("```") {
+                in_code = !in_code;
+                continue;
+            }
+            if !in_code {
+                if let Some(value) = re.captures(row) {
+                    let path = Path::new(&value[1]);
+                    // TODO: we don't need to copy external images
+                    if ext_images.contains(&path.extension().unwrap().to_str().unwrap()) {
+                        paths_to_copy.push(path.to_path_buf().clone());
+                    } else {
+                        log::error!(
+                            "Unhandled extension for file to be copied {:?}",
+                            path.file_name().unwrap()
+                        );
+                        std::process::exit(1);
+                    }
+                };
+            }
+        }
+    }
+
+    paths_to_copy
+}
+
+pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
     let mut in_code = false;
     let pages = pages
@@ -323,9 +351,7 @@ pub fn process_liquid_tags(
                     } else {
                         let row = process_liquid_tags_for_text(row, &all_pages);
                         let row = process_liquid_tags_youtube(&row);
-                        let (row, paths) = process_liquid_include(config, root, &row);
-                        paths_to_copy.extend(paths);
-                        row
+                        process_liquid_include(config, root, &row)
                     }
                 })
                 .collect::<Vec<String>>()
@@ -334,7 +360,7 @@ pub fn process_liquid_tags(
         })
         .collect();
 
-    (pages, paths_to_copy)
+    pages
 }
 
 fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
@@ -543,11 +569,10 @@ fn find_links(page: &Page) -> Vec<Link> {
     links
 }
 
-fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
+fn process_liquid_include(config: &Config, root: &str, text: &str) -> String {
     log::info!("process_liquid_include for {text}");
     let ext_to_language: HashMap<String, String> = read_languages();
     let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif"];
-    let mut paths: Vec<PathBuf> = vec![];
 
     let re_old = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let result_old = re_old.replace_all(text, |caps: &Captures| {
@@ -562,8 +587,6 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, V
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             include_file(config, include_path, path, language)
         } else if ext_images.contains(&path.extension().unwrap().to_str().unwrap()) {
-            // TODO: we don't need to copy external images
-            paths.push(path.to_path_buf());
             caps[0].to_string() // .copy() // don't replace anything
         } else {
             log::error!(
@@ -595,7 +618,7 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, V
         }
     });
 
-    (result.to_string(), paths)
+    result.to_string()
 }
 
 fn copy_files(root: &str, outdir: &str, paths: &Vec<PathBuf>) {

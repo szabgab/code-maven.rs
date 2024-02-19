@@ -7,7 +7,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use crate::{
-    collect_backlinks, copy_files, filter_words, get_pages_path, markdown_pages,
+    collect_backlinks, copy_files, filter_words, get_files_to_copy, get_pages_path, markdown_pages,
     process_liquid_tags, read_config, read_pages, topath, Author, Config, Page, ToPath,
 };
 
@@ -41,7 +41,8 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
 
     let pages = read_pages(&config, &pages_path, root);
     let pages = collect_backlinks(pages);
-    let (pages, paths) = process_liquid_tags(&config, root, pages);
+    let paths = get_files_to_copy(&pages);
+    let pages = process_liquid_tags(&config, root, pages);
     let pages = markdown_pages(pages);
 
     let tags: Tags = collect_tags(&pages);
