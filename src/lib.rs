@@ -387,7 +387,15 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
     log::info!("read_page from path '{:?}'", path);
     let mut pages: Vec<Page> = vec![];
 
-    for entry in path.read_dir().expect("read_dir call failed").flatten() {
+    let dir = match path.read_dir() {
+        Ok(dir) => dir,
+        Err(err) => {
+            log::error!("read_dir of '{path:?}' call failed: {err}");
+            std::process::exit(1);
+        }
+    };
+
+    for entry in dir.flatten() {
         log::info!("path: {:?}", entry.path());
         if entry.path().extension().unwrap() != "md" {
             log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
