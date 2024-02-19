@@ -544,7 +544,7 @@ fn find_links(page: &Page) -> Vec<Link> {
 }
 
 fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, Vec<PathBuf>) {
-    log::info!("process_liquid_include");
+    log::info!("process_liquid_include for {text}");
     let ext_to_language: HashMap<String, String> = read_languages();
     let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif"];
     let mut paths: Vec<PathBuf> = vec![];
@@ -575,6 +575,7 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, V
     });
 
     let text_new = result_old.to_string();
+    log::info!("text_new: {text_new}");
     // new syntax
     let re = Regex::new(r#"\{%\s+include\s+file="([^"]+)"\s+%\}"#).unwrap();
     let result = re.replace_all(&text_new, |caps: &Captures| {
@@ -589,9 +590,8 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> (String, V
             let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
             include_file(config, include_path, path, language)
         } else {
-            // TODO: we don't need to copy external images
-            paths.push(path.to_path_buf());
-            caps[0].to_string() // .copy() // don't replace anything
+            log::error!("Unhandled include statement for row {text}");
+            std::process::exit(1);
         }
     });
 
