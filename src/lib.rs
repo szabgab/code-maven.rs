@@ -335,10 +335,11 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
 
 pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
-    let mut in_code = false;
+
     let pages = pages
         .into_iter()
         .map(|mut page| {
+            let mut in_code = false;
             page.content = page
                 .content
                 .split('\n')
@@ -358,8 +359,7 @@ pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec
                 .join("\n");
             page
         })
-        .collect();
-
+        .collect::<Vec<Page>>();
     pages
 }
 
