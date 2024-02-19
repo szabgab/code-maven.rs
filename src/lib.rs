@@ -300,6 +300,22 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     .to_string()
 }
 
+pub fn check_for_invalid_liquid_code(pages: &Vec<Page>) {
+    for page in pages {
+        let mut in_code = false;
+        for row in page.content.split('\n') {
+            if row.starts_with("```") {
+                in_code = !in_code;
+                continue;
+            }
+            if !in_code && row.contains("{%") {
+                log::error!("Invalid liquid code in '{}'", page.filename);
+                std::process::exit(1);
+            }
+        }
+    }
+}
+
 pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
     let mut paths_to_copy: Vec<PathBuf> = vec![];
     let mut in_code = false;
