@@ -7,7 +7,7 @@ use sendgrid::v3::{
     SubscriptionTrackingSetting, TrackingSettings,
 };
 
-use crate::{read_config, read_md_file};
+use crate::{markdown2html, read_config, read_md_file};
 
 #[derive(Debug)]
 struct EmailAddress {
@@ -53,7 +53,7 @@ pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) -> Result<(), String> {
             &from,
             to_address,
             &page.title,
-            &page.content,
+            &markdown2html(&page.content),
         );
     }
 
