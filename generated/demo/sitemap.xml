@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>https://rust.code-maven.com/include</loc>
+    <lastmod>2023-10-11</lastmod>
+  </url>
+  
+  <url>
     <loc>https://rust.code-maven.com/img_without_title</loc>
     <lastmod>2023-10-04</lastmod>
   </url>

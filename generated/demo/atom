@@ -37,6 +37,22 @@
   </entry>
 
   <entry>
+    <title>Include</title>
+    <summary type="html"><![CDATA[]]></summary>
+    <updated>2023-10-11T12:29:01</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/include" />
+    <id>https://rust.code-maven.com/include</id>
+    <content type="html"><![CDATA[<p><strong><a href="https://github.com/szabgab/rust.code-maven.com/tree/main/examples/demo.yaml">examples/demo.yaml</a></strong></p>
+<pre><code class="language-yaml">field: value
+
+</code></pre>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
     <title>Image without title</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-04T12:30:01</updated>
@@ -134,6 +150,9 @@
 <p><a href="/with_todo">Page with todos</a></p>
 </li>
 <li>
+<p><a href="/include">Include</a></p>
+</li>
+<li>
 <p><a href="/img_without_title">Image without title</a></p>
 </li>
 <li>
@@ -141,9 +160,6 @@
 </li>
 <li>
 <p><a href="/usetags">Show how we use special tags</a></p>
-</li>
-<li>
-<p><a href="/links">Links</a></p>
 </li>
 </ul>
 <h2 class="title is-4">Here we show the syntax used to display the 5 most recent pages:</h2>
