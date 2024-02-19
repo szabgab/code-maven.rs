@@ -267,7 +267,7 @@ pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
 }
 
 fn process_liquid_tags_youtube(text: &str) -> String {
-    let re = Regex::new(r#"\{%\s+youtube=([^ ]+)\s+%\}"#).unwrap();
+    let re = Regex::new(r#"\{%\s+youtube="([^"]+)"\s+%\}"#).unwrap();
     re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
 }
 
