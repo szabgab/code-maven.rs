@@ -7,10 +7,11 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use crate::{
-    check_for_invalid_liquid_code, collect_backlinks, copy_files, filter_words, get_files_to_copy,
-    get_pages_path, markdown_pages, process_liquid_tags, read_config, read_pages, topath, Author,
-    Config, Page, ToPath,
+    collect_backlinks, copy_files, filter_words, get_files_to_copy, get_pages_path, markdown_pages,
+    read_config, read_pages, topath, Author, Config, Page, ToPath,
 };
+
+use crate::cmliquid::{check_for_invalid_liquid_code, process_liquid_tags};
 
 pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySource>;
 
