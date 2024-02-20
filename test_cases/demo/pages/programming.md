@@ -9,4 +9,4 @@ tags:
 
 ## 3 most recent pages about programming
 
-{% latest limit=3 tag=programming  %}
+{% latest limit=3 tag="programming"  %}

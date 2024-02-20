@@ -19,7 +19,7 @@ and then link to it from the menu.
 ## Show the N most recently published article with the given tag
 
 ```
-{% latest limit=3 tag=programming  %}
+{% latest limit=3 tag="programming"  %}
 ```
 
 ## [Embed YouTube videos](/youtube)

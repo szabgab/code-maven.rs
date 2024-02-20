@@ -41,7 +41,7 @@ fn process_liquid_tags_youtube(text: &str) -> String {
 }
 
 fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
-    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag=(\S+)\s+)?%\}"#).unwrap();
+    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag="([^"]+)"\s+)?%\}"#).unwrap();
     re.replace_all(text, |caps: &Captures| {
         let mut count = 0;
         let limit = caps[1].parse::<usize>().unwrap();
