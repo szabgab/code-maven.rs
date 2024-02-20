@@ -32,6 +32,6 @@ and then link to it from the menu.
 ## Embed text file (code)
 
 ```
-{% include file="" %}
+{% include file="example/code.py" %}
 ```
 
