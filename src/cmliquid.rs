@@ -69,22 +69,6 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     .to_string()
 }
 
-pub fn check_for_invalid_liquid_code(pages: &Vec<Page>) {
-    for page in pages {
-        let mut in_code = false;
-        for row in page.content.split('\n') {
-            if row.starts_with("```") {
-                in_code = !in_code;
-                continue;
-            }
-            if !in_code && row.contains("{%") {
-                log::error!("Invalid liquid code in '{}'", page.filename);
-                std::process::exit(1);
-            }
-        }
-    }
-}
-
 fn process_liquid_include(config: &Config, root: &str, text: &str) -> String {
     log::info!("process_liquid_include for {text}");
     let ext_to_language: HashMap<String, String> = read_languages();
@@ -108,4 +92,20 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> String {
     });
 
     result.to_string()
+}
+
+pub fn check_for_invalid_liquid_code(pages: &Vec<Page>) {
+    for page in pages {
+        let mut in_code = false;
+        for row in page.content.split('\n') {
+            if row.starts_with("```") {
+                in_code = !in_code;
+                continue;
+            }
+            if !in_code && row.contains("{%") {
+                log::error!("Invalid liquid code in '{}'", page.filename);
+                std::process::exit(1);
+            }
+        }
+    }
 }
