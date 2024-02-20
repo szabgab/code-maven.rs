@@ -13,7 +13,7 @@ use liquid_core::{
     Display_filter, Filter, FilterReflection, ParseFilter, Result, Runtime, Value, ValueView,
 };
 
-pub mod cmliquid;
+pub mod curly;
 pub mod drafts;
 pub mod new;
 pub mod notifications;

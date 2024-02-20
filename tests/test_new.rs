@@ -149,22 +149,22 @@ fn test_page_author_not_in_config() {
 }
 
 #[test]
-fn test_page_invalid_liquid_code() {
+fn test_page_invalid_curly_code() {
     let tmp_dir = TempDir::new("example").unwrap();
     println!("tempdir: {:?}", tmp_dir);
 
     let root = tmp_dir.path().join("site");
 
     new_site(root.to_str().unwrap());
-    let source_path = "test_cases/invalid_liquid.md";
-    let destination_path = root.join("pages").join("invalid_liquid.md");
+    let source_path = "test_cases/invalid_curly.md";
+    let destination_path = root.join("pages").join("invalid_curly.md");
     fs::copy(source_path, destination_path).unwrap();
 
     let outdir = tmp_dir.path().join("out");
 
     assert!(!outdir.exists());
     let (exit, out, err) = generate_site(root.to_str().unwrap(), outdir.to_str().unwrap());
-    assert!(out.contains("Invalid liquid code in 'invalid_liquid.md'"));
+    assert!(out.contains("Invalid curly code in 'invalid_curly.md'"));
     //assert_eq!(out, "");
     assert_eq!(err, "");
     assert_eq!(exit, ExitStatus::from_raw(256));

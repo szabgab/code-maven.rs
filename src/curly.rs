@@ -5,7 +5,7 @@ use regex::{Captures, Regex};
 
 use crate::{include_file, read_languages, Config, Page};
 
-pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
+pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
 
     let pages = pages
@@ -22,9 +22,9 @@ pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec
                     if in_code {
                         row.to_owned()
                     } else {
-                        let row = process_liquid_tags_for_text(row, &all_pages);
-                        let row = process_liquid_tags_youtube(&row);
-                        process_liquid_include(config, root, &row)
+                        let row = process_curly_tags_for_text(row, &all_pages);
+                        let row = process_curly_tags_youtube(&row);
+                        process_curly_include(config, root, &row)
                     }
                 })
                 .collect::<Vec<String>>()
@@ -35,12 +35,12 @@ pub fn process_liquid_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec
     pages
 }
 
-fn process_liquid_tags_youtube(text: &str) -> String {
+fn process_curly_tags_youtube(text: &str) -> String {
     let re = Regex::new(r#"\{%\s+youtube\s+id="([^"]+)"\s+%\}"#).unwrap();
     re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
 }
 
-fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
+fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag="([^"]+)"\s+)?%\}"#).unwrap();
     re.replace_all(text, |caps: &Captures| {
         let mut count = 0;
@@ -69,8 +69,8 @@ fn process_liquid_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     .to_string()
 }
 
-fn process_liquid_include(config: &Config, root: &str, text: &str) -> String {
-    log::info!("process_liquid_include for {text}");
+fn process_curly_include(config: &Config, root: &str, text: &str) -> String {
+    log::info!("process_curly_include for {text}");
     let ext_to_language: HashMap<String, String> = read_languages();
 
     let re = Regex::new(r#"\{%\s+include\s+file="([^"]+)"\s+%\}"#).unwrap();
@@ -94,7 +94,7 @@ fn process_liquid_include(config: &Config, root: &str, text: &str) -> String {
     result.to_string()
 }
 
-pub fn check_for_invalid_liquid_code(pages: &Vec<Page>) {
+pub fn check_for_invalid_curly_code(pages: &Vec<Page>) {
     for page in pages {
         let mut in_code = false;
         for row in page.content.split('\n') {
@@ -103,7 +103,7 @@ pub fn check_for_invalid_liquid_code(pages: &Vec<Page>) {
                 continue;
             }
             if !in_code && row.contains("{%") {
-                log::error!("Invalid liquid code in '{}'", page.filename);
+                log::error!("Invalid curly code in '{}'", page.filename);
                 std::process::exit(1);
             }
         }
