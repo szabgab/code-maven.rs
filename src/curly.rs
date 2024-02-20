@@ -103,7 +103,7 @@ pub fn check_for_invalid_curly_code(pages: &Vec<Page>) {
                 continue;
             }
             if !in_code && row.contains("{%") {
-                log::error!("Invalid curly code in '{}'", page.filename);
+                log::error!("Invalid curly code '{}' in '{}'", row, page.filename);
                 std::process::exit(1);
             }
         }

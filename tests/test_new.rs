@@ -164,7 +164,7 @@ fn test_page_invalid_curly_code() {
 
     assert!(!outdir.exists());
     let (exit, out, err) = generate_site(root.to_str().unwrap(), outdir.to_str().unwrap());
-    assert!(out.contains("Invalid curly code in 'invalid_curly.md'"));
+    assert!(out.contains("Invalid curly code '{% opening liquid tag' in 'invalid_curly.md'"));
     //assert_eq!(out, "");
     assert_eq!(err, "");
     assert_eq!(exit, ExitStatus::from_raw(256));
