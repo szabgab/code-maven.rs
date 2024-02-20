@@ -6,5 +6,5 @@ description: video
 ---
 
 
-{% youtube="K6EvVvYnjrY" %}
+{% youtube id="K6EvVvYnjrY" %}
 

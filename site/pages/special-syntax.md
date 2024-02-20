@@ -26,7 +26,7 @@ and then link to it from the menu.
 
 
 ```
-{% youtube="K6EvVvYnjrY" %}
+{% youtube id="K6EvVvYnjrY" %}
 ```
 
 ## Embed text file (code)

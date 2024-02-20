@@ -24,7 +24,7 @@
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/youtube" />
     <id>https://ssg.rust.code-maven.com/youtube</id>
     <content type="html"><![CDATA[<p>In order to embed a YouTube video use the following <a href="/special-syntax">special syntax</a></p>
-<pre><code>{% youtube=&quot;K6EvVvYnjrY&quot; %}
+<pre><code>{% youtube id=&quot;K6EvVvYnjrY&quot; %}
 </code></pre>
 <p>This is the result:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/K6EvVvYnjrY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -129,7 +129,7 @@ and then link to it from the menu.</p>
 <pre><code>{% latest limit=3 tag=programming  %}
 </code></pre>
 <h2 class="title is-4"><a href="/youtube">Embed YouTube videos</a></h2>
-<pre><code>{% youtube=&quot;K6EvVvYnjrY&quot; %}
+<pre><code>{% youtube id=&quot;K6EvVvYnjrY&quot; %}
 </code></pre>
 <h2 class="title is-4">Embed text file (code)</h2>
 <pre><code>{% include file=&quot;&quot; %}
