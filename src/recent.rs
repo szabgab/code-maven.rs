@@ -1,4 +1,4 @@
-use chrono::{DateTime, Duration, Utc};
+use chrono::{DateTime, TimeDelta, Utc};
 
 use crate::{get_pages_path, read_config, read_pages, Config, Page, ToPath};
 
@@ -25,7 +25,7 @@ fn list_recent(config: &Config, pages: Vec<Page>, recent: &str, url: &str) {
 
     let days: i64 = recent.parse().unwrap();
     let now: DateTime<Utc> = Utc::now();
-    let date = now - Duration::days(days);
+    let date = now - TimeDelta::try_days(days).unwrap();
     let date = date.format("%Y-%m-%dT%H:%M:%S").to_string();
     //println!("{:?}", pages);
 
