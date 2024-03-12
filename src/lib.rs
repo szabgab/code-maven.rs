@@ -75,6 +75,9 @@ pub fn topath(text: &str) -> String {
         "\\" => "back-slash".to_string(),
         "]" => "closing-bracket".to_string(),
         "^" => "caret".to_string(),
+        ":?" => String::from("colon-question-mark"),
+        "$?" => String::from("dollar-question-mark"),
+        ":#?" => String::from("colon-number-sign-question-mark"),
         //        "_" => "underscore".to_string(),
         "`" => "backtick".to_string(), // grave accent
         _ => text.replace(' ', "_").to_lowercase(),
