@@ -127,6 +127,19 @@
   </entry>
 
   <entry>
+    <title>html &lt;&gt;  in the title</title>
+    <summary type="html"><![CDATA[include special html characters <> in the description as well.]]></summary>
+    <updated>2010-10-11T12:33:05</updated>
+    <link rel="alternate" type="text/html" href="https://rust.code-maven.com/html_title" />
+    <id>https://rust.code-maven.com/html_title</id>
+    <content type="html"><![CDATA[<p>text</p>
+]]></content>
+    <author>
+      <name>Gábor Szabó</name>
+    </author>
+  </entry>
+
+  <entry>
     <title>Recent pages</title>
     <summary type="html"><![CDATA[recently published pages]]></summary>
     <updated>2010-10-11T12:30:25</updated>
