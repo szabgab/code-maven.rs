@@ -9,6 +9,7 @@
     <title>Page with todos</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-11T12:30:01</updated>
+    <pubDate>2023-10-11T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/with_todo" />
     <id>https://rust.code-maven.com/with_todo</id>
     <content type="html"><![CDATA[<p>Some Content.</p>
@@ -28,6 +29,7 @@
     <title>Include</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-11T12:29:01</updated>
+    <pubDate>2023-10-11T12:29:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/include" />
     <id>https://rust.code-maven.com/include</id>
     <content type="html"><![CDATA[<p><strong><a href="https://github.com/szabgab/rust.code-maven.com/tree/main/examples/demo.yaml">examples/demo.yaml</a></strong></p>
@@ -44,6 +46,7 @@
     <title>Image without title</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-04T12:30:01</updated>
+    <pubDate>2023-10-04T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/img_without_title" />
     <id>https://rust.code-maven.com/img_without_title</id>
     <content type="html"><![CDATA[<p><img src="examples/files/code_maven_440x440.png" alt="" /></p>
@@ -57,6 +60,7 @@
     <title>Image with title</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-03T13:30:01</updated>
+    <pubDate>2023-10-03T13:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/img_with_title" />
     <id>https://rust.code-maven.com/img_with_title</id>
     <content type="html"><![CDATA[<p><img src="examples/files/code_maven_490_490.jpg" alt="a title" /></p>
@@ -70,6 +74,7 @@
     <title>Show how we use special tags</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-02T12:30:01</updated>
+    <pubDate>2023-10-02T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/usetags" />
     <id>https://rust.code-maven.com/usetags</id>
     <content type="html"><![CDATA[<p>Content</p>
@@ -83,6 +88,7 @@
     <title>Links</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-10-01T12:30:01</updated>
+    <pubDate>2023-10-01T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/links" />
     <id>https://rust.code-maven.com/links</id>
     <content type="html"><![CDATA[<ul>
@@ -101,6 +107,7 @@
     <title>About page</title>
     <summary type="html"><![CDATA[]]></summary>
     <updated>2023-08-11T12:30:01</updated>
+    <pubDate>2023-08-11T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/about" />
     <id>https://rust.code-maven.com/about</id>
     <content type="html"><![CDATA[<p>About the demo site.</p>
@@ -114,6 +121,7 @@
     <title>Index page</title>
     <summary type="html"><![CDATA[The text for the search engines]]></summary>
     <updated>2015-10-11T12:30:01</updated>
+    <pubDate>2015-10-11T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/" />
     <id>https://rust.code-maven.com/</id>
     <content type="html"><![CDATA[<p>Some Text.</p>
@@ -130,6 +138,7 @@
     <title>html &lt;&gt;  in the title</title>
     <summary type="html"><![CDATA[include special html characters <> in the description as well.]]></summary>
     <updated>2010-10-11T12:33:05</updated>
+    <pubDate>2010-10-11T12:33:05</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/html_title" />
     <id>https://rust.code-maven.com/html_title</id>
     <content type="html"><![CDATA[<p>text</p>
@@ -143,6 +152,7 @@
     <title>Recent pages</title>
     <summary type="html"><![CDATA[recently published pages]]></summary>
     <updated>2010-10-11T12:30:25</updated>
+    <pubDate>2010-10-11T12:30:25</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/recent" />
     <id>https://rust.code-maven.com/recent</id>
     <content type="html"><![CDATA[<h2 class="title is-4">The 5 most recently published pages</h2>
@@ -176,6 +186,7 @@
     <title>Programming</title>
     <summary type="html"><![CDATA[sigils are used in Perl]]></summary>
     <updated>2010-10-11T12:30:20</updated>
+    <pubDate>2010-10-11T12:30:20</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/programming" />
     <id>https://rust.code-maven.com/programming</id>
     <content type="html"><![CDATA[<h2 class="title is-4">3 most recent pages about programming</h2>
@@ -194,6 +205,7 @@
     <title>youtube</title>
     <summary type="html"><![CDATA[video]]></summary>
     <updated>2010-10-11T12:30:16</updated>
+    <pubDate>2010-10-11T12:30:16</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/youtube" />
     <id>https://rust.code-maven.com/youtube</id>
     <content type="html"><![CDATA[<iframe width="560" height="315" src="https://www.youtube.com/embed/K6EvVvYnjrY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -207,6 +219,7 @@
     <title>sigils $ @ %</title>
     <summary type="html"><![CDATA[sigils are used in Perl]]></summary>
     <updated>2010-10-11T12:30:06</updated>
+    <pubDate>2010-10-11T12:30:06</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/sigils" />
     <id>https://rust.code-maven.com/sigils</id>
     <content type="html"><![CDATA[<p>Sigils in perl: $ @ %</p>
@@ -220,6 +233,7 @@
     <title>var for variables</title>
     <summary type="html"><![CDATA[var variables]]></summary>
     <updated>2010-10-11T12:30:05</updated>
+    <pubDate>2010-10-11T12:30:05</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/var" />
     <id>https://rust.code-maven.com/var</id>
     <content type="html"><![CDATA[<p>var is in JavaScript</p>
@@ -233,6 +247,7 @@
     <title>function for function</title>
     <summary type="html"><![CDATA[JavaScript functions]]></summary>
     <updated>2010-10-11T12:30:03</updated>
+    <pubDate>2010-10-11T12:30:03</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/function" />
     <id>https://rust.code-maven.com/function</id>
     <content type="html"><![CDATA[<p>function is for functions in JavaScript</p>
@@ -246,6 +261,7 @@
     <title>sub for function</title>
     <summary type="html"><![CDATA[Perl functions]]></summary>
     <updated>2010-10-11T12:30:02</updated>
+    <pubDate>2010-10-11T12:30:02</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/sub" />
     <id>https://rust.code-maven.com/sub</id>
     <content type="html"><![CDATA[<p>sub is for functions in  Perl</p>
@@ -259,6 +275,7 @@
     <title>fn for function</title>
     <summary type="html"><![CDATA[Rust]]></summary>
     <updated>2010-10-11T12:30:01</updated>
+    <pubDate>2010-10-11T12:30:01</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/fn" />
     <id>https://rust.code-maven.com/fn</id>
     <content type="html"><![CDATA[<p>fn is for functions in Rust</p>
@@ -272,6 +289,7 @@
     <title>def for function</title>
     <summary type="html"><![CDATA[Python function]]></summary>
     <updated>2010-1-11T12:30:02</updated>
+    <pubDate>2010-1-11T12:30:02</pubDate>
     <link rel="alternate" type="text/html" href="https://rust.code-maven.com/def" />
     <id>https://rust.code-maven.com/def</id>
     <content type="html"><![CDATA[<p>def is for functions in Python</p>
