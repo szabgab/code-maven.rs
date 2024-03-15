@@ -6,6 +6,8 @@ use std::io::Write;
 use std::path::Path;
 use std::path::PathBuf;
 
+use feed_rs::parser;
+
 use crate::{
     collect_backlinks, copy_files, filter_words, get_files_to_copy, get_pages_path, markdown_pages,
     read_config, read_pages, topath, Author, Config, Page, ToPath,
@@ -64,7 +66,7 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);
     render_sitemap(&pages, &format!("{outdir}/sitemap.xml"), url);
-    render_atom(&config, &pages, &format!("{outdir}/atom"), url);
+    render_atom(&config, &pages, &format!("{outdir}/atom"), url)?;
     render_archive(&config, &pages, outdir, url);
     render_robots_txt(&format!("{outdir}/robots.txt"), url);
 
@@ -121,7 +123,7 @@ fn render_sitemap(pages: &[Page], path: &str, url: &str) {
     writeln!(&mut file, "{output}").unwrap();
 }
 
-fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
+fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) -> Result<(), String> {
     log::info!("render atom feed");
     let pages: Vec<&Page> = pages
         .iter()
@@ -149,8 +151,16 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
     });
     let output = template.render(&globals).unwrap();
 
+    match parser::parse(output.as_bytes()) {
+        Ok(_) => {}
+        Err(err) => {
+            return Err(format!("Parsing feed failed with error {err}"));
+        }
+    };
+
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{output}").unwrap();
+    Ok(())
 }
 
 fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
