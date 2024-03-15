@@ -127,6 +127,9 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) {
         .iter()
         .filter(|page| page.published)
         .filter(|page| page.redirect.is_none())
+        .filter(|page| page.url_path != "archive") // exclude archive
+        //.filter(|page| !page.url_path.is_empty()) // exclude main page
+        //.filter(|page| !page.title.is_empty())
         .collect();
 
     let template = include_str!("../templates/atom.xml");
