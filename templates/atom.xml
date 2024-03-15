@@ -6,7 +6,7 @@
 <updated>{{updated}}</updated>
 {% for page in pages %}
   <entry>
-    <title>{{page.title}}</title>
+    <title>{{page.title | escape}}</title>
     <summary type="html"><![CDATA[{{page.description}}]]></summary>
     <updated>{{page.timestamp}}</updated>
     <link rel="alternate" type="text/html" href="{{url}}/{{page.url_path}}" />
