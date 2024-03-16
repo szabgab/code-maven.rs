@@ -134,6 +134,17 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) -> Result
         //.filter(|page| !page.title.is_empty())
         .collect();
 
+    let pages = match &config.atom {
+        Some(atom) => {
+            if pages.len() < atom.max {
+                &*pages
+            } else {
+                &pages[0..atom.max]
+            }
+        }
+        None => &*pages,
+    };
+
     let template = include_str!("../templates/atom.xml");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)

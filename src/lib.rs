@@ -93,6 +93,12 @@ pub struct ConfigNavbarLink {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
+pub struct ConfigAtom {
+    pub max: usize,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
 pub struct ConfigNavbar {
     pub start: Vec<ConfigNavbarLink>,
     pub end: Vec<ConfigNavbarLink>,
@@ -162,6 +168,8 @@ pub struct Config {
 
     #[serde(default = "get_empty_string")]
     pub related_pages_title: String,
+
+    pub atom: Option<ConfigAtom>,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
