@@ -8,8 +8,8 @@
   <entry>
     <title>Embed youtube video</title>
     <summary type="html"><![CDATA[video]]></summary>
-    <updated>2024-02-18T16:30:16</updated>
-    <pubDate>2024-02-18T16:30:16</pubDate>
+    <updated>2024-02-18T16:30:16Z</updated>
+    <pubDate>2024-02-18T16:30:16Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/youtube" />
     <id>https://ssg.rust.code-maven.com/youtube</id>
     <content type="html"><![CDATA[<p>In order to embed a YouTube video use the following <a href="/special-syntax">special syntax</a></p>
@@ -26,8 +26,8 @@
   <entry>
     <title>Most recent articles</title>
     <summary type="html"><![CDATA[List the most recent articles]]></summary>
-    <updated>2024-02-18T16:00:01</updated>
-    <pubDate>2024-02-18T16:00:01</pubDate>
+    <updated>2024-02-18T16:00:01Z</updated>
+    <pubDate>2024-02-18T16:00:01Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/recent" />
     <id>https://ssg.rust.code-maven.com/recent</id>
     <content type="html"><![CDATA[<p>Use this <a href="/special-syntax">special syntax</a></p>
@@ -60,8 +60,8 @@
   <entry>
     <title>Front matter (per page meta data)</title>
     <summary type="html"><![CDATA[Each page must have some meta-data at the top. Some fields are optional.]]></summary>
-    <updated>2024-02-14T17:40:01</updated>
-    <pubDate>2024-02-14T17:40:01</pubDate>
+    <updated>2024-02-14T17:40:01Z</updated>
+    <pubDate>2024-02-14T17:40:01Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/front-matter" />
     <id>https://ssg.rust.code-maven.com/front-matter</id>
     <content type="html"><![CDATA[<p>At the top of each page there must be a section for the front-matter that is in YAML format.</p>
@@ -108,8 +108,8 @@ show_related: true                   # If the `show_related` field in the config
   <entry>
     <title>Special syntax</title>
     <summary type="html"><![CDATA[Special syntax beyond the regular Markdown]]></summary>
-    <updated>2024-02-14T08:00:01</updated>
-    <pubDate>2024-02-14T08:00:01</pubDate>
+    <updated>2024-02-14T08:00:01Z</updated>
+    <pubDate>2024-02-14T08:00:01Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/special-syntax" />
     <id>https://ssg.rust.code-maven.com/special-syntax</id>
     <content type="html"><![CDATA[<h2 class="title is-4">Show the N <a href="/recent">most recently published articles</a></h2>
@@ -135,8 +135,8 @@ and then link to it from the menu.</p>
   <entry>
     <title>Where is it used?</title>
     <summary type="html"><![CDATA[Where is this Static Site Generator used?]]></summary>
-    <updated>2024-02-06T10:30:01</updated>
-    <pubDate>2024-02-06T10:30:01</pubDate>
+    <updated>2024-02-06T10:30:01Z</updated>
+    <pubDate>2024-02-06T10:30:01Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/where-is-it-used" />
     <id>https://ssg.rust.code-maven.com/where-is-it-used</id>
     <content type="html"><![CDATA[<ul>
@@ -168,8 +168,8 @@ and then link to it from the menu.</p>
   <entry>
     <title>First version of the Code Maven Static Site Generator</title>
     <summary type="html"><![CDATA[Static Site Generator]]></summary>
-    <updated>2023-11-20T15:50:02</updated>
-    <pubDate>2023-11-20T15:50:02</pubDate>
+    <updated>2023-11-20T15:50:02Z</updated>
+    <pubDate>2023-11-20T15:50:02Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/first-version" />
     <id>https://ssg.rust.code-maven.com/first-version</id>
     <content type="html"><![CDATA[<p>The first public version of the Code Maven Static Site Generator.</p>
@@ -195,8 +195,8 @@ That would encourage me to make the system more generic.</p>
   <entry>
     <title>About the Code Maven Static Site Generator</title>
     <summary type="html"><![CDATA[Static Site Generator]]></summary>
-    <updated>2023-11-08T11:30:02</updated>
-    <pubDate>2023-11-08T11:30:02</pubDate>
+    <updated>2023-11-08T11:30:02Z</updated>
+    <pubDate>2023-11-08T11:30:02Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/about" />
     <id>https://ssg.rust.code-maven.com/about</id>
     <content type="html"><![CDATA[<p>Sites using this project:</p>
@@ -223,8 +223,8 @@ That would encourage me to make the system more generic.</p>
   <entry>
     <title>Code Maven Static Site Generator</title>
     <summary type="html"><![CDATA[Static Site Generator]]></summary>
-    <updated>2023-11-08T11:30:01</updated>
-    <pubDate>2023-11-08T11:30:01</pubDate>
+    <updated>2023-11-08T11:30:01Z</updated>
+    <pubDate>2023-11-08T11:30:01Z</pubDate>
     <link rel="alternate" type="text/html" href="https://ssg.rust.code-maven.com/" />
     <id>https://ssg.rust.code-maven.com/</id>
     <content type="html"><![CDATA[<p>This is the static site generator behind the <a href="https://rust.code-maven.com/">Rust Maven</a> web site and a <a href="/where-is-it-used">couple of other sites</a>.</p>
