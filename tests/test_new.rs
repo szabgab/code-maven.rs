@@ -114,7 +114,7 @@ fn test_new_generate() {
     assert!(outdir.join("index.html").exists());
     assert!(outdir.join("robots.txt").exists());
     assert!(outdir.join("sitemap.xml").exists());
-    assert!(outdir.join("atom").exists());
+    assert!(outdir.join("atom.xml").exists());
     assert!(outdir.join("archive.html").exists());
     assert!(outdir.join("about.html").exists());
 

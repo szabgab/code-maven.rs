@@ -66,7 +66,7 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
     render_pages(&config, &pages, outdir, url);
     render_tag_pages(&config, &pages, &tags, outdir, url);
     render_sitemap(&pages, &format!("{outdir}/sitemap.xml"), url);
-    render_atom(&config, &pages, &format!("{outdir}/atom"), url)?;
+    render_atom(&config, &pages, &format!("{outdir}/atom.xml"), url)?;
     render_archive(&config, &pages, outdir, url);
     render_robots_txt(&format!("{outdir}/robots.txt"), url);
 
