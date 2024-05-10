@@ -14,7 +14,7 @@ simple_logger = "4.3"
 log = "0.4"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
-markdown = { git = "https://github.com/wooorm/markdown-rs.git" }
+markdown = "1.0.0-alpha.17"
 regex = "1.10"
 chrono = "0.4"
 sendgrid = { version = "0.20", features = ["blocking"] }
