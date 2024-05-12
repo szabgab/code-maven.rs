@@ -70,7 +70,7 @@ fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
 }
 
 fn process_curly_include(config: &Config, root: &str, text: &str) -> String {
-    log::info!("process_curly_include for {text}");
+    log::info!("process_curly_include for string {text:?}");
     let ext_to_language: HashMap<String, String> = read_languages();
 
     let re = Regex::new(r#"\{%\s+include\s+file="([^"]+)"\s+%\}"#).unwrap();

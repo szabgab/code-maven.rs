@@ -417,11 +417,11 @@ pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, S
             let mut front_matter = String::new();
             for line in reader.lines() {
                 let line = line.unwrap();
-                log::debug!("line '{}'", line);
+                // log::debug!("line '{}'", line);
                 if in_front_matter {
                     if line == "---" {
                         in_front_matter = false;
-                        log::info!("front_matter: '{}'", &front_matter);
+                        // log::info!("front_matter: '{}'", &front_matter);
                         match serde_yaml::from_str(&front_matter) {
                             Ok(val) => page = val,
                             Err(err) => {
