@@ -1,5 +1,4 @@
 Sitemap: https://rust.code-maven.com/sitemap.xml
-Sitemap: https://rust.code-maven.com/slides/sitemap.xml
 
 User-agent: *
 
