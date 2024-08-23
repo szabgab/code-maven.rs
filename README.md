@@ -60,6 +60,15 @@ Install [rustatic](https://rustatic.code-maven.com/) and run the following to vi
 rustatic --path _site/ --indexfile index.html --nice --port 3000
 ```
 
+## Sending emails
+
+code-maven sendgrid --mail emails/content.md --tofile list-of-addresses.csv
+
+## Logging / Debugging
+
+code-maven --debug sendgrid
+
+
 ## Testing
 
 ```
@@ -83,3 +92,5 @@ Clones several public repositories of site and check if they can be generated? T
 ```
 ./check_sites.sh
 ```
+
+
