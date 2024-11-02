@@ -1,3 +1,5 @@
+#![allow(clippy::std_instead_of_core)]
+
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
@@ -220,14 +222,21 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
         height: 500,
         text: config.archive.title.clone(),
         background_color: "FFFFFF".to_owned(),
+        embed: vec![],
+        lines: vec![],
+        size: 24,
     };
-    banner_builder::draw_image(&banner, &image_file);
+
+    // Currently we don't embed any images in the banner
+    // so we can use any path.
+    let root = Path::new(".");
+    banner_builder::draw_image(&banner, root, &image_file);
 }
 
 fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &str, url: &str) {
     log::info!("render_tag_pages");
 
-    #[allow(clippy::iter_over_hash_type)]
+    #[expect(clippy::iter_over_hash_type)]
     for tag in tags.keys() {
         let mut pages_with_tag: Vec<Page> = vec![];
         for page in pages {
@@ -362,8 +371,16 @@ pub fn render_and_save_single_page(
         height: 500,
         text: page.title.clone(),
         background_color: "FFFFFF".to_owned(),
+        embed: vec![],
+        lines: vec![],
+        size: 24,
     };
-    let image = banner_builder::draw_image(&banner, &image_file);
+
+    // Currently we don't embed any images in the banner
+    // so we can use any path.
+    let root = Path::new(".");
+
+    let image = banner_builder::draw_image(&banner, root, &image_file);
 
     match render_single_page(config, page, url, image, image_path) {
         Ok(output) => {

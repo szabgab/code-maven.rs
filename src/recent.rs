@@ -16,7 +16,7 @@ pub fn get_recent(root: &str, path_to_pages: &str, days: &str) -> Result<(), Str
     Ok(())
 }
 
-#[allow(clippy::print_stdout)]
+#[expect(clippy::print_stdout)]
 fn list_recent(config: &Config, pages: Vec<Page>, recent: &str, url: &str) {
     if recent.is_empty() {
         return;

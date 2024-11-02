@@ -13,14 +13,14 @@ pub fn list_todo(root: &str, path_to_pages: &str) -> Result<(), String> {
         if page.redirect.is_some() {
             continue;
         }
-        #[allow(clippy::print_stdout)]
+        #[expect(clippy::print_stdout)]
         if !page.todo.is_empty() {
             println!(
                 "{:<30} {}",
                 pages_path.join(page.filename).as_os_str().to_str().unwrap(),
                 page.title
             );
-            #[allow(clippy::print_stdout)]
+            #[expect(clippy::print_stdout)]
             for todo in page.todo {
                 println!("   {todo}");
             }

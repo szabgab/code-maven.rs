@@ -831,7 +831,7 @@ fn test_invalid_key() {
     }
 }
 
-#[allow(unused_macros)]
+#[expect(unused_macros)]
 macro_rules! s(($result:expr) => ($result.to_string()));
 
 #[test]

@@ -48,7 +48,7 @@ fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
         let tag = caps.get(2);
 
         let mut html = String::new();
-        #[allow(clippy::needless_range_loop)]
+        #[expect(clippy::needless_range_loop)]
         for ix in 1..all_pages.len() {
             if tag.is_some() {
                 let tag_text = &tag.unwrap().as_str().to_string();

@@ -75,3 +75,6 @@ non_ascii_literal = "allow"
 print_stdout = "allow"
 needless_raw_strings = "allow"
 needless_raw_string_hashes = "allow"
+
+allow_attributes_without_reason = "allow"
+allow_attributes = "allow"
