@@ -233,6 +233,10 @@ pub struct Page {
     // TODO: make use of this field to include this page in the archive page
     #[serde(default = "get_true")]
     pub archive: bool,
+
+    // TODO: add a list of types
+    #[serde(default = "get_empty_vector")]
+    pub types: Vec<String>,
 }
 
 impl Page {
@@ -255,6 +259,7 @@ impl Page {
             original: String::new(),
             translator: String::new(),
             archive: false,
+            types: vec![],
         }
     }
 }
