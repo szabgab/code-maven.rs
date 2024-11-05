@@ -33,9 +33,16 @@ function check_public_projects
     for url in \
         https://github.com/moshe742/my_blog \
         https://github.com/szabgab/rust.code-maven.com \
+        https://github.com/szabgab/python.code-maven.com \
+        https://github.com/szabgab/front.code-maven.com \
+        https://github.com/szabgab/hu.code-maven.com \
+        https://github.com/szabgab/es.code-maven.com \
+        https://github.com/szabgab/rust-he.code-maven.com \
+        https://github.com/szabgab/python-he.code-maven.com \
         https://github.com/szabgab/rust.org.il \
         https://github.com/szabgab/banner-builder.rs \
         https://github.com/szabgab/site-checker.rs
+
     do
         echo "Processing $url"
         cd $root
