@@ -217,6 +217,22 @@ pub struct Page {
 
     #[serde(default = "get_true")]
     pub show_related: bool,
+
+    // TODO: add a list of books
+    #[serde(default = "get_empty_vector")]
+    pub books: Vec<String>,
+
+    // TODO: need to make use of this field for cross-site linking
+    #[serde(default = "get_empty_string")]
+    pub original: String,
+
+    // TODO: add a list of translators (same as authors) and display them on the page
+    #[serde(default = "get_empty_string")]
+    pub translator: String,
+
+    // TODO: make use of this field to include this page in the archive page
+    #[serde(default = "get_true")]
+    pub archive: bool,
 }
 
 impl Page {
@@ -235,6 +251,10 @@ impl Page {
             redirect: None,
             show_related: true,
             author: String::new(),
+            books: vec![],
+            original: String::new(),
+            translator: String::new(),
+            archive: false,
         }
     }
 }
@@ -683,6 +703,7 @@ fn test_read_index() {
         filename: "index.md".to_string(),
         content: "\nSome Text.\n\nSome more text after an empty row.\n\n## A title with two hash-marks\n\nMore text [with TODO](/with_todo).\n".to_string(),
         published: true,
+        archive: true,
         ..Page::default()
     };
     //let expected = (expected_page, vec![]);
@@ -711,6 +732,7 @@ fn test_read_todo() {
         ],
         tags: vec!["println!".to_string(), "fn".to_string()],
         published: true,
+        archive: true,
         ..Page::default()
     };
     //let expected = (expected_page, vec![]);
@@ -735,6 +757,7 @@ fn test_img_with_title() {
         content: "\n\n![a title](examples/files/code_maven_490_490.jpg)\n\n".to_string(),
         tags: vec!["img".to_string()],
         published: true,
+        archive: true,
         ..Page::default()
     };
     // let expected = (
@@ -756,6 +779,7 @@ fn test_links() {
         filename: "links.md".to_string(),
         content: "\n* An [internal link](/with_todo) and more text.\n* An [external link](https://rust-digger.code-maven.com/) and more text.\n\n[sigils](/sigils) - another internal link to test the `show_related: false` in the front-matter of the sigils page\n[sub](/sub) - another internal link to test the `show_related: true` in the front-matter of the sigils page\n".to_string(),
         published: true,
+        archive: true,
         ..Page::default()
     };
     //let expected = (expected_page, vec![]);
@@ -831,8 +855,8 @@ fn test_invalid_key() {
     }
 }
 
-#[expect(unused_macros)]
-macro_rules! s(($result:expr) => ($result.to_string()));
+#[allow(unused_macros)]
+macro_rules! str(($result:expr) => ($result.to_string()));
 
 #[test]
 fn test_config_of_demo() {
@@ -846,9 +870,9 @@ fn test_config_of_demo() {
         config.authors,
         vec![Author {
             name: "Gabor Szabo".to_string(),
-            nickname: s!("szabgab"),
-            picture: s!("szabgab.png"),
-            text: s!(""),
+            nickname: str!("szabgab"),
+            picture: str!("szabgab.png"),
+            text: str!(""),
         }]
     );
 }
@@ -865,9 +889,9 @@ fn test_config_with_author_files() {
         config.authors,
         vec![Author {
             name: "Gabor Szabo".to_string(),
-            nickname: s!("szabgab"),
-            picture: s!("szabgab.png"),
-            text: s!(
+            nickname: str!("szabgab"),
+            picture: str!("szabgab.png"),
+            text: str!(
                 r#"<p><a href="https://szabgab.com/">Gabor Szabo</a>, the author of the Rust Maven web site
 teaches Rust, Python, git, CI, and testing.</p>
 "#

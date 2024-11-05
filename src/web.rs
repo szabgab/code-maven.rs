@@ -238,6 +238,10 @@ fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &st
 
     #[expect(clippy::iter_over_hash_type)]
     for tag in tags.keys() {
+        if tag == ".." {
+            log::error!("We cannot save a file for a tag of 2 dots: '..'");
+            continue;
+        }
         let mut pages_with_tag: Vec<Page> = vec![];
         for page in pages {
             for xtag in &page.tags {
