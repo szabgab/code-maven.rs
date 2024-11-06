@@ -27,6 +27,9 @@ enum Commands {
         root: String,
 
         #[arg(long, default_value = "")]
+        config: String,
+
+        #[arg(long, default_value = "")]
         pages: String,
 
         #[arg(long, default_value = "_site")]
@@ -89,9 +92,10 @@ fn main() {
     let result = match &args.command {
         Commands::Web {
             root,
+            config,
             pages,
             outdir,
-        } => web(root, pages, outdir),
+        } => web(root, config, pages, outdir),
         Commands::Recent { root, pages, days } => get_recent(root, pages, days),
         Commands::New { root } => new_site(root),
         Commands::Sendgrid { root, tofile, mail } => cm_sendgrid(root, mail, tofile),

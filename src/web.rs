@@ -12,7 +12,7 @@ use feed_rs::parser;
 
 use crate::{
     collect_backlinks, copy_files, filter_words, get_files_to_copy, get_pages_path, markdown_pages,
-    read_config, read_pages, topath, Author, Config, Page, ToPath,
+    read_config, read_config_file, read_pages, topath, Author, Config, Page, ToPath,
 };
 
 use crate::curly::{check_for_invalid_curly_code, process_curly_tags};
@@ -22,7 +22,7 @@ pub type Partials = liquid::partials::EagerCompiler<liquid::partials::InMemorySo
 type Tags = HashMap<String, i32>;
 const IMG: &str = "img";
 
-pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> {
+pub fn web(root: &str, config_path: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> {
     log::info!("Generate pages for web site");
 
     if !Path::new(outdir).exists() {
@@ -38,7 +38,11 @@ pub fn web(root: &str, path_to_pages: &str, outdir: &str) -> Result<(), String> 
         fs::create_dir_all(images_dir).unwrap();
     }
 
-    let config = read_config(root)?;
+    let config = if config_path.is_empty() {
+        read_config(root)?
+    } else {
+        read_config_file(PathBuf::from(config_path), root)?
+    };
     log::info!("config");
     let url = &config.url;
     log::info!("pages_path");
