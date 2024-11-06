@@ -242,6 +242,14 @@ fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &st
             log::error!("We cannot save a file for a tag of 2 dots: '..'");
             continue;
         }
+        if tag.contains('/') && tag != "/" {
+            log::error!("For now we don't save tags with / in them:: '{tag}'");
+            continue;
+        }
+        // if !tag.chars().all(char::is_alphanumeric) {
+        //     log::error!("For now we don't save tags with non alphanumeric: '{tag}'");
+        //     continue;
+        // }
         let mut pages_with_tag: Vec<Page> = vec![];
         for page in pages {
             for xtag in &page.tags {
@@ -308,7 +316,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
     let output = template.render(&globals).unwrap();
 
     log::info!("saving file at {:?}", path);
-    let mut file = File::create(path).unwrap();
+    let mut file = File::create(&path).unwrap_or_else(|_| panic!("Could not create file {path:?}"));
     writeln!(&mut file, "{output}").unwrap();
 }
 
