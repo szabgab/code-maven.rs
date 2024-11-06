@@ -617,6 +617,10 @@ fn read_languages() -> HashMap<String, String> {
 
 pub fn read_config(root: &str) -> Result<Config, String> {
     let filepath = std::path::Path::new(root).join("config.yaml");
+    read_config_file(filepath, root)
+}
+
+pub fn read_config_file(filepath: PathBuf, authors: &str) -> Result<Config, String> {
     log::info!("read_config {:?}", filepath);
 
     let mut config: Config = match std::fs::File::open(&filepath) {
@@ -650,7 +654,7 @@ pub fn read_config(root: &str) -> Result<Config, String> {
         .authors
         .into_iter()
         .map(|mut author| {
-            let author_file = std::path::Path::new(root)
+            let author_file = std::path::Path::new(authors)
                 .join("authors")
                 .join(format!("{}.md", author.nickname));
             let content = std::fs::read_to_string(author_file).unwrap_or_default();
