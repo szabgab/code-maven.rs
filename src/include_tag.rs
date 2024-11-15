@@ -119,7 +119,8 @@ impl Renderable for Include {
             std::process::exit(1);
         };
 
-        let file_content = std::fs::read_to_string(include_path).replace("Failed to read file")?;
+        let file_content = std::fs::read_to_string(&include_path)
+            .replace(format!("Failed to read file {include_path:?}"))?;
         write!(
             writer,
             "**[{}]({}/tree/{}/{})**\n```{}\n{}\n```\n",
