@@ -68,7 +68,6 @@ struct Include {
 }
 
 #[allow(clippy::missing_trait_methods)]
-#[allow(clippy::unwrap_in_result)]
 impl Renderable for Include {
     fn render_to(&self, writer: &mut dyn Write, runtime: &dyn Runtime) -> Result<()> {
         let ext_to_language: HashMap<String, String> = read_languages();
@@ -104,19 +103,43 @@ impl Renderable for Include {
         let path = Path::new(&self.file);
         let include_path = Path::new(&root).join(path);
 
-        let file_name = path.file_name().unwrap().to_str().unwrap();
-        let extension = path.extension().unwrap().to_str().unwrap();
+        let file_name = path
+            .file_name()
+            .ok_or(liquid_core::error::Error::with_msg(format!(
+                "file_name not found in include tag '{}'",
+                self.file
+            )))?
+            .to_str()
+            .ok_or(liquid_core::error::Error::with_msg(format!(
+                "file_name could not convert to string in include tag '{}'",
+                self.file
+            )))?;
 
-        println!("extension: {extension}");
         // TODO remove the hard coded mapping of .gitignore
         // TODO properly handle files that do not have an extension
         let language = if file_name == ".gitignore" {
             "gitignore"
-        } else if ext_to_language.contains_key(extension) {
-            ext_to_language[extension].as_str()
         } else {
-            log::error!("Unhandled extension {extension}");
-            std::process::exit(1);
+            let extension = path
+                .extension()
+                .ok_or(liquid_core::error::Error::with_msg(format!(
+                    "extension not found in include tag '{}'",
+                    self.file
+                )))?
+                .to_str()
+                .ok_or(liquid_core::error::Error::with_msg(format!(
+                    "extension could not convert to string in include tag {}",
+                    self.file
+                )))?;
+
+            println!("extension: {extension}");
+
+            if ext_to_language.contains_key(extension) {
+                ext_to_language[extension].as_str()
+            } else {
+                log::error!("Unhandled extension {extension}");
+                std::process::exit(1);
+            }
         };
 
         let file_content = std::fs::read_to_string(&include_path)
