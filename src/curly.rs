@@ -3,7 +3,7 @@ use std::path::Path;
 
 use regex::{Captures, Regex};
 
-use crate::{include_file, read_languages, Config, Page};
+use crate::{include_file, latest_tag, read_languages, youtube_tag, Config, Page};
 
 pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
@@ -23,7 +23,7 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                         row.to_owned()
                     } else {
                         let row = process_curly_tags_for_text(row, &all_pages);
-                        let row = process_curly_tags_youtube(&row);
+
                         process_curly_include(config, root, &row)
                     }
                 })
@@ -35,16 +35,10 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
     pages
 }
 
-fn process_curly_tags_youtube(text: &str) -> String {
-    let re = Regex::new(r#"\{%\s+youtube\s+id="([^"]+)"\s+%\}"#).unwrap();
-    re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
-}
-
-use crate::latest_tag;
-
 fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
     let template = liquid::ParserBuilder::with_stdlib()
         .tag(latest_tag::LatestTag)
+        .tag(youtube_tag::YoutubeTag)
         .build()
         .unwrap()
         .parse(text)

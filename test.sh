@@ -1,4 +1,4 @@
-set -e
+set -ex
 
 function run_tests() {
     cargo test

@@ -21,6 +21,7 @@ pub mod notifications;
 pub mod recent;
 pub mod todo;
 pub mod web;
+pub mod youtube_tag;
 
 #[derive(Clone, ParseFilter, FilterReflection)]
 #[filter(
