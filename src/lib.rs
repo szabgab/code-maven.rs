@@ -15,6 +15,7 @@ use liquid_core::{
 
 pub mod curly;
 pub mod drafts;
+pub mod latest_tag;
 pub mod new;
 pub mod notifications;
 pub mod recent;

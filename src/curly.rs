@@ -40,33 +40,19 @@ fn process_curly_tags_youtube(text: &str) -> String {
     re.replace_all(text, r#"<iframe width="560" height="315" src="https://www.youtube.com/embed/$1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>"#).to_string()
 }
 
+use crate::latest_tag;
+
 fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
-    let re = Regex::new(r#"\{%\s+latest\s+limit=(\d+)\s+(?:tag="([^"]+)"\s+)?%\}"#).unwrap();
-    re.replace_all(text, |caps: &Captures| {
-        let mut count = 0;
-        let limit = caps[1].parse::<usize>().unwrap();
-        let tag = caps.get(2);
+    let template = liquid::ParserBuilder::with_stdlib()
+        .tag(latest_tag::LatestTag)
+        .build()
+        .unwrap()
+        .parse(text)
+        .unwrap();
 
-        let mut html = String::new();
-        #[expect(clippy::needless_range_loop)]
-        for ix in 1..all_pages.len() {
-            if tag.is_some() {
-                let tag_text = &tag.unwrap().as_str().to_string();
-                if !all_pages[ix].tags.contains(tag_text) {
-                    continue;
-                }
-            }
-            html += format!("* [{}](/{})", all_pages[ix].title, all_pages[ix].url_path).as_str();
-            html += "\n";
-            count += 1;
-            if 0 < limit && limit <= count {
-                break;
-            }
-        }
+    let globals = liquid::object!({"items": all_pages});
 
-        html
-    })
-    .to_string()
+    template.render(&globals).unwrap()
 }
 
 fn process_curly_include(config: &Config, root: &str, text: &str) -> String {
