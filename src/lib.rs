@@ -15,6 +15,7 @@ use liquid_core::{
 
 pub mod curly;
 pub mod drafts;
+pub mod include_tag;
 pub mod latest_tag;
 pub mod new;
 pub mod notifications;
@@ -578,28 +579,6 @@ fn copy_file(source_path: &Path, destination_path: &PathBuf) {
         fs::create_dir_all(destination_dir).unwrap();
     }
     fs::copy(source_path, destination_path).unwrap();
-}
-
-fn include_file(config: &Config, include_path: PathBuf, path: &Path, language: &str) -> String {
-    log::info!("include_path: {:?}", include_path);
-
-    match std::fs::read_to_string(&include_path) {
-        Ok(file_content) => {
-            format!(
-                "**[{}]({}/tree/{}/{})**\n```{}\n{}\n```\n",
-                path.display(),
-                &config.repo,
-                &config.branch,
-                path.display(),
-                language,
-                &file_content
-            )
-        }
-        Err(err) => {
-            log::info!("Failed to include file {:?}: {}", include_path, err);
-            "MISSING".to_string()
-        }
-    }
 }
 
 fn read_languages() -> HashMap<String, String> {

@@ -1,9 +1,4 @@
-use std::collections::HashMap;
-use std::path::Path;
-
-use regex::{Captures, Regex};
-
-use crate::{include_file, latest_tag, read_languages, youtube_tag, Config, Page};
+use crate::{include_tag, latest_tag, youtube_tag, Config, Page};
 
 pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
     let all_pages = pages.clone();
@@ -22,9 +17,7 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                     if in_code {
                         row.to_owned()
                     } else {
-                        let row = process_curly_tags_for_text(row, &all_pages);
-
-                        process_curly_include(config, root, &row)
+                        process_curly_tags_for_text(config, root, row, &all_pages)
                     }
                 })
                 .collect::<Vec<String>>()
@@ -35,43 +28,24 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
     pages
 }
 
-fn process_curly_tags_for_text(text: &str, all_pages: &[Page]) -> String {
+fn process_curly_tags_for_text(
+    config: &Config,
+    root: &str,
+    text: &str,
+    all_pages: &[Page],
+) -> String {
     let template = liquid::ParserBuilder::with_stdlib()
         .tag(latest_tag::LatestTag)
         .tag(youtube_tag::YoutubeTag)
+        .tag(include_tag::IncludeTag)
         .build()
         .unwrap()
         .parse(text)
         .unwrap();
 
-    let globals = liquid::object!({"items": all_pages});
+    let globals = liquid::object!({"items": all_pages, "branch": config.branch, "repo": config.repo , "root": root});
 
     template.render(&globals).unwrap()
-}
-
-fn process_curly_include(config: &Config, root: &str, text: &str) -> String {
-    log::info!("process_curly_include for string {text:?}");
-    let ext_to_language: HashMap<String, String> = read_languages();
-
-    let re = Regex::new(r#"\{%\s+include\s+file="([^"]+)"\s+%\}"#).unwrap();
-    let result = re.replace_all(text, |caps: &Captures| {
-        let path = Path::new(&caps[1]);
-        let include_path = Path::new(root).join(path);
-        log::debug!("path '{:?}'", path);
-        // TODO remove the hard coded mapping of .gitignore
-        // TODO properly handle files that do not have an extension
-        if path.file_name().unwrap().to_str().unwrap() == ".gitignore" {
-            include_file(config, include_path, path, "gitignore")
-        } else if ext_to_language.contains_key(path.extension().unwrap().to_str().unwrap()) {
-            let language = ext_to_language[path.extension().unwrap().to_str().unwrap()].as_str();
-            include_file(config, include_path, path, language)
-        } else {
-            log::error!("Unhandled include statement for row {text}");
-            std::process::exit(1);
-        }
-    });
-
-    result.to_string()
 }
 
 pub fn check_for_invalid_curly_code(pages: &Vec<Page>) {
