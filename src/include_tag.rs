@@ -34,7 +34,7 @@ impl ParseTag for IncludeTag {
         mut arguments: TagTokenIter<'_>,
         _options: &Language,
     ) -> Result<Box<dyn Renderable>> {
-        println!("Parsing include tag");
+        //println!("Parsing include tag");
         arguments
             .expect_next("\"file\" expected.")?
             .expect_str("file")
@@ -52,7 +52,7 @@ impl ParseTag for IncludeTag {
         };
 
         arguments.expect_nothing()?;
-        println!("Parsing done");
+        //println!("Parsing done");
 
         Ok(Box::new(Include { file }))
     }
@@ -71,7 +71,7 @@ struct Include {
 impl Renderable for Include {
     fn render_to(&self, writer: &mut dyn Write, runtime: &dyn Runtime) -> Result<()> {
         let ext_to_language: HashMap<String, String> = read_languages();
-        println!("render_to");
+        //println!("render_to");
 
         let root = match runtime.get(&[Scalar::new("root")]) {
             Ok(value) => value.to_kstr().into_string(),
@@ -132,7 +132,7 @@ impl Renderable for Include {
                     self.file
                 )))?;
 
-            println!("extension: {extension}");
+            //println!("extension: {extension}");
 
             if ext_to_language.contains_key(extension) {
                 ext_to_language[extension].as_str()
