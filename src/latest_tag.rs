@@ -130,6 +130,9 @@ impl Renderable for Latest {
                     if self.tag.is_some() && !tags.contains(&selected_tag) {
                         continue;
                     }
+                    if url_path == "archive" {
+                        continue;
+                    }
 
                     writeln!(writer, "* [{title}](/{url_path})").replace("Failed to render")?;
                     count += 1;
