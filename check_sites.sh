@@ -26,6 +26,10 @@ function check_project
             test -f _site/img/$page
         fi
     done
+
+    echo "---------------------------"
+    echo "site:    $site" DONE
+    echo "---------------------------"
 }
 
 function check_public_projects
