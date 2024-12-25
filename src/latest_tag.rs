@@ -1,13 +1,13 @@
 use std::io::Write;
 
-use liquid_core::error::ResultLiquidReplaceExt;
+use liquid_core::error::ResultLiquidReplaceExt as _;
 use liquid_core::model::Scalar;
 use liquid_core::parser::TryMatchToken;
 use liquid_core::Language;
 use liquid_core::Renderable;
 use liquid_core::Result;
 use liquid_core::Runtime;
-use liquid_core::ValueView;
+use liquid_core::ValueView as _;
 use liquid_core::{ParseTag, TagReflection, TagTokenIter};
 use serde::Serialize;
 

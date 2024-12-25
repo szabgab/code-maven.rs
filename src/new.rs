@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::Write;
+use std::io::Write as _;
 
 pub fn new_site(root: &str) -> Result<(), String> {
     log::info!("new_site {root}");
