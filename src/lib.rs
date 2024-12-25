@@ -310,7 +310,7 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
     let mut paths_to_copy: Vec<PathBuf> = vec![];
     let mut in_code = false;
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
-    let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif"];
+    let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif", "webp"];
 
     for page in pages {
         for row in page.content.split('\n') {
