@@ -29,6 +29,14 @@ and then link to it from the menu.
 {% youtube id="K6EvVvYnjrY" %}
 ```
 
+## [Embed YouTube videos and include filename](/youtube-with-filename)
+
+
+```
+{% youtube id="K6EvVvYnjrY"  file="movie.mp4"   %}
+```
+
+
 ## Embed text file (code)
 
 ```

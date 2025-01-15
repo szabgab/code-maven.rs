@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Articles about Rust tagged with 'youtube'">
-    <meta name="keywords" content="">
-    <title>Articles tagged with 'youtube'</title>
+    <meta name="description" content="video">
+    <meta name="keywords" content="youtube, syntax">
+    <title>Embed youtube video with filename</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
     <!--
@@ -16,18 +16,18 @@
     <script>hljs.highlightAll();</script>
 
     <meta prefix="og: https://ogp.me/ns#" property="og:type" content="article" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/tags/youtube" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Articles tagged with 'youtube'" />
-    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="Articles about Rust tagged with 'youtube'" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:url" content="https://ssg.rust.code-maven.com/youtube-with-filename" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:title" content="Embed youtube video with filename" />
+    <meta prefix="og: https://ogp.me/ns#" property="og:description" content="video" />
     <meta prefix="og: https://ogp.me/ns#" property="og:site_name" content="Code Maven site generator" />
-    
+    <meta prefix="og: https://ogp.me/ns#" property="og:image" content="https://ssg.rust.code-maven.com/img/youtube-with-filename.png" />
 
     <meta name="twitter:creator" content="@szabgab">
-    <meta name="twitter:title" content="Articles tagged with 'youtube'">
-    <meta name="twitter:description" content="Articles about Rust tagged with 'youtube'">
+    <meta name="twitter:title" content="Embed youtube video with filename">
+    <meta name="twitter:description" content="video">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:widgets:new-embed-design" content="on">
-    
+    <meta name="twitter:image:src" content="https://ssg.rust.code-maven.com/img/youtube-with-filename.png">
 
     <link rel="alternate" type="application/atom+xml" title="Latest posts" href="https://ssg.rust.code-maven.com/atom.xml" />
   </head>
@@ -67,21 +67,28 @@
   <section class="section">
     <div class="container">
       <h1 class="title">
-        Articles tagged with 'youtube'
+        Embed youtube video with filename
       </h1>
+      
+      <a class="button is-primary" href="/tags/youtube">youtube</a>
+      
+      <a class="button is-primary" href="/tags/syntax">syntax</a>
+      
       <div class="content">
-        <ul>
-          
-             <li><a href="/youtube">Embed youtube video</a></li>
-          
-             <li><a href="/youtube-with-filename">Embed youtube video with filename</a></li>
-          
-        </ul>
-      </div>
+        <p>In order to embed a YouTube video use the following <a href="/special-syntax">special syntax</a></p>
+<pre><code>{% youtube id=&quot;K6EvVvYnjrY&quot;  file=&quot;movie.mp4&quot;   %}
+</code></pre>
+<p>This is the result:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/K6EvVvYnjrY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-      Explore all the available <a href="/tags">tags</a>!
-    </div>
+      </div>
+    </div>   
   </section>
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>The <a href="https://github.com/szabgab/code-maven.rs">Code Maven RS</a>. <a href="https://github.com/szabgab/code-maven.rs/blob/main/pages/youtube-with-filename.md">source</a></p>
+    </div>
+  </footer>  
 
 
 <script>

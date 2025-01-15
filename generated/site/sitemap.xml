@@ -12,6 +12,11 @@
   </url>
   
   <url>
+    <loc>https://ssg.rust.code-maven.com/youtube-with-filename</loc>
+    <lastmod>2024-02-18</lastmod>
+  </url>
+  
+  <url>
     <loc>https://ssg.rust.code-maven.com/recent</loc>
     <lastmod>2024-02-18</lastmod>
   </url>
