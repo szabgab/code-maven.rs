@@ -32,12 +32,12 @@ function check_project
     echo "---------------------------"
 }
 
+        # https://github.com/szabgab/python.code-maven.com \
 function check_public_projects
 {
     for url in \
         https://github.com/moshe742/my_blog \
         https://github.com/szabgab/rust.code-maven.com \
-        https://github.com/szabgab/python.code-maven.com \
         https://github.com/szabgab/front.code-maven.com \
         https://github.com/szabgab/hu.code-maven.com \
         https://github.com/szabgab/es.code-maven.com \
