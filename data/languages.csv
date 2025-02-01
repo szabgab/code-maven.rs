@@ -20,3 +20,6 @@ md,markdown
 c,c
 h,c
 log,log
+out,txt
+cfg,cfg
+java,java
