@@ -17,7 +17,10 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                     if in_code {
                         row.to_owned()
                     } else {
-                        process_curly_tags_for_text(config, root, row, &all_pages).unwrap()
+                        match process_curly_tags_for_text(config, root, row, &all_pages) {
+                            Ok(val) => val,
+                            Err(err) => panic!("Error while parsing '{}': {err}", page.filename),
+                        }
                     }
                 })
                 .collect::<Vec<String>>()
