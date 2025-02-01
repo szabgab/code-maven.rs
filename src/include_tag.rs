@@ -137,8 +137,10 @@ impl Renderable for Include {
             if ext_to_language.contains_key(extension) {
                 ext_to_language[extension].as_str()
             } else {
-                log::error!("Unhandled extension {extension}");
-                std::process::exit(1);
+                return Err(liquid_core::error::Error::with_msg(format!(
+                    "Unhandled extension '{extension}' in {}",
+                    self.file
+                )));
             }
         };
 
