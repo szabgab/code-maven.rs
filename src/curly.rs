@@ -17,7 +17,7 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                     if in_code {
                         row.to_owned()
                     } else {
-                        process_curly_tags_for_text(config, root, row, &all_pages)
+                        process_curly_tags_for_text(config, root, row, &all_pages).unwrap()
                     }
                 })
                 .collect::<Vec<String>>()
@@ -33,19 +33,17 @@ fn process_curly_tags_for_text(
     root: &str,
     text: &str,
     all_pages: &[Page],
-) -> String {
+) -> Result<String, liquid_core::Error> {
     let template = liquid::ParserBuilder::with_stdlib()
         .tag(latest_tag::LatestTag)
         .tag(youtube_tag::YoutubeTag)
         .tag(include_tag::IncludeTag)
-        .build()
-        .unwrap()
-        .parse(text)
-        .unwrap();
+        .build()?
+        .parse(text)?;
 
     let globals = liquid::object!({"items": all_pages, "branch": config.branch, "repo": config.repo , "root": root});
 
-    template.render(&globals).unwrap()
+    template.render(&globals)
 }
 
 pub fn check_for_invalid_curly_code(pages: &Vec<Page>) {
