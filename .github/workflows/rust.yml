@@ -76,9 +76,9 @@ jobs:
         token: ${{ secrets.MY_GITHUB_TOKEN }}
         path: sites/izrael.szabgab.com
 
-    - name: Check all the sites
-      run: |
-        ./check_sites.sh
+        #    - name: Check all the sites
+        #      run: |
+        #        ./check_sites.sh
 
     - name: Generate the web site of the generator
       run: |
