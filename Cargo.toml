@@ -78,3 +78,6 @@ needless_raw_string_hashes = "allow"
 
 allow_attributes_without_reason = "allow"
 allow_attributes = "allow"
+
+arbitrary_source_item_ordering = "allow" # let's not force the order now
+
