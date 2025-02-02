@@ -224,4 +224,28 @@ mod test {
             "liquid: Failed to read file \"./test_cases/other.txt\"\n"
         );
     }
+
+    #[test]
+    fn include_file_invalid_extension() {
+        let options = options();
+        let template = parser::parse(r#"{% include file = "test_cases/other.qqrq" %}"#, &options)
+            .map(runtime::Template::new)
+            .unwrap();
+
+        let runtime = RuntimeBuilder::new().build();
+        runtime.set_global("root".into(), Value::scalar("."));
+        runtime.set_global(
+            "repo".into(),
+            Value::scalar("https://github.com/szabgab/code-maven.rs/"),
+        );
+        runtime.set_global("branch".into(), Value::scalar("main"));
+
+        let result = template.render(&runtime);
+        assert!(result.is_err());
+        let result = result.err().unwrap();
+        assert_eq!(
+            result.to_string(),
+            "liquid: Unhandled extension 'qqrq' in test_cases/other.qqrq\n"
+        );
+    }
 }
