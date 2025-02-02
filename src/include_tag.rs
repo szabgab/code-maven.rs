@@ -200,4 +200,28 @@ mod test {
         let output = template.render(&runtime).unwrap();
         assert_eq!(output, "**[test_cases/demo/examples/demo.yaml](https://github.com/szabgab/code-maven.rs//tree/main/test_cases/demo/examples/demo.yaml)**\n```yaml\nfield: value\n\n```\n");
     }
+
+    #[test]
+    fn missing_include_file() {
+        let options = options();
+        let template = parser::parse(r#"{% include file = "test_cases/other.txt" %}"#, &options)
+            .map(runtime::Template::new)
+            .unwrap();
+
+        let runtime = RuntimeBuilder::new().build();
+        runtime.set_global("root".into(), Value::scalar("."));
+        runtime.set_global(
+            "repo".into(),
+            Value::scalar("https://github.com/szabgab/code-maven.rs/"),
+        );
+        runtime.set_global("branch".into(), Value::scalar("main"));
+
+        let result = template.render(&runtime);
+        assert!(result.is_err());
+        let result = result.err().unwrap();
+        assert_eq!(
+            result.to_string(),
+            "liquid: Failed to read file \"./test_cases/other.txt\"\n"
+        );
+    }
 }
