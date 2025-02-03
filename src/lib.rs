@@ -186,6 +186,14 @@ pub struct Link {
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
 #[serde(deny_unknown_fields)]
+pub struct Mp3 {
+    file: String,
+    size: String,
+    time: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct Page {
     pub title: String,
     pub timestamp: String,
@@ -240,6 +248,10 @@ pub struct Page {
     // TODO: add a list of types
     #[serde(default = "get_empty_vector")]
     pub types: Vec<String>,
+
+    // TODO handle
+    #[serde(default = "get_empty_mp3")]
+    pub mp3: Mp3,
 }
 
 impl Page {
@@ -263,6 +275,7 @@ impl Page {
             translator: String::new(),
             archive: false,
             types: vec![],
+            mp3: get_empty_mp3(),
         }
     }
 }
@@ -291,6 +304,14 @@ fn get_empty_vector() -> Vec<String> {
 
 fn get_empty_string() -> String {
     String::new()
+}
+
+fn get_empty_mp3() -> Mp3 {
+    Mp3 {
+        file: String::new(),
+        size: String::new(),
+        time: String::new(),
+    }
 }
 
 pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
