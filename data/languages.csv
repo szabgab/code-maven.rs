@@ -10,6 +10,9 @@ json,json
 txt,txt
 pl,perl
 pm,perl
+t,perl
+psgi,perl
+cgi,perl
 py,python
 rb,ruby
 html,html
@@ -23,3 +26,9 @@ log,log
 out,txt
 cfg,cfg
 java,java
+conf,conf
+ini,ini
+ical,ical
+service,txt
+tt,txt
+sql,sql
