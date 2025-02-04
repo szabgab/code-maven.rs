@@ -12,7 +12,7 @@ use liquid_core::Runtime;
 use liquid_core::ValueView as _;
 use liquid_core::{ParseTag, TagReflection, TagTokenIter};
 
-use crate::read_languages;
+use crate::{read_languages, read_no_extension};
 
 #[derive(Copy, Clone, Debug, Default)]
 pub struct IncludeTag;
@@ -71,6 +71,7 @@ struct Include {
 impl Renderable for Include {
     fn render_to(&self, writer: &mut dyn Write, runtime: &dyn Runtime) -> Result<()> {
         let ext_to_language: HashMap<String, String> = read_languages();
+        let no_extension: HashMap<String, String> = read_no_extension();
         //println!("render_to");
 
         let root = match runtime.get(&[Scalar::new("root")]) {
@@ -117,8 +118,8 @@ impl Renderable for Include {
 
         // TODO remove the hard coded mapping of .gitignore
         // TODO properly handle files that do not have an extension
-        let language = if file_name == ".gitignore" {
-            "gitignore"
+        let language = if no_extension.contains_key(file_name) {
+            &no_extension[file_name]
         } else {
             let extension = path
                 .extension()

@@ -604,7 +604,15 @@ fn copy_file(source_path: &Path, destination_path: &PathBuf) {
 
 fn read_languages() -> HashMap<String, String> {
     let text = include_str!("../data/languages.csv");
+    read_csv_to_hash(text)
+}
 
+fn read_no_extension() -> HashMap<String, String> {
+    let text = include_str!("../data/no_extension.csv");
+    read_csv_to_hash(text)
+}
+
+fn read_csv_to_hash(text: &str) -> HashMap<String, String> {
     let mut data = HashMap::new();
     for line in text.split('\n') {
         if line.is_empty() {
