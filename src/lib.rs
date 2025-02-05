@@ -330,11 +330,11 @@ pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
 
 pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Error>> {
     let mut paths_to_copy: Vec<PathBuf> = vec![];
-    let mut in_code = false;
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
     let ext_images: Vec<&str> = vec!["png", "jpg", "jpeg", "gif", "webp"];
 
     for page in pages {
+        let mut in_code = false;
         for row in page.content.split('\n') {
             if row.starts_with("```") {
                 in_code = !in_code;
@@ -346,9 +346,9 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Erro
                     // TODO: we don't need to copy external images
                     let extension = &path
                         .extension()
-                        .ok_or("No extension")?
+                        .ok_or(format!("No extension in '{path:?}'"))?
                         .to_str()
-                        .ok_or("Could not convert to str")?;
+                        .ok_or("Could not convert to str '{path:?}'")?;
                     if ext_images.contains(extension) {
                         paths_to_copy.push(path.to_path_buf().clone());
                     } else {
@@ -362,6 +362,10 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Erro
                     }
                 };
             }
+        }
+        if in_code {
+            let err = format!("Still in_code after ending file '{:?}'", page.filename);
+            return Err(err.into());
         }
     }
 
