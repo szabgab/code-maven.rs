@@ -134,9 +134,10 @@ impl Renderable for Include {
                 )))?;
 
             //println!("extension: {extension}");
+            let extension = extension.to_lowercase();
 
-            if ext_to_language.contains_key(extension) {
-                ext_to_language[extension].as_str()
+            if ext_to_language.contains_key(&extension) {
+                ext_to_language[&extension].as_str()
             } else {
                 return Err(liquid_core::error::Error::with_msg(format!(
                     "Unhandled extension '{extension}' in {}",

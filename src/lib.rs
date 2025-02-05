@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use core::error::Error;
 use std::collections::HashMap;
 use std::fs;
 use std::fs::File;
@@ -327,7 +328,7 @@ pub fn markdown_pages(pages: Vec<Page>) -> Vec<Page> {
         .collect()
 }
 
-pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
+pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Error>> {
     let mut paths_to_copy: Vec<PathBuf> = vec![];
     let mut in_code = false;
     let re = Regex::new(r"!\[[^\]]*\]\(([^)]+)\)").unwrap();
@@ -343,21 +344,28 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Vec<PathBuf> {
                 if let Some(value) = re.captures(row) {
                     let path = Path::new(&value[1]);
                     // TODO: we don't need to copy external images
-                    if ext_images.contains(&path.extension().unwrap().to_str().unwrap()) {
+                    let extension = &path
+                        .extension()
+                        .ok_or("No extension")?
+                        .to_str()
+                        .ok_or("Could not convert to str")?;
+                    if ext_images.contains(extension) {
                         paths_to_copy.push(path.to_path_buf().clone());
                     } else {
-                        log::error!(
-                            "Unhandled extension for file to be copied {:?}",
-                            path.file_name().unwrap()
+                        let err = format!(
+                            "Unhandled extension '{}' for file '{:?}' to be copied in page {}",
+                            extension,
+                            path.file_name().unwrap(),
+                            page.filename
                         );
-                        std::process::exit(1);
+                        return Err(err.into());
                     }
                 };
             }
         }
     }
 
-    paths_to_copy
+    Ok(paths_to_copy)
 }
 
 fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {

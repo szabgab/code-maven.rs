@@ -51,7 +51,7 @@ pub fn web(root: &str, config_path: &str, path_to_pages: &str, outdir: &str) -> 
 
     let pages = read_pages(&config, &pages_path, root);
     let pages = collect_backlinks(pages);
-    let paths = get_files_to_copy(&pages);
+    let paths = get_files_to_copy(&pages).unwrap();
     let pages = process_curly_tags(&config, root, pages);
     check_for_invalid_curly_code(&pages);
     let pages = markdown_pages(pages);
