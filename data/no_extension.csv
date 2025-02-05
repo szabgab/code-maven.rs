@@ -1,3 +1,7 @@
 .gitignore,gitignore
+.env,txt
 Dockerfile,Dockerfile
 Release,txt
+cpanfile,txt
+Rexfile,txt
+Changes,txt
