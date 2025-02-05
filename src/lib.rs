@@ -405,7 +405,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
     };
 
     for entry in dir.flatten() {
-        log::info!("path: {:?}", entry.path());
+        log::debug!("path: {:?}", entry.path());
         if entry.path().extension().unwrap() != "md" {
             log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
             continue;
@@ -463,7 +463,7 @@ fn check_unique_dates(pages: &Vec<Page>) -> Result<(), String> {
 
 pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, String> {
     let mut page = Page::new();
-    log::info!("read_md_file '{path}'");
+    log::debug!("read_md_file '{path}'");
 
     let mut content = String::new();
 

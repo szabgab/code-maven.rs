@@ -34,7 +34,7 @@ impl ParseTag for IncludeTag {
         mut arguments: TagTokenIter<'_>,
         _options: &Language,
     ) -> Result<Box<dyn Renderable>> {
-        //println!("Parsing include tag");
+        println!("Parsing include tag");
         arguments
             .expect_next("\"file\" expected.")?
             .expect_str("file")

@@ -80,6 +80,8 @@ pub fn web(root: &str, config_path: &str, path_to_pages: &str, outdir: &str) -> 
 }
 
 fn collect_tags(pages: &Vec<Page>) -> Tags {
+    log::info!("collect_tags");
+
     let mut tags: Tags = HashMap::new();
     for page in pages {
         if page.redirect.is_some() {
@@ -96,6 +98,8 @@ fn collect_tags(pages: &Vec<Page>) -> Tags {
 }
 
 fn render_robots_txt(path: &str, url: &str) {
+    log::info!("render_robots_txt");
+
     let text = format!("Sitemap: {url}/sitemap.xml\n\nUser-agent: *\n");
 
     let mut file = File::create(path).unwrap();
@@ -103,7 +107,8 @@ fn render_robots_txt(path: &str, url: &str) {
 }
 
 fn render_sitemap(pages: &[Page], path: &str, url: &str) {
-    log::info!("render sitemap");
+    log::info!("render_sitemap");
+
     let template = include_str!("../templates/sitemap.xml");
     let template = liquid::ParserBuilder::with_stdlib()
         .filter(ToPath)
@@ -180,7 +185,7 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) -> Result
 }
 
 fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
-    log::info!("render archive");
+    log::info!("render_archive");
 
     let partials = match load_templates() {
         Ok(partials) => partials,
@@ -325,6 +330,8 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
 }
 
 fn render_pages(config: &Config, pages: &Vec<Page>, outdir: &str, url: &str) {
+    log::info!("render_pages");
+
     for page in pages {
         if page.url_path == "archive" {
             continue;

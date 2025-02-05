@@ -13,8 +13,8 @@ use code_maven::web::web;
 #[derive(Parser, Debug)]
 #[command(version = build::CLAP_LONG_VERSION)]
 struct Cli {
-    #[arg(long)]
-    debug: bool,
+    #[arg(long, default_value = "warn")]
+    log: String,
 
     #[command(subcommand)]
     command: Commands,
@@ -82,11 +82,13 @@ enum Commands {
 
 fn main() {
     let args = Cli::parse();
-    let log_level = if args.debug {
-        log::Level::Debug
-    } else {
-        log::Level::Warn
+    let log_level = match args.log.as_str() {
+        //"debug" => log::Level::Debug,
+        "info" => log::Level::Info,
+        "warn" => log::Level::Warn,
+        _ => log::Level::Debug,
     };
+
     simple_logger::init_with_level(log_level).unwrap();
 
     let result = match &args.command {

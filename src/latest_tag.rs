@@ -99,6 +99,7 @@ impl Renderable for Latest {
         match runtime.get(&[Scalar::new("items")]) {
             // Ok(values) => values.as_array().unwrap().values().collect::<Vec<_>>(),
             Ok(values) => {
+                log::info!("Find latest items");
                 for value in values
                     .as_array()
                     .ok_or(liquid_core::error::Error::with_msg(

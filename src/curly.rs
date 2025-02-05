@@ -1,11 +1,20 @@
 use crate::{include_tag, latest_tag, youtube_tag, Config, Page};
 
 pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<Page> {
+    log::info!("process_curly_tags");
+
     let all_pages = pages.clone();
+    let parser = liquid::ParserBuilder::with_stdlib()
+        .tag(latest_tag::LatestTag)
+        .tag(youtube_tag::YoutubeTag)
+        .tag(include_tag::IncludeTag)
+        .build()
+        .unwrap();
 
     let pages = pages
         .into_iter()
         .map(|mut page| {
+            log::info!("process_curly_tags: {}", page.filename);
             let mut in_code = false;
             page.content = page
                 .content
@@ -17,7 +26,7 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                     if in_code {
                         row.to_owned()
                     } else {
-                        match process_curly_tags_for_text(config, root, row, &all_pages) {
+                        match process_curly_tags_for_text(config, root, row, &all_pages, &parser) {
                             Ok(val) => val,
                             Err(err) => panic!("Error while parsing '{}': {err}", page.filename),
                         }
@@ -36,13 +45,10 @@ fn process_curly_tags_for_text(
     root: &str,
     text: &str,
     all_pages: &[Page],
+    parser: &liquid::Parser,
 ) -> Result<String, liquid_core::Error> {
-    let template = liquid::ParserBuilder::with_stdlib()
-        .tag(latest_tag::LatestTag)
-        .tag(youtube_tag::YoutubeTag)
-        .tag(include_tag::IncludeTag)
-        .build()?
-        .parse(text)?;
+    //log::info!("process_curly_tags_for_text");
+    let template = parser.parse(text)?;
 
     let globals = liquid::object!({"items": all_pages, "branch": config.branch, "repo": config.repo , "root": root});
 
@@ -50,6 +56,8 @@ fn process_curly_tags_for_text(
 }
 
 pub fn check_for_invalid_curly_code(pages: &Vec<Page>) {
+    log::info!("check_for_invalid_curly_code");
+
     for page in pages {
         let mut in_code = false;
         for row in page.content.split('\n') {
