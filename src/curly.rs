@@ -24,12 +24,14 @@ pub fn process_curly_tags(config: &Config, root: &str, pages: Vec<Page>) -> Vec<
                         in_code = !in_code;
                     }
                     if in_code {
-                        row.to_owned()
-                    } else {
-                        match process_curly_tags_for_text(config, root, row, &all_pages, &parser) {
-                            Ok(val) => val,
-                            Err(err) => panic!("Error while parsing '{}': {err}", page.filename),
-                        }
+                        return row.to_owned();
+                    }
+                    if !row.contains('{') {
+                        return row.to_owned();
+                    }
+                    match process_curly_tags_for_text(config, root, row, &all_pages, &parser) {
+                        Ok(val) => val,
+                        Err(err) => panic!("Error while parsing '{}': {err}", page.filename),
                     }
                 })
                 .collect::<Vec<String>>()
