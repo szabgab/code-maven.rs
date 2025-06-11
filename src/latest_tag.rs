@@ -143,7 +143,7 @@ impl Renderable for Latest {
                 }
             }
             Err(_) => return Err(liquid_core::error::Error::with_msg("Expected number")),
-        };
+        }
 
         Ok(())
     }

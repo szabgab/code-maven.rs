@@ -111,5 +111,5 @@ fn main() {
             log::error!("{}", error);
             std::process::exit(1);
         }
-    };
+    }
 }

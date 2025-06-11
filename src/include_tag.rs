@@ -147,7 +147,7 @@ impl Renderable for Include {
         };
 
         let file_content = std::fs::read_to_string(&include_path)
-            .replace(format!("Failed to read file {include_path:?}"))?;
+            .replace(format!("Failed to read file {:?}", include_path.display()))?;
         write!(
             writer,
             "**[{}]({}/tree/{}/{})**\n```{}\n{}\n```\n",

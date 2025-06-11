@@ -177,7 +177,7 @@ fn render_atom(config: &Config, pages: &[Page], path: &str, url: &str) -> Result
         Err(err) => {
             return Err(format!("Parsing feed failed with error {err}"));
         }
-    };
+    }
 
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{output}").unwrap();
@@ -325,7 +325,8 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
     let output = template.render(&globals).unwrap();
 
     log::info!("saving file at {:?}", path);
-    let mut file = File::create(&path).unwrap_or_else(|_| panic!("Could not create file {path:?}"));
+    let mut file = File::create(&path)
+        .unwrap_or_else(|_| panic!("Could not create file {:?}", path.display()));
     writeln!(&mut file, "{output}").unwrap();
 }
 
@@ -414,7 +415,7 @@ pub fn render_and_save_single_page(
             log::error!("{err}");
             std::process::exit(1);
         }
-    };
+    }
 }
 
 fn render_and_save_redirect_page(page: &Page, outfile: PathBuf, outdir: &str) {

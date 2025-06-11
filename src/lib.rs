@@ -346,7 +346,7 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Erro
                     // TODO: we don't need to copy external images
                     let extension = &path
                         .extension()
-                        .ok_or(format!("No extension in '{path:?}'"))?
+                        .ok_or(format!("No extension in '{:?}'", path.display()))?
                         .to_str()
                         .ok_or("Could not convert to str '{path:?}'")?;
                     if ext_images.contains(extension) {
@@ -355,12 +355,12 @@ pub fn get_files_to_copy(pages: &Vec<Page>) -> Result<Vec<PathBuf>, Box<dyn Erro
                         let err = format!(
                             "Unhandled extension '{}' for file '{:?}' to be copied in page {}",
                             extension,
-                            path.file_name().unwrap(),
+                            path.file_name().unwrap().display(),
                             page.filename
                         );
                         return Err(err.into());
                     }
-                };
+                }
             }
         }
         if in_code {
@@ -429,7 +429,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
             log::error!("{}", err);
             std::process::exit(1);
         }
-    };
+    }
     pages.sort_by(|a, b| b.timestamp.cmp(&a.timestamp));
 
     let archive = Page {
@@ -488,7 +488,7 @@ pub fn read_md_file(_config: &Config, _root: &str, path: &str) -> Result<Page, S
                             Err(err) => {
                                 return Err(format!("YAML parsing error in '{path}' {err}"))
                             }
-                        };
+                        }
                         continue;
                     }
                     //dbg!(&line);
@@ -649,11 +649,17 @@ pub fn read_config_file(filepath: PathBuf, authors: &str) -> Result<Config, Stri
         Ok(file) => match serde_yaml::from_reader(file) {
             Ok(data) => data,
             Err(err) => {
-                return Err(format!("Invalid YAML format in {filepath:?}: {err}"));
+                return Err(format!(
+                    "Invalid YAML format in {:?}: {err}",
+                    filepath.display()
+                ));
             }
         },
         Err(error) => {
-            return Err(format!("Error opening file {filepath:?}: {error}"));
+            return Err(format!(
+                "Error opening file {:?}: {error}",
+                filepath.display()
+            ));
         }
     };
 
