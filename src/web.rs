@@ -220,7 +220,7 @@ fn render_archive(config: &Config, pages: &[Page], outdir: &str, url: &str) {
     let output = template.render(&globals).unwrap();
 
     let path = Path::new(outdir).join("archive.html");
-    log::info!("archive file {:?}", path);
+    log::info!("archive file {}", path.display());
     let mut file = File::create(path).unwrap();
     writeln!(&mut file, "{output}").unwrap();
 
@@ -280,7 +280,7 @@ fn render_tag_pages(config: &Config, pages: &Vec<Page>, tags: &Tags, outdir: &st
         });
 
         let path = Path::new(outdir).join("tags").join(topath(tag));
-        log::info!("render_tag {}", tag);
+        log::info!("render_tag {tag}");
 
         render_any(include_str!("../templates/tag.html"), path, globals);
     }
@@ -324,7 +324,7 @@ fn render_any(template: &str, mut path: PathBuf, globals: liquid::Object) {
 
     let output = template.render(&globals).unwrap();
 
-    log::info!("saving file at {:?}", path);
+    log::info!("saving file at {}", path.display());
     let mut file = File::create(&path)
         .unwrap_or_else(|_| panic!("Could not create file {:?}", path.display()));
     writeln!(&mut file, "{output}").unwrap();
@@ -380,7 +380,7 @@ pub fn render_and_save_single_page(
 ) {
     let path = Path::new(outdir).join(outfile);
 
-    log::info!("render path {:?}", path);
+    log::info!("render path {}", path.display());
 
     // let image_file = image_file.join(IMG);
     // let mut image_file = image_file.join(&page.filename);
@@ -420,7 +420,7 @@ pub fn render_and_save_single_page(
 
 fn render_and_save_redirect_page(page: &Page, outfile: PathBuf, outdir: &str) {
     let path = Path::new(outdir).join(outfile);
-    log::info!("render redirect page path {:?}", path);
+    log::info!("render redirect page path {}", path.display());
     let output = format!(
         r#"<meta http-equiv="refresh" content="0; url={}" />"#,
         page.redirect.as_ref().unwrap()

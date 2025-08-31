@@ -108,7 +108,7 @@ fn main() {
     match result {
         Ok(()) => {}
         Err(error) => {
-            log::error!("{}", error);
+            log::error!("{error}");
             std::process::exit(1);
         }
     }

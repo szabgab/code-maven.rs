@@ -393,19 +393,19 @@ fn collect_backlinks(pages: Vec<Page>) -> Vec<Page> {
 }
 
 pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
-    log::info!("read_page from path '{:?}'", path);
+    log::info!("read_page from path '{}'", path.display());
     let mut pages: Vec<Page> = vec![];
 
     let dir = match path.read_dir() {
         Ok(dir) => dir,
         Err(err) => {
-            log::error!("read_dir of '{path:?}' call failed: {err}");
+            log::error!("read_dir of '{}' call failed: {err}", path.display());
             std::process::exit(1);
         }
     };
 
     for entry in dir.flatten() {
-        log::debug!("path: {:?}", entry.path());
+        log::debug!("path: {}", entry.path().display());
         if entry.path().extension().unwrap() != "md" {
             log::info!("Skipping non-md file '{:?}'", entry.path().to_str());
             continue;
@@ -414,7 +414,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
         let page = match read_md_file(config, root, entry.path().to_str().unwrap()) {
             Ok(res) => res,
             Err(err) => {
-                log::error!("{}", err);
+                log::error!("{err}");
                 std::process::exit(1);
             }
         };
@@ -426,7 +426,7 @@ pub fn read_pages(config: &Config, path: &Path, root: &str) -> Vec<Page> {
     match check_unique_dates(&pages) {
         Ok(()) => {}
         Err(err) => {
-            log::error!("{}", err);
+            log::error!("{err}");
             std::process::exit(1);
         }
     }
@@ -590,21 +590,25 @@ fn copy_files(root: &str, outdir: &str, paths: &Vec<PathBuf>) {
     for path in paths {
         let include_path = Path::new(root).join(path);
         let output_path = Path::new(outdir).join(path);
-        log::info!("copy file from '{:?}' to '{:?}'", include_path, output_path);
+        log::info!(
+            "copy file from '{}' to '{}'",
+            include_path.display(),
+            output_path.display()
+        );
         copy_file(&include_path, &output_path);
     }
 }
 
 fn copy_file(source_path: &Path, destination_path: &PathBuf) {
     log::info!(
-        "copy_path: from {:?} to {:?}",
-        source_path,
-        destination_path
+        "copy_path: from {} to {}",
+        source_path.display(),
+        destination_path.display()
     );
     let destination_dir = destination_path.parent().unwrap();
-    log::info!("dir: {:?}", destination_dir);
+    log::info!("dir: {}", destination_dir.display());
     if !source_path.exists() {
-        log::error!("source_path: {:?} does not exists", source_path);
+        log::error!("source_path: {} does not exists", source_path.display());
         return;
     }
 
@@ -643,7 +647,7 @@ pub fn read_config(root: &str) -> Result<Config, String> {
 }
 
 pub fn read_config_file(filepath: PathBuf, authors: &str) -> Result<Config, String> {
-    log::info!("read_config {:?}", filepath);
+    log::info!("read_config {}", filepath.display());
 
     let mut config: Config = match std::fs::File::open(&filepath) {
         Ok(file) => match serde_yaml::from_reader(file) {

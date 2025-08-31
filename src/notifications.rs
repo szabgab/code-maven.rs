@@ -21,7 +21,7 @@ pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) -> Result<(), String> {
     let page = match read_md_file(&config, root, mail) {
         Ok(page) => page,
         Err(err) => {
-            log::error!("{}", err);
+            log::error!("{err}");
             std::process::exit(1);
         }
     };
@@ -61,7 +61,7 @@ pub fn cm_sendgrid(root: &str, mail: &str, tofile: &str) -> Result<(), String> {
 }
 
 fn read_tofile(path: &str) -> Vec<EmailAddress> {
-    log::info!("Read addresses from '{}'", path);
+    log::info!("Read addresses from '{path}'");
     let re_full = Regex::new(r"(.+?)\s*<(.+)>").unwrap();
 
     let mut addresses: Vec<EmailAddress> = vec![];
