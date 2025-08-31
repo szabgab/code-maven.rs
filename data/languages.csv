@@ -1,5 +1,19 @@
+cr,crystal
+diff,diff
+desktop,txt
+go,go
+gvy,groovy
+Jenkins,txt
+jenkins,txt
+Jenkinsfile,txt
+jenkinsfile,txt
+php,php
+pl6,txt
+raku,txt
 rs,rust
 sh,bash
+tf,txt
+tfvars,txt
 toml,toml
 yaml,yaml
 yml,yaml
@@ -14,8 +28,10 @@ t,perl
 psgi,perl
 cgi,perl
 py,python
+r,r
 rb,ruby
 html,html
+htm,html
 tera,html
 css,css
 js,js
@@ -33,3 +49,4 @@ service,txt
 tt,txt
 sql,sql
 skip,txt
+cnf,txt
